@@ -75,7 +75,7 @@
                         <input type="text" name="name" placeholder="Recipients Name" required>
                     </label>
                     <label>
-                        <input type="text" name="recipient_account_number" placeholder="Recipients Account Number"
+                        <input type="text" name="beneficiary_account_number" placeholder="Recipients Account Number"
                                required>
                     </label>
 {{--                                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose your account</label>--}}
@@ -86,7 +86,7 @@
                         {{--                    <option selected>Choose your account</option>--}}
                         @foreach($accounts as $account)
                             <option
-                                value="{{ $account->id }}">{{ $account->name }} {{ number_format($account->balance, 2) }} {{ $account->currency }}</option>
+                                value="{{ $account->id }}">{{ $account->name }} {{ $account->number }} {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
                         @endforeach
                     </select>
                     <label>
@@ -99,8 +99,9 @@
                             style="width: 10%">
                         <option value="US-DOLLAR">US Dollar</option>
                         <option value="EUR" selected>EUR</option>
-                        <option value="YEN">Yen</option>
-                        <option value="ZLOTY">Zloty</option>
+                        <option value="GBP">GBP</option>
+                        <option value="YEN">YEN</option>
+                        <option value="ZLOTY">ZLOTY</option>
                     </select>
                     <label>
                         <input type="text" name="code" placeholder="Code" required>

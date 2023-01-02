@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
+use App\Models\Transaction;
+use App\Models\User;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class TransferController extends Controller
@@ -15,36 +19,34 @@ class TransferController extends Controller
         ]);
     }
 
-    public function confirm(Request $request): \Illuminate\Http\RedirectResponse
+    public function confirm(Request $request): RedirectResponse
     {
-        \Log::info($request);
-        //
-//        find code in code card - code comes from request
+        $amount = $request->amount * 100;
 
         $codeId = 'code_'.$request->codeId;
-//        \Log::info(auth()->user()->codeCard->$codeId);
+
+        $payerAccount = auth()->user()->accounts->where('id', $request->account_selected)->first();
+        $payerAccount->balance -= $amount;
+        $payerAccount->save();
+
+        $beneficiaryAccount = Account::where('number', $request->beneficiary_account_number)->first();
+        if (!empty($beneficiaryAccount)) {
+            $beneficiaryAccount->balance += $amount;
+            $beneficiaryAccount->save();
+        }
 
         if ($request->code == auth()->user()->codeCard->$codeId) {
-            auth()->user()->transactions()->create(
-                [
-                    'account_id' => $request->account_selected,
-                    'account_number' => 398790902469, // should be name
-                    'recipient_user_id' => rand(1, 1351315), // should be account
-//                    'recipient_account_number' => $request->recipient_account_number, // should be account
-                    'recipient_account_number' => fake()->iban('LV', 'HABA'), // should be account
-                    'description' => $request->description,
-                    'type' => 'outgoing_transfer',
-                    'amount' => $request->amount * 100 * -1,
-                    'currency' => $request->currency_selected,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]
-            );
+            $transaction = new Transaction();
+            $transaction->account_number = $payerAccount->number;
+            $transaction->beneficiary_account_number = $request->beneficiary_account_number;
+            $transaction->description = $request->description;
+            $transaction->type = 'transfer';
+            $transaction->amount = $amount;
+            $transaction->currency = $request->currency_selected;
+            $transaction->save();
 
-
-            return redirect()->back()->with('message', 'Code confirmed!');
+            return redirect()->back()->with('message', 'Transfer successful!');
         }
         return redirect()->back()->with('message', 'Transaction Error!');
-//        \Log::info(auth()->user()->codeCard->$codeId);
     }
 }

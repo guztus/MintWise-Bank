@@ -1,9 +1,6 @@
 ### FEATURES
 ## Main TODO:
-* Transfers now only save the transaction for user who is sending
-* Save transaction for recipient
-* Decrease money for sender
-* Increase money for recipient
+
 
 
 #### **On registration**
@@ -28,9 +25,13 @@
 
 
 #### Later...:
+* Maybe rework Code Card generation
+
+
 * Use Events - clear up Controllers (TransferController)
 * Add verification to transfers
 * Currencies - show according symbol in transaction overview
+
 
 * Stocks
 
@@ -57,6 +58,11 @@
 
 
 ### DONE:
+* Transfers now only save the transaction for user who is sending (fixed)
+* Save transaction for recipient (now BOTH in one transaction)
+* Decrease money for sender
+* Increase money for recipient
+
 * Transfers + verification with Code Card
 * Add currency to Transaction
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
+use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -17,10 +19,17 @@ class AccountController extends Controller
 
     public function showOne(Request $request): View
     {
+        $account = auth()->user()->accounts->where('name', $request->name)->first();
+        $accountNumber = $account->number;
+
         return view('account', [
-            'account' => auth()->user()->accounts->where('name', $request->name)->first() ?? abort(404),
-            'transactions' => auth()->user()->transactions->where('account_id', auth()->user()->accounts->where('name', $request->name)->first()->id),
-        ]);
+            'account' => auth()->user()->accounts->where('number', $accountNumber)->first(),
+            'transactions' =>
+                Transaction::where('account_number', $accountNumber)
+                ->orWhere('beneficiary_account_number', $accountNumber)
+                ->get(),
+            'cards' => Card::whereIn('account_number', $account)->get(),
+       ]);
     }
 
     public function create(Request $request)

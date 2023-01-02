@@ -21,13 +21,20 @@
             </div>
             <form method="POST" action="/cards/create">
                 @csrf
-                    <label for="debit">Debit</label>
+                <label for="debit">Debit</label>
                 <input type="radio" id="debit" name="type" value="debit" checked>
-                    <label for="credit">Credit</label>
+                <label for="credit">Credit</label>
                 <input type="radio" id="credit" name="type" value="credit">
-                <input type="text" name="name" placeholder="name" required>
-                <input type="submit">
+                {{--                selector that has foreach going through cards--}}
+                <select name="account_id" id="account_id" required>
+                    @foreach($accounts as $account)
+                        <option value="{{ $account->id }}">{{ $account->name }} {{ $account->number }}</option>
+                    @endforeach
+
+                    <input type="submit">
+                </select>
             </form>
+
             <div>
                 @if(session()->has('message'))
                     <div
@@ -37,23 +44,22 @@
                     </div>
                 @endif
             </div>
+
             <div class="my-5">
                 <table class="center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="py-3 px-6">Type</th>
                         <th scope="col" class="py-3 px-6">Number</th>
-                        <th scope="col" class="py-3 px-6">Expiration Date</th>
-                        <th scope="col" class="py-3 px-6">Security Code</th>
+                        <th scope="col" class="py-3 px-6 right">Expiration Date</th>
+                        <th scope="col" class="py-3 px-6 right">Security Code</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($cards as $card)
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                             <td class="dark:text-white left py-4 px-6">
-                                {{--                                <a href="/card/{{ $account->name }}">--}}
                                 {{ $card->type }}
-                                {{--                                </a>--}}
                             </td>
                             <td class="dark:text-white left py-4 px-6">{{ $card->number }}</td>
                             <td class="dark:text-white right py-4 px-6">{{ date('m/y', strtotime($card->expiration_date)) }}</td>

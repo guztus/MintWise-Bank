@@ -23,7 +23,17 @@
                 @csrf
                 <label>
                     <input type="text" name="name" placeholder="Account Name" required>
-                    <input type="text" name="currency" placeholder="Currency" required>
+                    <label for="underline_select" class="sr-only">Underline select</label>
+                    <select id="underline_select"
+                            name="currency"
+                            class="center  py-2.5 px-0 w-10 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                            style="width: 10%">
+                        <option value="US-DOLLAR">US Dollar</option>
+                        <option value="EUR" selected>EUR</option>
+                        <option value="GBP">GBP</option>
+                        <option value="YEN">Yen</option>
+                        <option value="ZLOTY">Zloty</option>
+                    </select>
                 </label>
                 <input type="submit">
             </form>
@@ -40,8 +50,8 @@
                     <tr>
                         <th scope="col" class="py-3 px-6">Name</th>
                         <th scope="col" class="py-3 px-6">Account</th>
-                        <th scope="col" class="py-3 px-6">Balance</th>
-                        <th scope="col" class="py-3 px-6">Currency</th>
+                        <th scope="col" class="py-3 px-6 right">Balance</th>
+                        <th scope="col" class="py-3 px-6 right">Currency</th>
                     </tr>
                     </thead>
                     <tbody>

@@ -12,6 +12,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link href="/css/app.css" rel="stylesheet">
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -31,5 +32,6 @@
                 {{ $slot }}
             </main>
         </div>
+        <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
     </body>
 </html>

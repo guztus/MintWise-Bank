@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -12,7 +13,8 @@ class CardController extends Controller
     public function show(): View
     {
         return view('cards', [
-            'cards' => auth()->user()->cards,
+            'accounts' => auth()->user()->accounts,
+            'cards' => Card::whereIn('account_number', auth()->user()->accounts->pluck('number'))->get(),
         ]);
     }
 
@@ -23,8 +25,10 @@ class CardController extends Controller
 
     public function create(Request $request)
     {
-        auth()->user()->cards()->create([
-            'cardholder_name' => $request->name,
+        Card::create([
+            'account_id' => $request->account_id,
+            'account_number' => auth()->user()->accounts->where('id', $request->account_id)->first()->number,
+            'cardholder_name' => auth()->user()->name,
             'type' => $request->type,
             'number' => fake()->creditCardNumber,
             'security_code' => fake()->numberBetween(100,999),

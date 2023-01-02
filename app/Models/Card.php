@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Card extends Model
 {
     protected $fillable = [
+        'account_id',
+        'account_number',
         'cardholder_name',
         'type',
         'number',
@@ -18,11 +20,6 @@ class Card extends Model
     ];
 
     use HasFactory;
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function account(): BelongsTo
     {
