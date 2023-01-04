@@ -1,8 +1,8 @@
 ### FEATURES
 ## Quick todo
 * Add verification to transfers
-* Accounts have LABELS not NAMES
 
+* Generate a new Code Card
 
 ## Main TODO:
 * Rework Code Card generation
@@ -39,6 +39,9 @@
 * Session deletion after inactivity
 * Accounts -> adding account u can choose credit/debit = but card or account??
 
+    * Accounts edit modal exit doesnt work
+    * Account deletion should have a confirmation
+
 [//]: # (* Currencies - show according symbol in transaction overview)
 
 
@@ -55,8 +58,6 @@
 
 
 ### TODO:
-* Account
-  * Currency
 
 [//]: # (  * Account type &#40;i.e. savings, checking, credit card, etc.&#41;)
 [//]: # (  * Account status &#40;i.e. active, inactive, etc.&#41;)

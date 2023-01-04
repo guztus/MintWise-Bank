@@ -19,7 +19,7 @@
             <div>
                 <h1 class="text-2xl font-bold">Cards</h1>
             </div>
-            <form method="POST" action="/cards/create">
+            <form method="POST" action="{{ route('cards.create') }}">
                 @csrf
                 <label for="debit">Debit</label>
                 <input type="radio" id="debit" name="type" value="debit" checked>
@@ -28,7 +28,7 @@
                 {{--                selector that has foreach going through cards--}}
                 <select name="account_id" id="account_id" required>
                     @foreach($accounts as $account)
-                        <option value="{{ $account->id }}">{{ $account->name }} {{ $account->number }}</option>
+                        <option value="{{ $account->id }}">{{ $account->label }} {{ $account->number }}</option>
                     @endforeach
 
                     <input type="submit" value="Order">

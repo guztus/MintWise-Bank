@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Services\CryptoCoinMarketCapAPIService;
+use App\Models\Transaction;
+//use http\Env\Request;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -26,16 +29,32 @@ class CryptoController extends Controller
         ]);
     }
 
-    public function buy(string $symbol)
+    public function buy(Request $request, string $symbol)
     {
-        $assetAmount = request('asset_amount');
+        $assetAmount = $request->asset_amount;
         if (!Str::contains($assetAmount, '.')) {
             $assetAmount .= '.0';
         }
         [$amount_before_decimal, $amount_after_decimal] = explode('.', $assetAmount);
+//        validation
+
+
+//        take cash
+        $account = Auth::user()->accounts->where('number', $request->account_selected)->first();
+        $account->balance -= $request->amount * 100;
+        $account->save();
 
 //        add to users transactions
+        $transaction = new Transaction();
+        $transaction->account_number = $request->account;
+        $transaction->beneficiary_account_number = 'Crypto';
+        $transaction->description = 'Buy ' . $request->asset_amount . ' ' . $symbol;
+        $transaction->type = 'Crypto BUY';
+        $transaction->amount = $request->asset_amount;
+        $transaction->currency = $symbol;
+        $transaction->save();
 
+//        add to assets (update or create)
         Auth::user()->assets()->updateOrCreate(
             [
                 'symbol' => $symbol,

@@ -95,7 +95,7 @@
                         {{--                    <option selected>Choose your account</option>--}}
                         @foreach($accounts as $account)
                             <option
-                                value="{{ $account->number }}">{{ $account->name }} {{ $account->number }} {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                value="{{ $account->number }}">{{ $account->label }} {{ $account->number }} {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
                         @endforeach
                     </select>
                     <label>

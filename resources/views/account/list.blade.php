@@ -29,10 +29,10 @@
                 @endif
             </div>
 
-            <form method="POST" action="/accounts/create">
+            <form method="post" action="{{ route('account.create') }}">
                 @csrf
                 <label>
-                    <input type="text" name="label" placeholder="Account Name" required>
+                    <input type="text" name="label" placeholder="Account Name" value="New Account" required>
                     <label for="underline_select" class="sr-only">Underline select</label>
                     <select id="underline_select"
                             name="currency"
@@ -97,7 +97,7 @@
                                     <div>
                                         <div
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <form method="POST" action="/accounts/{{ $account->label }}">
+                                            <form method="POST" action="{{ route('account.destroy', $account->label) }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="submit"
@@ -133,7 +133,7 @@
                                             <div class="center my-4">
                                                 <form method="POST"
                                                       id="label_change"
-                                                      action="/accounts/{{ $account->label }}">
+                                                      action="{{ route('account.update', $account->label) }}">
                                                     @csrf
                                                     @method('PATCH')
                                                     <input name="newLabel" value="{{ $account->label }}">
@@ -160,6 +160,4 @@
             </div>
         </div>
     </div>
-
-
 </x-app-layout>
