@@ -12,23 +12,23 @@ class AccountController extends Controller
 {
     public function show(): View
     {
-        return view('accounts', [
+        return view('account.list', [
             'accounts' => auth()->user()->accounts,
         ]);
     }
 
     public function showOne(Request $request): View
     {
-        $account = auth()->user()->accounts->where('name', $request->name)->first();
+        $account = auth()->user()->accounts->where('label', $request->label)->first();
         $accountNumber = $account->number;
 
-        return view('account', [
+        return view('account.single', [
             'account' => auth()->user()->accounts->where('number', $accountNumber)->first(),
             'transactions' =>
                 Transaction::where('account_number', $accountNumber)
                 ->orWhere('beneficiary_account_number', $accountNumber)
                 ->get(),
-            'cards' => Card::whereIn('account_number', $account)->get(),
+            'cards' => Card::where('account_number', $accountNumber)->get(),
        ]);
     }
 
@@ -36,10 +36,27 @@ class AccountController extends Controller
     {
         auth()->user()->accounts()->create([
             'number' => fake()->iban('LV', 'HABA'),
-            'name' => Str::ucfirst($request->name),
+            'label' => Str::ucfirst($request->label),
             'currency' => $request->currency
         ]);
 
         return redirect()->back()->with('message', 'Account successfully created!');
+    }
+
+    public function update(Request $request)
+    {
+        $account = auth()->user()->accounts->where('label', $request->label)->first();
+        $account->label = Str::ucfirst($request->newLabel);
+        $account->save();
+
+        return redirect()->back()->with('message', 'Account successfully updated!');
+    }
+
+    public function destroy(Request $request)
+    {
+        $account = auth()->user()->accounts->where('label', $request->label)->first();
+        $account->delete();
+
+        return redirect()->back()->with('message', 'Account successfully deleted!');
     }
 }

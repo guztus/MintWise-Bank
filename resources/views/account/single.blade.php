@@ -31,7 +31,7 @@
                     </thead>
                     <tbody>
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="dark:text-white left py-4 px-6">{{ $account->name }}</td>
+                        <td class="dark:text-white left py-4 px-6">{{ $account->label }}</td>
                         <td class="dark:text-white left py-4 px-6">{{ $account->number }}</td>
                         <td class="dark:text-white right py-4 px-6">{{ number_format($account->balance/100, 2) }}</td>
                     </tr>
@@ -83,11 +83,19 @@
                                     </tr>
                                 @endforeach
                                 </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td class="dark:text-white left py-4 px-6">
+                                        <a href="/cards/create" class="hover:text-gray-900 hover:">
+                                            Order a new Card
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
                 </div>
-
             </div>
             <div>
                 <p class="dark:text-white">Transactions</p>
@@ -113,7 +121,7 @@
                         @foreach($transactions as $transaction)
                             @php
                                 $endingBalance += $transaction->amount;
-                                if ($transaction->receiver_id == $account->number) {
+                                if ($transaction->beneficiary_account_number == $account->number) {
                                     $debitTurnover += $transaction->amount;
                                 } else {
                                     $creditTurnover += $transaction->amount;
@@ -126,7 +134,8 @@
                                 <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
                                 <td class="dark:text-white right py-4 px-6">{{ $transaction->currency }}</td>
                                 @if($transaction->beneficiary_account_number == $account->number)
-                                    <td class="dark:text-white right py-4 px-6">{{ number_format($transaction->amount/100, 2) }}</td>
+                                    <td class="text-green-700 right py-4 px-6">
+                                        +{{ number_format($transaction->amount/100, 2) }}</td>
                                 @else
                                     <td class="text-red-700 right py-4 px-6">
                                         -{{ number_format($transaction->amount/100, 2) }}</td>

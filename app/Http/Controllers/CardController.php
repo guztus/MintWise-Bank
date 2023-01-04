@@ -12,16 +12,11 @@ class CardController extends Controller
 {
     public function show(): View
     {
-        return view('cards', [
+        return view('card.list', [
             'accounts' => auth()->user()->accounts,
             'cards' => Card::whereIn('account_number', auth()->user()->accounts->pluck('number'))->get(),
         ]);
     }
-
-//    public function showOne(Request $request): View
-//    {
-//
-//    }
 
     public function create(Request $request)
     {

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Card extends Model
 {
+//    use HasFactory;
+
     protected $fillable = [
         'account_id',
         'account_number',
@@ -18,8 +20,6 @@ class Card extends Model
         'expiration_date',
         'design',
     ];
-
-    use HasFactory;
 
     public function account(): BelongsTo
     {

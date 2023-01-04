@@ -36,6 +36,8 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'address' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -49,7 +51,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-//        new codeCard
         auth()->user()->codeCard()->create([
             'code_1' => fake()->numberBetween(1000,9999),
             'code_2' => fake()->numberBetween(1000,9999),

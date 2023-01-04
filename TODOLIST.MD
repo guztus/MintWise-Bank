@@ -1,11 +1,25 @@
 ### FEATURES
-## Main TODO:
+## Quick todo
+* Add verification to transfers
+* Accounts have LABELS not NAMES
 
+
+## Main TODO:
+* Rework Code Card generation
+  * Login to require a code card & password
+
+
+* Close an account
+* Edit account name
+- Same for Cards - activate/ 'deactivate' cards
+
+
+## Secondary TODO:
+* Add a "Forgot Password" feature -> MailHog - DOCKER
 
 
 #### **On registration**
-* Code Card generation !!!!!!!!!!!!!!!
-* - ^ Add an event listener! - Use Events
+* Add an event listener to code card! - Use Events
 
 
 #### User has:
@@ -15,22 +29,17 @@
 
 
 #### Options to:
-* Close an account
-* Edit account name
-- Same for Cards - activate/ 'deactivate'
-
   * Balance report should have search options to **filter** and **search**
 
 * Add a contact (?)
 
 
 #### Later...:
-* Maybe rework Code Card generation
-
-
 * Use Events - clear up Controllers (TransferController)
-* Add verification to transfers
-* Currencies - show according symbol in transaction overview
+* Session deletion after inactivity
+* Accounts -> adding account u can choose credit/debit = but card or account??
+
+[//]: # (* Currencies - show according symbol in transaction overview)
 
 
 * Stocks
@@ -48,9 +57,9 @@
 ### TODO:
 * Account
   * Currency
-  * Account type (i.e. savings, checking, credit card, etc.)
-  * Account status (i.e. active, inactive, etc.)
 
+[//]: # (  * Account type &#40;i.e. savings, checking, credit card, etc.&#41;)
+[//]: # (  * Account status &#40;i.e. active, inactive, etc.&#41;)
 
 
 
@@ -58,6 +67,8 @@
 
 
 ### DONE:
+* Code Card generation !!!!!!!!!!!!!!!
+
 * Transfers now only save the transaction for user who is sending (fixed)
 * Save transaction for recipient (now BOTH in one transaction)
 * Decrease money for sender

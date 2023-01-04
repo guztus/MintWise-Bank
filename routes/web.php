@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransferController;
 use Illuminate\Support\Facades\Route;
@@ -32,10 +34,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/accounts',
         [AccountController::class, 'show'])->name('accounts.show');
-    Route::get('/accounts/{name}',
+    Route::get('/accounts/{label}',
         [AccountController::class, 'showOne'])->name('account.show');
     Route::post('/accounts/create',
         [AccountController::class, 'create'])->name('account.create');
+
+    Route::patch('/accounts/{label}',
+        [AccountController::class, 'update'])->name('account.update');
+    Route::delete('/accounts/{label}',
+        [AccountController::class, 'destroy'])->name('account.destroy');
 
     Route::get('/cards',
         [CardController::class, 'show'])->name('cards.show');
@@ -46,8 +53,20 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/transfer',
         [TransferController::class, 'show'])->name('transfer.show');
-    Route::post('/transfer/confirm',
-        [TransferController::class, 'confirm'])->name('transfer.confirm');
+    Route::post('/transfer',
+        [TransferController::class, 'create'])->name('transfer.create');
+
+    Route::get('/crypto',
+        [CryptoController::class, 'index'])->name('crypto.index');
+    Route::get('/crypto/{symbol}',
+        [CryptoController::class, 'show'])->name('crypto.show');
+    Route::post('/crypto/{symbol}/buy',
+        [CryptoController::class, 'buy'])->name('crypto.buy');
+    Route::post('/crypto/{symbol}/sell',
+        [CryptoController::class, 'sell'])->name('crypto.sell');
+
+    Route::get('/portfolio',
+        [AssetController::class, 'index'])->name('asset.index');
 });
 
 require __DIR__ . '/auth.php';

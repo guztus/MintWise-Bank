@@ -31,7 +31,7 @@
                         <option value="{{ $account->id }}">{{ $account->name }} {{ $account->number }}</option>
                     @endforeach
 
-                    <input type="submit">
+                    <input type="submit" value="Order">
                 </select>
             </form>
 

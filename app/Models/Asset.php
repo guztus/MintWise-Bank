@@ -5,17 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Account extends Model
+class Asset extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'label',
-        'number',
-        'currency',
-        'credit_limit'
+    protected $fillable =
+    [
+        'symbol',
+        'average_cost_before_decimal',
+        'average_cost_after_decimal',
+        'amount_before_decimal',
+        'amount_after_decimal',
+        'type'
     ];
 
     public function user(): BelongsTo

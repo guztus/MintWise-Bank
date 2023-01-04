@@ -56,7 +56,6 @@
             <div>
                 <h1 class="text-2xl font-bold">Transfer money</h1>
             </div>
-
             <div>
                 @if(session()->has('message'))
                     <div
@@ -65,11 +64,21 @@
                         <span class="font-medium">{{ session()->get('message') }}</span>
                     </div>
                 @endif
+                @if ($errors->any())
+                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400"
+                         role="alert">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
 
 
             <div>
-                <form method="POST" action="/transfer/confirm">
+                <form method="POST" action="/transfer">
                     @csrf
                     <label>
                         <input type="text" name="name" placeholder="Recipients Name" required>
@@ -78,7 +87,7 @@
                         <input type="text" name="beneficiary_account_number" placeholder="Recipients Account Number"
                                required>
                     </label>
-{{--                                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose your account</label>--}}
+                    {{--                                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose your account</label>--}}
                     <select id="countries"
                             name="account_selected"
                             class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -86,7 +95,7 @@
                         {{--                    <option selected>Choose your account</option>--}}
                         @foreach($accounts as $account)
                             <option
-                                value="{{ $account->id }}">{{ $account->name }} {{ $account->number }} {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                value="{{ $account->number }}">{{ $account->name }} {{ $account->number }} {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
                         @endforeach
                     </select>
                     <label>

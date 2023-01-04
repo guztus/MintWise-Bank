@@ -29,6 +29,11 @@ class User extends Authenticatable
         return $this->hasMany(Card::class);
     }
 
+    public function assets(): HasMany
+    {
+        return $this->hasMany(Asset::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
