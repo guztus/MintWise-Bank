@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/accounts',
         [AccountController::class, 'show'])->name('accounts.show');
+
     Route::get('/accounts/{label}',
         [AccountController::class, 'showOne'])->name('account.show');
     Route::post('/accounts/create',

@@ -2,17 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\CurrencyRateService;
 use App\Models\Card;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class AccountController extends Controller
 {
+    public function __construct(CurrencyRateService $currencyRateService)
+    {
+    }
+
     public function show(): View
     {
         return view('account.list', [
+            'currencies' => Cache::get('currencies'),
             'accounts' => auth()->user()->accounts,
         ]);
     }

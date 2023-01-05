@@ -14,6 +14,11 @@
         }
     </style>
 
+    @foreach($currencies as $currency)
+        {{ $currency['id'] }}
+        {{ $currency['rate'] }}
+    @endforeach
+
     <div class="container-fluid" style="margin-right: 0">
         <div class="center" style="width: 50%; height: 50%; text-align: center">
             <div>
@@ -38,11 +43,10 @@
                             name="currency"
                             class="center  py-2.5 px-0 w-10 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                             style="width: 10%">
-                        <option value="US-DOLLAR">US Dollar</option>
-                        <option value="EUR" selected>EUR</option>
-                        <option value="GBP">GBP</option>
-                        <option value="YEN">Yen</option>
-                        <option value="ZLOTY">Zloty</option>
+                        <option value="EUR">EUR</option>
+                        @foreach($currencies as $currency)
+                            <option value="{{ $currency['id'] }}">{{ $currency['id'] }}</option>
+                        @endforeach
                     </select>
                 </label>
                 <input type="submit" value="Create">
@@ -97,7 +101,8 @@
                                     <div>
                                         <div
                                             class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                            <form method="POST" action="{{ route('account.destroy', $account->label) }}">
+                                            <form method="POST"
+                                                  action="{{ route('account.destroy', $account->label) }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="submit"

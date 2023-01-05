@@ -1,5 +1,8 @@
 ### FEATURES
 ## Quick todo
+* Transactions need to fix the amount of the transaction
+
+
 * Add verification to transfers
 
 * Generate a new Code Card

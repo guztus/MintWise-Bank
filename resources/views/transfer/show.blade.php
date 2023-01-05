@@ -106,11 +106,10 @@
                             name="currency_selected"
                             class="center  py-2.5 px-0 w-10 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                             style="width: 10%">
-                        <option value="US-DOLLAR">US Dollar</option>
-                        <option value="EUR" selected>EUR</option>
-                        <option value="GBP">GBP</option>
-                        <option value="YEN">YEN</option>
-                        <option value="ZLOTY">ZLOTY</option>
+                        <option value="EUR">EUR</option>
+                        @foreach($currencies as $currency)
+                            <option value="{{ $currency['id'] }}">{{ $currency['id'] }}</option>
+                        @endforeach
                     </select>
                     <label>
                         <input type="text" name="code" placeholder="Code" required>
