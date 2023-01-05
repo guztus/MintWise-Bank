@@ -28,6 +28,26 @@
     <div class="container-fluid" style="margin-right: 0">
         <div class="center" style="width: 50%; height: 50%; text-align: center">
             <div>
+                @if(session()->has('message'))
+                    <div
+                        class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
+                        role="alert">
+                        <span class="font-medium">{{ session()->get('message') }}</span>
+                    </div>
+                @endif
+                @if ($errors->any())
+                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400"
+                         role="alert">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+
+            <div>
                 <a class="center block max-w-lg mb-4 p-6 my-4 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center justify-center my-5">
                         <img src="{{ $crypto->logo }}" alt="icon">

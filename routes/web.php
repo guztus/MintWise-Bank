@@ -34,15 +34,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/accounts',
         [AccountController::class, 'show'])->name('accounts.show');
-
-    Route::get('/accounts/{label}',
+    Route::get('/accounts/{id}',
         [AccountController::class, 'showOne'])->name('account.show');
     Route::post('/accounts/create',
         [AccountController::class, 'create'])->name('account.create');
 
-    Route::patch('/accounts/{label}',
+    Route::patch('/accounts/{id}',
         [AccountController::class, 'update'])->name('account.update');
-    Route::delete('/accounts/{label}',
+    Route::delete('/accounts/{id}',
         [AccountController::class, 'destroy'])->name('account.destroy');
 
     Route::get('/cards',

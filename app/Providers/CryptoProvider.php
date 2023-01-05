@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Http\Controllers\AccountController;
-use App\Http\Services\CurrencyRateService;
+use App\Http\Interfaces\CryptoServiceInterface;
+use App\Http\Services\CryptoLocalDatabase;
 use Illuminate\Support\ServiceProvider;
 
-class CurrencyRateProvider extends ServiceProvider
+class CryptoProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -15,9 +15,7 @@ class CurrencyRateProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(AccountController::class, function ($app) {
-            return new AccountController($app->make(CurrencyRateService::class));
-        });
+        $this->app->bind(CryptoServiceInterface::class, CryptoLocalDatabase::class);
     }
 
     /**

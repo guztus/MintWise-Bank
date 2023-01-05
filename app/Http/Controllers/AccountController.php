@@ -26,7 +26,7 @@ class AccountController extends Controller
 
     public function showOne(Request $request): View
     {
-        $account = auth()->user()->accounts->where('label', $request->label)->first();
+        $account = auth()->user()->accounts->where('id', $request->id)->first();
         $accountNumber = $account->number;
 
         return view('account.single', [
@@ -52,7 +52,7 @@ class AccountController extends Controller
 
     public function update(Request $request)
     {
-        $account = auth()->user()->accounts->where('label', $request->label)->first();
+        $account = auth()->user()->accounts->where('id', $request->id)->first();
         $account->label = Str::ucfirst($request->newLabel);
         $account->save();
 
@@ -61,7 +61,7 @@ class AccountController extends Controller
 
     public function destroy(Request $request)
     {
-        $account = auth()->user()->accounts->where('label', $request->label)->first();
+        $account = auth()->user()->accounts->where('id', $request->id)->first();
         $account->delete();
 
         return redirect()->back()->with('message', 'Account successfully deleted!');

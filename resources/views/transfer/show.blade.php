@@ -111,12 +111,10 @@
                             <option value="{{ $currency['id'] }}">{{ $currency['id'] }}</option>
                         @endforeach
                     </select>
-                    <label>
-                        <input type="text" name="code" placeholder="Code" required>
-                        <input id="codeId" name="codeId" value="" placeholder=""
-                               style="width: 20px !important;">
-                    </label>
                     <input type="text" name="description" placeholder="Description" required>
+                    <label>
+                        <input type="text" name="code" placeholder="Code Nr. {{ $code }}" required>
+                    </label>
                     <input type="submit" value="Send">
                 </form>
             </div>

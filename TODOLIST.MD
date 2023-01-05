@@ -2,6 +2,8 @@
 ## Quick todo
 * Transactions need to fix the amount of the transaction
 
+CurrencyRateProvider is not used .....
+
 
 * Add verification to transfers
 

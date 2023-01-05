@@ -21,7 +21,7 @@ class CurrencyRateService
                 $i++;
             }
 
-            Cache::remember('currencies', 60, function () use ($currencies) {
+            Cache::remember('currencies', 5, function () use ($currencies) {
                 return $currencies;
             });
         }

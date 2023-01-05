@@ -2,18 +2,20 @@
 
 namespace App\Http\Services;
 
+use App\Http\Interfaces\CryptoServiceInterface;
 use Illuminate\Support\Facades\Http;
 
-class CryptoCoinMarketCapAPIService
+class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
 {
-    public function getSingle(string $symbol)
+
+    public function getSingle(string $symbol): object
     {
         $coin = $this->singleCoin($symbol);
         $coin->data->$symbol[0]->logo =$this->getLogo($symbol);
-        return $coin;
+        return $coin->data->$symbol[0];
     }
 
-    public function getList()
+    public function getList(): array
     {
         $coinList = [];
 
