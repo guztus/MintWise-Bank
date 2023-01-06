@@ -1,35 +1,55 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Http\Services\Crypto;
 
 use App\Http\Interfaces\CryptoServiceInterface;
+use App\Models\Coin;
+use App\Models\Collections\CoinCollection;
 use Illuminate\Support\Facades\Http;
 
 class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
 {
 
-    public function getSingle(string $symbol): object
+    public function getSingle(string $symbol): Coin
     {
-        $coin = $this->singleCoin($symbol);
-        $coin->data->$symbol[0]->logo =$this->getLogo($symbol);
-        return $coin->data->$symbol[0];
+        $fetchedCoin = $this->singleCoin($symbol)->data->$symbol[0];
+        return new Coin(
+            $this->getLogo($symbol) ?? '',
+            $fetchedCoin->symbol,
+            $fetchedCoin->quote->USD->price,
+            $fetchedCoin->quote->USD->percent_change_24h,
+            $fetchedCoin->quote->USD->volume_24h,
+            $fetchedCoin->quote->USD->volume_change_24h,
+            $fetchedCoin->circulating_supply,
+            $fetchedCoin->total_supply,
+            $fetchedCoin->max_supply,
+        );
     }
 
-    public function getList(): array
+    public function getList(): CoinCollection
     {
-        $coinList = [];
+        $coinList = new CoinCollection();
 
         $coins = $this->realCoins()->data;
-//        $coins = $this->dummyCoins()->data;
         foreach ($coins as $coin) {
-            $coin->logo = str_replace('64x64', '32x32', $this->getLogo($coin->symbol));
-//            $coin->logo = 'https://logo.chainbit.xyz/' . $coin->symbol;
-            $coinList [] = $coin;
+            $coinList->addCoin(
+                new Coin(
+                    $coin->logo = str_replace('64x64', '32x32', $this->getLogo($coin->symbol)) ?? '',
+                    $coin->symbol,
+                    $coin->quote->USD->price,
+                    $coin->quote->USD->percent_change_24h,
+                    $coin->quote->USD->volume_24h,
+                    $coin->quote->USD->volume_change_24h,
+                    $coin->circulating_supply,
+                    $coin->total_supply,
+                    $coin->max_supply,
+                )
+            );
         }
         return $coinList;
     }
 
-    private function singleCoin(string $symbol)
+    private function singleCoin(string $symbol): object
     {
         $coin = Http::withHeaders([
             'Accepts' => 'application/json',
@@ -40,7 +60,7 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
         return $coin->object();
     }
 
-    private function dummyCoins()
+    private function dummyCoins(): object
     {
         $request = Http::withHeaders([
             'Accepts' => 'application/json',
@@ -53,7 +73,7 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
         return $request->object();
     }
 
-    private function realCoins()
+    private function realCoins(): object
     {
         $request = Http::withHeaders([
             'Accepts' => 'application/json',
@@ -66,7 +86,7 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
         return $request->object();
     }
 
-    private function getLogo(string $symbol)
+    private function getLogo(string $symbol): string
     {
         $metadata = Http::withHeaders([
             'Accepts' => 'application/json',

@@ -20,7 +20,7 @@ class CryptoController extends Controller
     public function index(): View
     {
         return view('crypto.list', [
-            'cryptoList' => $this->cryptoService->getList(),
+            'cryptoList' => $this->cryptoService->getList()->getCoins(),
         ]);
     }
 

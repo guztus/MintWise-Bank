@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\CurrencyRateService;
 use App\Models\Card;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
@@ -12,11 +11,7 @@ use Illuminate\Support\Str;
 
 class AccountController extends Controller
 {
-    public function __construct(CurrencyRateService $currencyRateService)
-    {
-    }
-
-    public function show(): View
+    public function index(): View
     {
         return view('account.list', [
             'currencies' => Cache::get('currencies'),
@@ -64,6 +59,6 @@ class AccountController extends Controller
         $account = auth()->user()->accounts->where('id', $request->id)->first();
         $account->delete();
 
-        return redirect()->back()->with('message', 'Account successfully deleted!');
+        return redirect()->to(route('accounts.index'))->with('message', 'Account successfully deleted!');
     }
 }

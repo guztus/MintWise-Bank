@@ -1,12 +1,28 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Providers;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\ServiceProvider;
 
-class CurrencyRateService
+class CurrencyRateProvider extends ServiceProvider
 {
-    public function __construct()
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    /**
+     * Bootstrap services.
+     *
+     * @return void
+     */
+    public function boot()
     {
         if (!Cache::get('currencies')) {
             $xml = simplexml_load_file('https://www.bank.lv/vk/ecb.xml');
@@ -21,7 +37,7 @@ class CurrencyRateService
                 $i++;
             }
 
-            Cache::remember('currencies', 5, function () use ($currencies) {
+            Cache::remember('currencies', 60, function () use ($currencies) {
                 return $currencies;
             });
         }

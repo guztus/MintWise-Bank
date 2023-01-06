@@ -21,10 +21,10 @@
             </div>
             <form method="POST" action="{{ route('cards.create') }}">
                 @csrf
-                <label for="debit">Debit</label>
-                <input type="radio" id="debit" name="type" value="debit" checked>
-                <label for="credit">Credit</label>
-                <input type="radio" id="credit" name="type" value="credit">
+{{--                <label for="debit">Debit</label>--}}
+                <input type="radio" id="debit" name="type" value="debit" checked hidden>
+{{--                <label for="credit">Credit</label>--}}
+{{--                <input type="radio" id="credit" name="type" value="credit">--}}
                 {{--                selector that has foreach going through cards--}}
                 <select name="account_id" id="account_id" required>
                     @foreach($accounts as $account)

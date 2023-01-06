@@ -195,8 +195,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
-        App\Providers\CryptoProvider::class
-
+        App\Providers\CryptoProvider::class,
+        App\Providers\CurrencyRateProvider::class,
     ],
 
     /*

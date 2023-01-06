@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AssetController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CryptoController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransferController;
 use Illuminate\Support\Facades\Route;
@@ -28,20 +29,19 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard',
+        [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::get('/accounts',
-        [AccountController::class, 'show'])->name('accounts.show');
-    Route::get('/accounts/{id}',
-        [AccountController::class, 'showOne'])->name('account.show');
+        [AccountController::class, 'index'])->name('accounts.index');
     Route::post('/accounts/create',
         [AccountController::class, 'create'])->name('account.create');
 
-    Route::patch('/accounts/{id}',
+    Route::get('/account/{id}',
+        [AccountController::class, 'showOne'])->name('account.show');
+    Route::patch('/account/{id}',
         [AccountController::class, 'update'])->name('account.update');
-    Route::delete('/accounts/{id}',
+    Route::delete('/account/{id}',
         [AccountController::class, 'destroy'])->name('account.destroy');
 
     Route::get('/cards',

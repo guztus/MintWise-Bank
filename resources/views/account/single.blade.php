@@ -27,6 +27,7 @@
                         <th scope="col" class="py-3 px-6">Name</th>
                         <th scope="col" class="py-3 px-6">Number</th>
                         <th scope="col" class="py-3 px-6 right">Balance</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -34,13 +35,48 @@
                         <td class="dark:text-white left py-4 px-6">{{ $account->label }}</td>
                         <td class="dark:text-white left py-4 px-6">{{ $account->number }}</td>
                         <td class="dark:text-white right py-4 px-6">{{ number_format($account->balance/100, 2) }}</td>
+                        <td class="right" style="padding-right: 0.5em">
+                            <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots"
+                                    class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                                    type="button">
+                                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
+                                </svg>
+                            </button>
+                            <!-- Dropdown menu -->
+                            <div id="dropdownDots"
+                                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                <div
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    <!-- Modal toggle -->
+                                    <button data-modal-target="staticModal" data-modal-toggle="staticModal"
+                                            type="button"
+                                            onclick="correctId()">
+                                        Change Label {{ $account->id }}
+                                    </button>
+                                </div>
+                                <div>
+                                    <div
+                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                        <form method="POST"
+                                              action="{{ route('account.destroy', $account->id) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="submit"
+                                                   value="Close Account">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
 
             </div>
             <div class="left">
-
                 <div id="accordion-flush" data-accordion="collapse"
                      data-active-classes="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
                      data-inactive-classes="text-gray-500 dark:text-gray-400">
@@ -86,7 +122,7 @@
                                 <tfoot>
                                 <tr>
                                     <td class="dark:text-white left py-4 px-6">
-                                        <a href="/cards/create" class="hover:text-gray-900 hover:">
+                                        <a href="/cards" class="hover:text-gray-900 hover:">
                                             Order a new Card
                                         </a>
                                     </td>
@@ -97,6 +133,55 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Main modal -->
+            <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+                 class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                <div class="relative w-full h-full max-w-2xl md:h-auto">
+                    <!-- Modal content -->
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div
+                            class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                Account Label Change
+                            </h3>
+                            <button type="button"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="staticModal">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="center my-4">
+                            <form method="POST"
+                                  id="label_change"
+                                  action="{{ route('account.update', $account->id) }}">
+                                @csrf
+                                @method('PATCH')
+                                <input name="newLabel" value="{{ $account->label }}">
+                            </form>
+                        </div>
+                        <!-- Modal footer -->
+                        <div
+                            class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                            <div>
+                                <div
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                    <input form="label_change" type="submit"
+                                           value="Rename">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div>
                 <p class="dark:text-white">Transactions</p>
                 <div class="my-5">

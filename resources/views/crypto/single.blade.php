@@ -50,37 +50,37 @@
             <div>
                 <a class="center block max-w-lg mb-4 p-6 my-4 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
                     <div class="flex items-center justify-center my-5">
-                        <img src="{{ $crypto->logo }}" alt="icon">
+                        <img src="{{ $crypto->getLogo() }}" alt="icon">
                     </div>
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $crypto->symbol }}</h5>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $crypto->getSymbol() }}</h5>
                     <p class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        $ {{ number_format($crypto->quote->USD->price, 6) }}
+                        $ {{ number_format($crypto->getPrice(), 6) }}
                         <span style="
                             font-size: 0.8em;
                             vertical-align: super">
-                        {{ number_format($crypto->quote->USD->percent_change_24h, 2) }}%</span>
+                        {{ number_format($crypto->getPercentChange24h(), 2) }}%</span>
                     </p>
                     <table class="table-auto">
                         <thead>
                         <tr>
                             <th class="px-4 py-2">Volume (24h)</th>
-                            <td class="border px-4 py-2">{{ $crypto->quote->USD->volume_24h }}
+                            <td class="border px-4 py-2">{{ $crypto->getVolume24h() }}</td>
                                 <span style="
                                     font-size: 0.8em;
-                                    vertical-align: super">{{ number_format($crypto->quote->USD->volume_change_24h, 2) }}%</span>
+                                    vertical-align: super">{{ number_format($crypto->getVolumeChange24h(), 2) }}%</span>
                             </td>
                         </tr>
                         <tr>
                             <th class="px-4 py-2">Circulating Supply</th>
-                            <td class="border px-4 py-2">{{ $crypto->circulating_supply }}</td>
+                            <td class="border px-4 py-2">{{ $crypto->getCirculatingSupply() }}</td>
                         </tr>
                         <tr>
                             <th class="px-4 py-2">Total Supply</th>
-                            <td class="border px-4 py-2">{{ $crypto->total_supply }}</td>
+                            <td class="border px-4 py-2">{{ $crypto->getTotalSupply() }}</td>
                         </tr>
                         <tr>
                             <th class="px-4 py-2">Max Supply</th>
-                            <td class="border px-4 py-2">{{ $crypto->max_supply }}</td>
+                            <td class="border px-4 py-2">{{ $crypto->getMaxSupply() }}</td>
                         </tr>
                         </thead>
                     </table>
@@ -91,18 +91,18 @@
                 <div class="container-fluid">
                     <div class="flex flex-col w-1/2 center">
                         <div class="flex flex-row">
-                            <form id="buy" action="{{ route('crypto.buy', $crypto->symbol) }}" method="post">
+                            <form id="buy" action="{{ route('crypto.buy', $crypto->getSymbol()) }}" method="post">
                                 @csrf
-                                <input name="asset_amount" type="number" placeholder="{{ $crypto->symbol }}"
+                                <input name="asset_amount" type="number" placeholder="{{ $crypto->getSymbol() }}"
                                        step="0.000000001"
                                        required>
                                 <input name="money_amount" type="number" placeholder="Money Amount" step="0.01"
                                        min="0.01"
                                        required>
                             </form>
-                            <form action="{{ route('crypto.sell', $crypto->symbol) }}" method="post">
+                            <form action="{{ route('crypto.sell', $crypto->getSymbol()) }}" method="post">
                                 @csrf
-                                <input name="asset_amount" type="number" placeholder="{{ $crypto->symbol }}" required>
+                                <input name="asset_amount" type="number" placeholder="{{ $crypto->getSymbol() }}" required>
                                 <input name="money_amount" type="number" placeholder="Money Amount" step="0.01"
                                        min="0.01"
                                        required>
@@ -115,7 +115,7 @@
                             name="account">
                             @foreach($accounts as $account)
                                 <option
-                                    value="{{ $account->number }}">{{ $account->name }} {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                    value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
                             @endforeach
                         </select>
                         <div class="flex flex-row center w-max" style="justify-content: space-evenly">

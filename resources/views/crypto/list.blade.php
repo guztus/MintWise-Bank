@@ -36,12 +36,12 @@
                     @foreach($cryptoList as $crypto)
                         <tr>
                             <td class="border px-4 py-2"><a
-                                    href="/crypto/{{ $crypto->symbol }}">{{ $crypto->symbol }}</a></td>
-                            <td class="border px-4 py-2"><img src="{{ $crypto->logo }}" alt="icon"></td>
-                            <td class="border px-4 py-2">{{ $crypto->max_supply }}</td>
-                            <td class="border px-4 py-2">{{ $crypto->circulating_supply }}</td>
-                            <td class="border px-4 py-2">{{ $crypto->total_supply }}</td>
-                            <td class="border px-4 py-2">{{ $crypto->quote->USD->price }}</td>
+                                    href="/crypto/{{ $crypto->getSymbol() }}">{{ $crypto->getSymbol() }}</a></td>
+                            <td class="border px-4 py-2"><img src="{{ $crypto->getLogo() }}" alt="icon"></td>
+                            <td class="border px-4 py-2">{{ $crypto->getMaxSupply() }}</td>
+                            <td class="border px-4 py-2">{{ $crypto->getCirculatingSupply() }}</td>
+                            <td class="border px-4 py-2">{{ $crypto->getTotalSupply() }}</td>
+                            <td class="border px-4 py-2">{{ $crypto->getPrice() }}</td>
                         </tr>
                     @endforeach
                     </tbody>

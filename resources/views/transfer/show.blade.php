@@ -89,13 +89,13 @@
                     </label>
                     {{--                                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose your account</label>--}}
                     <select id="countries"
-                            name="account_selected"
+                            name="payer_account_number"
                             class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             style="width: 50%">
                         {{--                    <option selected>Choose your account</option>--}}
                         @foreach($accounts as $account)
                             <option
-                                value="{{ $account->number }}">{{ $account->label }} {{ $account->number }} {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
                         @endforeach
                     </select>
                     <label>

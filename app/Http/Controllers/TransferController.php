@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\CurrencyRateService;
-use App\Models\Account;
-use App\Models\Transaction;
+use App\Http\Services\TransferService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,10 +11,6 @@ use Illuminate\Support\Facades\Cache;
 
 class TransferController extends Controller
 {
-    public function __construct(CurrencyRateService $currencyRateService)
-    {
-    }
-
     public function show(): View
     {
         Cache::forget('code');
@@ -26,81 +20,30 @@ class TransferController extends Controller
             'code' => Cache::remember('code', 9999, function () {
                 return fake()->numberBetween(1, 12);
             }),
-//            'code' => fake()->numberBetween(1, 12),
         ]);
     }
 
     public function create(Request $request): RedirectResponse
     {
         $request->validate([
+            'code' => 'required|numeric',
+            'payer_account_number' => 'required',
             'beneficiary_account_number' => 'required',
             'amount' => 'required|numeric|min:0.01',
-            'description' => 'required|string',
+            'description' => 'required|string'
         ]);
 
-        $amount = $request->amount;
+//        need to implement exception using try catch
+        $transferTry = (new TransferService())->execute(
+            $request->code,
+            $request->payer_account_number,
+            $request->beneficiary_account_number,
+            $request->amount,
+            $request->description
+        );
 
-        $currencies = Cache::get('currencies');
-
-        $amount = round($amount * 100);
-
-        $codeId = 'code_' . Cache::get('code');
-
-        if ($request->code != Auth::user()->codeCard->$codeId) {
-            return redirect()->back()->with('error', 'Wrong code');
-        }
-
-        $payerAccount = auth()->user()->accounts->where('number', $request->account_selected)->first();
-        $payerAccount->balance -= $amount;
-
-        if ($payerAccount->credit_limit < $payerAccount->balance
-            && $request->beneficiary_account_number != $request->account_selected
-            && $amount <= $payerAccount->balance + $amount
-        ) {
-            $beneficiaryAccount = Account::where('number', $request->beneficiary_account_number)->first();
-            if (!empty($beneficiaryAccount)) {
-                $amount = $amount / 100;
-                $payerCurrency = $payerAccount->currency;
-                $beneficiaryCurrency = $beneficiaryAccount->currency;
-
-                foreach ($currencies as $currency) {
-                    if ($currency['id'] == $payerCurrency) {
-                        $payerRate = $currency['rate'];
-                    }
-                    if ($currency['id'] == $beneficiaryCurrency) {
-                        $beneficiaryRate = $currency['rate'];
-                    }
-                }
-
-                if ($payerCurrency !== $beneficiaryCurrency && $payerCurrency == 'EUR') {
-                    $amount = $amount * $beneficiaryRate;
-//                    return redirect()->back()->with('message', "Transfer currency exchanged from EUR to {$beneficiaryCurrency}. Paid: {$amount} {$beneficiaryCurrency}");
-
-                } else if ($payerCurrency !== $beneficiaryCurrency && $beneficiaryCurrency == 'EUR') {
-                    $amount = $amount / $payerRate;
-//                    return redirect()->back()->with('message', "Transfer currency exchanged from {$payerCurrency} to EUR. Paid: {$amount} {$beneficiaryCurrency}");
-
-                } else if ($payerCurrency !== $beneficiaryCurrency) {
-                    $amount = $amount * $beneficiaryRate / $payerRate;
-//                    return redirect()->back()->with('message', "Transfer currency exchanged from {$payerCurrency} to {$beneficiaryCurrency}. Paid: {$amount} {$beneficiaryCurrency}");
-                }
-                $beneficiaryAccount->balance += $amount * 100;
-                $beneficiaryAccount->save();
-            }
-
-            $transaction = new Transaction();
-            $transaction->account_number = $payerAccount->number;
-            $transaction->beneficiary_account_number = $request->beneficiary_account_number;
-            $transaction->description = $request->description;
-            $transaction->type = 'transfer';
-            $transaction->amount = $amount;
-            $transaction->currency = $request->currency_selected;
-
-            $transaction->save();
-            $payerAccount->save();
-
-            return redirect()->back()->with('message', 'Transfer successful!');
-
+        if ($transferTry) {
+            return redirect()->back()->with('message', 'Transaction Successful!');
         }
         return redirect()->back()->with('message', 'Transaction Error!');
     }

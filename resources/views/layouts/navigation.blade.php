@@ -30,7 +30,7 @@
 
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-nav-link :href="route('accounts.show')" :active="request()->routeIs('accounts.show')">
+                        <x-nav-link :href="route('accounts.index')" :active="request()->routeIs('accounts.show')">
                             {{ ('Payments, accounts') }}
                         </x-nav-link>
                     </div>
@@ -80,7 +80,7 @@
                                 <x-dropdown-link :href="route('profile.edit')">
                                     {{ ('Profile') }}
                                 </x-dropdown-link>
-                                <x-dropdown-link :href="route('dashboard')">
+                                <x-dropdown-link :href="route('dashboard.index')">
                                     {{ ('Dashboard') }}
                                 </x-dropdown-link>
 
@@ -118,7 +118,7 @@
         <!-- Responsive Navigation Menu -->
         <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
             <div class="pt-2 pb-3 space-y-1">
-                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                <x-responsive-nav-link :href="route('dashboard.index')" :active="request()->routeIs('dashboard.index')">
                     {{ ('Dashboard') }}
                 </x-responsive-nav-link>
             </div>

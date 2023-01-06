@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Http\Interfaces\CryptoServiceInterface;
-use App\Http\Services\CryptoLocalDatabase;
+use App\Http\Services\Crypto\CryptoLocalDatabase;
 use Illuminate\Support\ServiceProvider;
 
 class CryptoProvider extends ServiceProvider

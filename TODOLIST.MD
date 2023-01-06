@@ -2,8 +2,6 @@
 ## Quick todo
 * Transactions need to fix the amount of the transaction
 
-CurrencyRateProvider is not used .....
-
 
 * Add verification to transfers
 
@@ -14,9 +12,8 @@ CurrencyRateProvider is not used .....
   * Login to require a code card & password
 
 
-* Close an account
-* Edit account name
-- Same for Cards - activate/ 'deactivate' cards
+
+- Cards - activate/ 'deactivate' cards
 
 
 ## Secondary TODO:
@@ -40,7 +37,11 @@ CurrencyRateProvider is not used .....
 
 
 #### Later...:
+* User has saved contacts
+* when doing a transfer, the user can select a contact / someone they sent/received money to/from
+
 * Use Events - clear up Controllers (TransferController)
+
 * Session deletion after inactivity
 * Accounts -> adding account u can choose credit/debit = but card or account??
 
@@ -73,6 +74,9 @@ CurrencyRateProvider is not used .....
 
 
 ### DONE:
+* Close an account
+* Edit account name
+
 * Code Card generation !!!!!!!!!!!!!!!
 
 * Transfers now only save the transaction for user who is sending (fixed)
