@@ -31,4 +31,7 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'coinmarketcap' => [
+        'key' => env('CRYPTO_COINMARKETCAP_API_KEY'),
+    ],
 ];

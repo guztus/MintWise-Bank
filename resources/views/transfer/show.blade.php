@@ -84,12 +84,12 @@
                         <input type="text" name="name" placeholder="Recipients Name" required>
                     </label>
                     <label>
-                        <input type="text" name="beneficiary_account_number" placeholder="Recipients Account Number"
+                        <input type="text" name="beneficiaryAccountNumber" placeholder="Recipients Account Number"
                                required>
                     </label>
                     {{--                                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose your account</label>--}}
                     <select id="countries"
-                            name="payer_account_number"
+                            name="payerAccountNumber"
                             class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             style="width: 50%">
                         {{--                    <option selected>Choose your account</option>--}}
@@ -103,7 +103,7 @@
                     </label>
                     <label for="underline_select" class="sr-only">Underline select</label>
                     <select id="underline_select"
-                            name="currency_selected"
+                            name="currencySelected"
                             class="center  py-2.5 px-0 w-10 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                             style="width: 10%">
                         <option value="EUR">EUR</option>

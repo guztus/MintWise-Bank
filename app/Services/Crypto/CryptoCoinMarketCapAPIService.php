@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\Crypto;
+namespace App\Services\Crypto;
 
 use App\Http\Interfaces\CryptoServiceInterface;
 use App\Models\Coin;
@@ -9,17 +9,30 @@ use Illuminate\Support\Facades\Http;
 
 class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
 {
+    private string $currency;
 
-    public function getSingle(string $symbol): Coin
+    public function __construct(string $currency = 'USD')
     {
-        $fetchedCoin = $this->singleCoin($symbol)->data->$symbol[0];
+        $this->currency = $currency;
+    }
+
+    public function getSingle(string $symbol): ?Coin
+    {
+        $fetchedCoin = $this->singleCoin($symbol)->data->$symbol;
+        if ($fetchedCoin) {
+            $fetchedCoin = $fetchedCoin[0];
+        } else {
+            return null;
+        }
+
+        $currency = $this->currency;
         return new Coin(
             $this->getLogo($symbol) ?? '',
             $fetchedCoin->symbol,
-            $fetchedCoin->quote->USD->price,
-            $fetchedCoin->quote->USD->percent_change_24h,
-            $fetchedCoin->quote->USD->volume_24h,
-            $fetchedCoin->quote->USD->volume_change_24h,
+            $fetchedCoin->quote->$currency->price,
+            $fetchedCoin->quote->$currency->percent_change_24h,
+            $fetchedCoin->quote->$currency->volume_24h,
+            $fetchedCoin->quote->$currency->volume_change_24h,
             $fetchedCoin->circulating_supply,
             $fetchedCoin->total_supply,
             $fetchedCoin->max_supply,
@@ -30,16 +43,17 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
     {
         $coinList = new CoinCollection();
 
+        $currency = $this->currency;
         $coins = $this->realCoins()->data;
         foreach ($coins as $coin) {
             $coinList->addCoin(
                 new Coin(
                     $coin->logo = str_replace('64x64', '32x32', $this->getLogo($coin->symbol)) ?? '',
                     $coin->symbol,
-                    $coin->quote->USD->price,
-                    $coin->quote->USD->percent_change_24h,
-                    $coin->quote->USD->volume_24h,
-                    $coin->quote->USD->volume_change_24h,
+                    $coin->quote->$currency->price,
+                    $coin->quote->$currency->percent_change_24h,
+                    $coin->quote->$currency->volume_24h,
+                    $coin->quote->$currency->volume_change_24h,
                     $coin->circulating_supply,
                     $coin->total_supply,
                     $coin->max_supply,
@@ -53,9 +67,10 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
     {
         $coin = Http::withHeaders([
             'Accepts' => 'application/json',
-            'X-CMC_PRO_API_KEY' => env('CRYPTO_COINMARKETCAP_API_KEY'),
+            'X-CMC_PRO_API_KEY' => config('services.coinmarketcap.key'),
         ])->get("https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest", [
-            'symbol' => $symbol
+            'symbol' => $symbol,
+            'convert' => $this->currency
         ]);
         return $coin->object();
     }
@@ -68,7 +83,7 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
         ])->get('https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
             'start' => '1',
             'limit' => '10',
-            'convert' => 'USD',
+            'convert' => $this->currency,
         ]);
         return $request->object();
     }
@@ -81,7 +96,7 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
         ])->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
             'start' => '1',
             'limit' => '2',
-            'convert' => 'USD',
+            'convert' => $this->currency,
         ]);
         return $request->object();
     }

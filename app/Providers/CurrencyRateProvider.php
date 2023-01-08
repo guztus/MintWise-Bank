@@ -27,14 +27,23 @@ class CurrencyRateProvider extends ServiceProvider
         if (!Cache::get('currencies')) {
             $xml = simplexml_load_file('https://www.bank.lv/vk/ecb.xml');
             $json = json_encode($xml);
-            $array = json_decode($json, TRUE);
-            $array = $array['Currencies']['Currency'];
+            $rawCurrencies = json_decode($json, TRUE);
+            $rawCurrencies = $rawCurrencies['Currencies']['Currency'];
 
             $currencies = [];
-            for ($i=0; $i<count($array); $i++) {
-                $currencies[$i] ['id']= $array[$i]['ID'];
-                $currencies[$i] ['rate']= (float)$array[$i]['Rate'];
-                $i++;
+
+            $currencies [] =
+                [
+                    'id' => 'EUR',
+                    'rate' => 1
+                ];
+
+            for ($i = 0; $i < count($rawCurrencies); $i++) {
+                $currencies [] =
+                    [
+                        'id' => $rawCurrencies[$i]['ID'],
+                        'rate' => (float)$rawCurrencies[$i]['Rate']
+                    ];
             }
 
             Cache::remember('currencies', 60, function () use ($currencies) {

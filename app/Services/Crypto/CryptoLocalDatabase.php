@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\Crypto;
+namespace App\Services\Crypto;
 
 use App\Http\Interfaces\CryptoServiceInterface;
 use App\Models\Coin;
@@ -8,7 +8,7 @@ use App\Models\Collections\CoinCollection;
 
 class CryptoLocalDatabase implements CryptoServiceInterface
 {
-    public function getSingle(string $symbol): Coin
+    public function getSingle(string $symbol): ?Coin
     {
         return new Coin(
             'https://s2.coinmarketcap.com/static/img/coins/32x32/1.png',

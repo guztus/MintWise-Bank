@@ -25,6 +25,26 @@
         }
     </style>
 
+{{--    <script>--}}
+{{--        function fiatChangeLive() {--}}
+{{--            let inputCoinAmount = document.getElementById('coin_amount').value;--}}
+{{--            let fiatAmount = inputCoinAmount * {{ $crypto->getPrice() }};--}}
+
+{{--            fiatAmount = fiatAmount.toFixed(2);--}}
+
+{{--            document.getElementById('fiat_amount').value = fiatAmount;--}}
+{{--        }--}}
+
+{{--        function assetChangeLive() {--}}
+{{--            let inputFiatAmount = document.getElementById('fiat_amount').value;--}}
+{{--            let coinAmount = inputFiatAmount / {{ $crypto->getPrice() }};--}}
+
+{{--            coinAmount = coinAmount.toFixed(9);--}}
+
+{{--            document.getElementById('coin_amount').value = coinAmount;--}}
+{{--        }--}}
+{{--    </script>--}}
+
     <div class="container-fluid" style="margin-right: 0">
         <div class="center" style="width: 50%; height: 50%; text-align: center">
             <div>
@@ -65,7 +85,7 @@
                         <tr>
                             <th class="px-4 py-2">Volume (24h)</th>
                             <td class="border px-4 py-2">{{ $crypto->getVolume24h() }}</td>
-                                <span style="
+                            <span style="
                                     font-size: 0.8em;
                                     vertical-align: super">{{ number_format($crypto->getVolumeChange24h(), 2) }}%</span>
                             </td>
@@ -93,31 +113,57 @@
                         <div class="flex flex-row">
                             <form id="buy" action="{{ route('crypto.buy', $crypto->getSymbol()) }}" method="post">
                                 @csrf
-                                <input name="asset_amount" type="number" placeholder="{{ $crypto->getSymbol() }}"
+                                <input id="asset_amount" name="assetAmount" type="number"
+                                       placeholder="{{ $crypto->getSymbol() }}"
+                                       step="0.000000001"
+                                       required
+{{--                                       oninput="fiatChangeLive()"--}}
+                                >
+                                <input id="fiat_amount" type="number" placeholder="Money Amount" step="0.01"
+                                       min="0.01"
+{{--                                       oninput="assetChangeLive()"--}}
+                                >
+                                <select
+                                    form="buy"
+                                    class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="payerAccountNumber">
+                                    @foreach($accounts as $account)
+                                        <option
+                                            value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}
+                                            ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                    @endforeach
+                                </select>
+                            </form>
+                            <form id="sell" action="{{ route('crypto.sell', $crypto->getSymbol()) }}" method="post">
+                                @csrf
+                                <input name="assetAmount" type="number" placeholder="{{ $crypto->getSymbol() }}"
                                        step="0.000000001"
                                        required>
-                                <input name="money_amount" type="number" placeholder="Money Amount" step="0.01"
-                                       min="0.01"
-                                       required>
-                            </form>
-                            <form action="{{ route('crypto.sell', $crypto->getSymbol()) }}" method="post">
-                                @csrf
-                                <input name="asset_amount" type="number" placeholder="{{ $crypto->getSymbol() }}" required>
-                                <input name="money_amount" type="number" placeholder="Money Amount" step="0.01"
-                                       min="0.01"
-                                       required>
+                                <input type="number" placeholder="Money Amount" step="0.01"
+                                       min="0.01">
+                                <select
+                                    form="sell"
+                                    class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="payerAccountNumber">
+                                    @foreach($accounts as $account)
+                                        <option
+                                            value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}
+                                            ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                    @endforeach
+                                </select>
                             </form>
                         </div>
-                        <select
-                            form="buy"
-                            form="sell"
-                            class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            name="account">
-                            @foreach($accounts as $account)
-                                <option
-                                    value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
-                            @endforeach
-                        </select>
+                        {{--                        <select--}}
+                        {{--                            form="buy"--}}
+                        {{--                            class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"--}}
+                        {{--                            name="payerAccountNumber">--}}
+                        {{--                            @foreach($accounts as $account)--}}
+                        {{--                                <option--}}
+                        {{--                                    value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}--}}
+                        {{--                                    ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>--}}
+                        {{--                            @endforeach--}}
+                        {{--                        </select>--}}
+
                         <div class="flex flex-row center w-max" style="justify-content: space-evenly">
                             <div style="padding-right: 4em">
                                 <button type="submit"

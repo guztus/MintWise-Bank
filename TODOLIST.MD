@@ -1,9 +1,11 @@
 ### FEATURES
 ## Quick todo
-* Transactions need to fix the amount of the transaction
+* Currency when buying crypto from an account that is not EUROOOOO
 
 
-* Add verification to transfers
+*
+* Handle if entered symbol doesnt exist
+
 
 * Generate a new Code Card
 
@@ -12,25 +14,20 @@
   * Login to require a code card & password
 
 
-
 - Cards - activate/ 'deactivate' cards
 
 
-## Secondary TODO:
 * Add a "Forgot Password" feature -> MailHog - DOCKER
 
 
-#### **On registration**
 * Add an event listener to code card! - Use Events
 
 
-#### User has:
 * address
 * personal id
 * phone number
 
 
-#### Options to:
   * Balance report should have search options to **filter** and **search**
 
 * Add a contact (?)
@@ -74,6 +71,9 @@
 
 
 ### DONE:
+* Transactions need to fix the amount of the transaction
+* Add verification to transfers
+
 * Close an account
 * Edit account name
 

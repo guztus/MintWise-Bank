@@ -7,6 +7,6 @@ use App\Models\Collections\CoinCollection;
 
 interface CryptoServiceInterface
 {
-    public function getSingle(string $symbol): Coin;
+    public function getSingle(string $symbol): ?Coin;
     public function getList(): CoinCollection;
 }

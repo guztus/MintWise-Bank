@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\TransferService;
+use App\Rules\CodecardCode;
+use App\Services\TransferService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,26 +26,47 @@ class TransferController extends Controller
 
     public function create(Request $request): RedirectResponse
     {
+        $payerAccount = auth()->user()->accounts->where('number', $request->payerAccountNumber)->first();
+
         $request->validate([
-            'code' => 'required|numeric',
-            'payer_account_number' => 'required',
-            'beneficiary_account_number' => 'required',
-            'amount' => 'required|numeric|min:0.01',
-            'description' => 'required|string'
+            'code' =>
+                [
+                    'required',
+                    'numeric',
+                    new CodecardCode,
+                ],
+            'payerAccountNumber' =>
+                [
+                    'required',
+                    'exists:accounts,number',
+//                        check if this account belongs to the user
+                ],
+            'beneficiaryAccountNumber' =>
+                [
+                    'required',
+                    'different:payerAccountNumber'
+                ],
+            'amount' =>
+                [
+                    'required',
+                    'numeric',
+                    'min:0.01',
+                    'max:' . $payerAccount->balance / 100,
+                ],
+            'description' =>
+                [
+                    'required',
+                    'string',
+                ]
         ]);
 
-//        need to implement exception using try catch
-        $transferTry = (new TransferService())->execute(
-            $request->code,
-            $request->payer_account_number,
-            $request->beneficiary_account_number,
+        (new TransferService())->execute(
+            $request->payerAccountNumber,
+            $request->beneficiaryAccountNumber,
             $request->amount,
             $request->description
         );
 
-        if ($transferTry) {
-            return redirect()->back()->with('message', 'Transaction Successful!');
-        }
-        return redirect()->back()->with('message', 'Transaction Error!');
+        return redirect()->back();
     }
 }
