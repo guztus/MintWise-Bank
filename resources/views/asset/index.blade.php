@@ -39,8 +39,8 @@
                 @foreach($assets as $asset)
                     <tr>
                         <td class="px-4 py-2">{{ $asset->symbol }}</td>
-                        <td class="px-4 py-2">{{ $asset->average_cost_before_decimal . "." . $asset->average_cost_after_decimal }}</td>
-                        <td class="px-4 py-2">{{ $asset->amount_before_decimal . "." . $asset->amount_after_decimal }}</td>
+                        <td class="px-4 py-2">{{ $asset->average_cost }}</td>
+                        <td class="px-4 py-2">{{ $asset->amount }}</td>
                     </tr>
                 @endforeach
                 </tbody>

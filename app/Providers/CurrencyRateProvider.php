@@ -7,43 +7,23 @@ use Illuminate\Support\ServiceProvider;
 
 class CurrencyRateProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
+
     public function register()
     {
         //
     }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
     public function boot()
     {
         if (!Cache::get('currencies')) {
             $xml = simplexml_load_file('https://www.bank.lv/vk/ecb.xml');
-            $json = json_encode($xml);
-            $rawCurrencies = json_decode($json, TRUE);
+            $rawCurrencies = json_decode(json_encode($xml), TRUE);
             $rawCurrencies = $rawCurrencies['Currencies']['Currency'];
 
             $currencies = [];
-
-            $currencies [] =
-                [
-                    'id' => 'EUR',
-                    'rate' => 1
-                ];
-
-            for ($i = 0; $i < count($rawCurrencies); $i++) {
-                $currencies [] =
-                    [
-                        'id' => $rawCurrencies[$i]['ID'],
-                        'rate' => (float)$rawCurrencies[$i]['Rate']
-                    ];
+            $currencies ['EUR'] = 1;
+            foreach ($rawCurrencies as $currency) {
+                $currencies [$currency['ID']] = (float)$currency['Rate'];
             }
 
             Cache::remember('currencies', 60, function () use ($currencies) {

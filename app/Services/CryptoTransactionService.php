@@ -2,117 +2,149 @@
 
 namespace App\Services;
 
+use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class CryptoTransactionService
 {
     public function execute(
-        string $payerAccountNumber,
+        string $accountNumber,
         string $symbol,
-        string $assetAmount,
+        float  $assetAmount,
         float  $latestPrice,
     ): void
     {
 //        take cash
-        $account = Auth::user()->accounts->where('number', $payerAccountNumber)->first();
+        $account = Auth::user()->accounts->where('number', $accountNumber)->first();
 
         $currencies = Cache::get('currencies');
-        foreach ($currencies as $currency) {
-            if ($currency['id'] == $account->currency) {
-                $payerRate = $currency['rate'];
+        $payerRate = $currencies[$account->currency];
+
+        $orderSum = round($assetAmount * $latestPrice * $payerRate, 2);
+        $assetAmount = $orderSum / $payerRate / $latestPrice; // recalculated to avoid rounding errors
+
+        DB::transaction(
+            function () use ($account, $symbol, $assetAmount, $orderSum, $latestPrice) {
+                $this->updatePayerAccount($account, $orderSum);
+
+                if ($orderSum > 0) {
+                    $this->sell($account, $symbol, $assetAmount, $orderSum);
+                } else {
+                    $this->buy($account, $symbol, $assetAmount, $orderSum, $latestPrice);
+                }
             }
-        }
-        $orderSum = $assetAmount * $latestPrice * $payerRate;
-        $account->balance -= $orderSum * 100;
-        $account->save();
-
-        if ($orderSum > 0) {
-            $this->buy($payerAccountNumber, $symbol, $assetAmount, $orderSum);
-        } else {
-            $this->sell($payerAccountNumber, $symbol, $assetAmount, $orderSum);
-        }
+        );
     }
 
-    public function buy(
-        string $payerAccountNumber,
-        string $symbol,
-        string $assetAmount,
-        float  $orderSum,
-    )
-    {
-        if (!Str::contains($assetAmount, '.')) {
-            $assetAmount .= '.0';
-        }
-        [$amountBeforeDecimal, $amountAfterDecimal] = explode('.', $assetAmount);
-
-//        add to users transactions
-        $transaction = new Transaction();
-        $transaction->account_number = $payerAccountNumber;
-        $transaction->beneficiary_account_number = 'Crypto';
-        $transaction->description = 'Buy ' . $assetAmount . ' ' . $symbol;
-        $transaction->type = 'Crypto BUY';
-        $transaction->amount = $assetAmount;
-        $transaction->currency = $symbol;
-        $transaction->save();
-
-//        add to assets (update or create)
-        Auth::user()->assets()->updateOrCreate(
-            [
-                'symbol' => $symbol,
-            ],
-            [
-                'symbol' => $symbol,
-                'average_cost_before_decimal' => 0,
-                'average_cost_after_decimal' => 0,
-                'amount_before_decimal' => DB::raw('amount_before_decimal + ' . (int)$amountBeforeDecimal),
-                'amount_after_decimal' => DB::raw('amount_after_decimal + ' . (int)$amountAfterDecimal),
-                'type' => 'standard'
-            ]);
-
-        session()->flash('message', "Crypto transaction successful! Bought $assetAmount $symbol for $orderSum EUR from {$payerAccountNumber}.");
-    }
-
-    public function sell(
-        string $payerAccountNumber,
-        string $symbol,
-        string $assetAmount,
-        float  $orderSum,
+    private function buy(
+        Account $account,
+        string  $symbol,
+        float   $assetAmount,
+        float   $orderSum,
+        float   $latestPrice
     ): void
     {
-        if (!Str::contains($assetAmount, '.')) {
-            $assetAmount .= '.0';
-        }
-        [$amountBeforeDecimal, $amountAfterDecimal] = explode('.', $assetAmount);
-
 //        add to users transactions
-        $transaction = new Transaction();
-        $transaction->account_number = $payerAccountNumber;
-        $transaction->beneficiary_account_number = 'Crypto';
-        $transaction->description = 'Sell ' . $assetAmount . ' ' . $symbol;
-        $transaction->type = 'Crypto SELL';
-        $transaction->amount = $assetAmount;
-        $transaction->currency = $symbol;
-        $transaction->save();
+        $this->addTransaction($account, $assetAmount, $symbol, 'Buy');
+
+        $asset = Auth::user()->assets()->where('symbol', $symbol)->first();
+        if ($asset) {
+            $averageCost = (int)number_format((($asset->average_cost * $asset->amount) + ($assetAmount * $latestPrice)) / ($asset->amount + $assetAmount) * 100, 2, '', '');
+        } else {
+            $averageCost = $latestPrice * -1 * 100;
+        }
 
 //        add to assets (update or create)
+        $this->updateAssets($symbol, $assetAmount, $averageCost);
+
+//        flash message
+        $assetAmount = $this->formatAmount($assetAmount);
+        session()->flash('message',
+            "Transaction successful!
+            Bought $assetAmount $symbol for "
+            . $orderSum * -1
+            . " $account->currency from {$account->number}"
+        );
+    }
+
+    private function sell(
+        Account $account,
+        string  $symbol,
+        float   $assetAmount,
+        float   $orderSum,
+    ): void
+    {
+//        add to users transactions
+        $this->addTransaction($account, $assetAmount, $symbol, 'Sell');
+
+//        add to assets (update or create)
+        $this->updateAssets($symbol, $assetAmount * -1);
+
+//        flash message
+        $assetAmount = $this->formatAmount($assetAmount);
+        $orderSum = abs($orderSum);
+        session()->flash('message',
+            "Transaction successful!
+            Sold $assetAmount $symbol for $orderSum $account->currency from {$account->number}"
+        );
+    }
+
+    private function updatePayerAccount(
+        Account $payerAccount,
+        float   $amount
+    ): void
+    {
+        $payerAccount->balance -= $amount;
+        $payerAccount->save();
+    }
+
+    private function updateAssets(
+        string $symbol,
+        string $assetAmount,
+        float  $averageCost = 0
+    ): void
+    {
         Auth::user()->assets()->updateOrCreate(
             [
                 'symbol' => $symbol,
             ],
             [
                 'symbol' => $symbol,
-                'average_cost_before_decimal' => 0,
-                'average_cost_after_decimal' => 0,
-                'amount_before_decimal' => DB::raw('amount_before_decimal - ' . (int)$amountBeforeDecimal),
-                'amount_after_decimal' => DB::raw('amount_after_decimal - ' . (int)$amountAfterDecimal),
+                'average_cost' => $averageCost,
+                'amount' => DB::raw("amount + $assetAmount"),
                 'type' => 'standard'
             ]);
+    }
 
-        $orderSum = abs($orderSum);
-        session()->flash('message', "Crypto transaction successful! Sold $assetAmount $symbol for $orderSum EUR from {$payerAccountNumber}.");
+    private function addTransaction(
+        Account $account,
+        string  $assetAmount,
+        string  $symbol,
+        string  $type
+    ): void
+    {
+        Transaction::create([
+            'account_number' => $account->number,
+            'beneficiary_account_number' => 'Crypto',
+            'description' => "$type $assetAmount $symbol",
+            'type' => "Crypto $type",
+            'amount_one' => $assetAmount,
+            'currency_one' => $symbol,
+            'amount_two' => null,
+            'currency_two' => null,
+        ]);
+    }
+
+    private function formatAmount(
+        float $amount
+    ): string
+    {
+        if (strpos($amount, "-")) {
+            return number_format($amount, (int)substr($amount, (strpos($amount, "-") + 1)));
+        }
+        return $amount;
     }
 }

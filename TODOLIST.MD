@@ -1,6 +1,9 @@
 ### FEATURES
 ## Quick todo
-* Currency when buying crypto from an account that is not EUROOOOO
+
+* EVENTS
+
+
 
 
 *
@@ -71,6 +74,16 @@
 
 
 ### DONE:
+* Check out the - done -> improved to work without foreach
+* "
+*         $currencies = Cache::get('currencies');
+        foreach ($currencies as $currency) {
+            if ($currency['id'] == $account->currency) {
+* "
+
+* Currency when buying crypto from an account that is not EUROOOOO - done
+* Crypto: fix validation - done
+
 * Transactions need to fix the amount of the transaction
 * Add verification to transfers
 

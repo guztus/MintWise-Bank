@@ -6,6 +6,7 @@ use App\Models\Card;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
@@ -36,7 +37,7 @@ class AccountController extends Controller
 
     public function create(Request $request)
     {
-        auth()->user()->accounts()->create([
+        Auth::user()->accounts()->create([
             'number' => fake()->iban('LV', 'HABA'),
             'label' => Str::ucfirst($request->label),
             'currency' => $request->currency

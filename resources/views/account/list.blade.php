@@ -20,9 +20,9 @@
         }
     </script>
 
-    @foreach($currencies as $currency)
-        {{ $currency['id'] }}
-        {{ $currency['rate'] }}
+    @foreach($currencies as $currency => $rate)
+        {{ $currency }}
+        {{ $rate }}
     @endforeach
 
     <div class="container-fluid" style="margin-right: 0">
@@ -49,9 +49,8 @@
                             name="currency"
                             class="center  py-2.5 px-0 w-10 text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
                             style="width: 10%">
-                        <option value="EUR">EUR</option>
-                        @foreach($currencies as $currency)
-                            <option value="{{ $currency['id'] }}">{{ $currency['id'] }}</option>
+                        @foreach($currencies as $currency => $rate)
+                            <option value="{{ $currency }}">{{ $currency }}</option>
                         @endforeach
                     </select>
                 </label>

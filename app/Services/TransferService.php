@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class TransferService
 {
@@ -19,31 +20,47 @@ class TransferService
         $payerAccount = auth()->user()->accounts->where('number', $payerAccountNumber)->first();
         $beneficiaryAccount = Account::where('number', $beneficiaryAccountNumber)->first();
 
-        $this->updatePayerAccount($payerAccount, $amount);
-        $this->createTransaction($payerAccount, $beneficiaryAccount, $amount, $description);
+        DB::transaction(function () use ($payerAccount, $beneficiaryAccount, $amount, $description) {
+            $this->updatePayerAccount($payerAccount, $amount);
+            $this->createTransaction($payerAccount, $beneficiaryAccount->number, $amount, $description);
 
-        if (!empty($beneficiaryAccount)) {
-            $this->updateBeneficiaryAccount($payerAccount, $beneficiaryAccount, $amount);
-        } else {
-            session()->flash('message', "Transfer successful! Sent $amount EUR from {$payerAccountNumber} to {$beneficiaryAccountNumber}.");
-        }
+            if (!empty($beneficiaryAccount)) {
+                $this->updateBeneficiaryAccount($payerAccount, $beneficiaryAccount, $amount);
+            } else {
+                session()->flash('message', "Transfer successful! Sent "
+                    . $amount / 100
+                    . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccount->number}."
+                );
+            }
+        });
     }
 
     private function createTransaction(
         Account $payerAccount,
-        Account $beneficiaryAccount,
+        string  $beneficiaryAccountNumber,
         float   $amount,
         string  $description
     ): void
     {
-        $transaction = new Transaction();
-        $transaction->account_number = $payerAccount->number;
-        $transaction->beneficiary_account_number = $beneficiaryAccount->number;
-        $transaction->description = $description;
-        $transaction->type = 'transfer';
-        $transaction->amount = $amount;
-        $transaction->currency = $payerAccount->currency;
-        $transaction->save();
+        $currencies = Cache::get('currencies');
+        $payerRate = $currencies[$payerAccount->currency];
+
+        $beneficiaryAccount = Account::where('number', $beneficiaryAccountNumber)->first();
+        if ($beneficiaryAccount) {
+            $beneficiaryRate = $currencies[$beneficiaryAccount->currency];
+            $amountWithRate = $amount * $beneficiaryRate / $payerRate;
+        }
+
+        Transaction::create([
+            'account_number' => $payerAccount->number,
+            'beneficiary_account_number' => $beneficiaryAccountNumber,
+            'description' => $description,
+            'type' => 'transfer',
+            'amount_one' => $amount,
+            'currency_one' => $payerAccount->currency,
+            'amount_two' => $amountWithRate ?? null,
+            'currency_two' => $beneficiaryAccount->currency ?? null,
+        ]);
     }
 
     private function updatePayerAccount(
@@ -65,29 +82,22 @@ class TransferService
         $beneficiaryCurrency = $beneficiaryAccount->currency;
 
         $currencies = Cache::get('currencies');
-        foreach ($currencies as $currency) {
-            if ($currency['id'] == $payerCurrency) {
-
-                $payerRate = $currency['rate'];
-            }
-            if ($currency['id'] == $beneficiaryCurrency) {
-
-                $beneficiaryRate = $currency['rate'];
-            }
-        }
+        $payerRate = $currencies[$payerCurrency];
+        $beneficiaryRate = $currencies[$beneficiaryCurrency];
 
         if ($payerCurrency !== $beneficiaryCurrency) {
             $amountWithRate = $amount * $beneficiaryRate / $payerRate;
             session()->flash('message', "Transfer successful!
-                Sent $amount EUR from {$payerAccount->number} to {$beneficiaryAccount->number}.
-                \n Currency exchanged from {$payerCurrency} to {$beneficiaryCurrency}. Paid: {$amountWithRate} {$beneficiaryCurrency}");
+                Sent " . $amount / 100 . " {$payerCurrency} from {$payerAccount->number} to {$beneficiaryAccount->number}.
+                \n Currency exchanged from {$payerCurrency} to {$beneficiaryCurrency}. Sent: "
+                . number_format($amountWithRate / 100, 2)
+                . " {$beneficiaryCurrency}");
         } else {
             session()->flash('message', "Transfer successful!
-                Sent $amount EUR from {$payerAccount->number} to {$beneficiaryAccount->number}.");
+                Sent " . $amount / 100 . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccount->number}.");
         }
 
-        $beneficiaryAccount->balance += $amount * 100;
+        $beneficiaryAccount->balance += (float)number_format($amountWithRate, 2);
         $beneficiaryAccount->save();
     }
-
 }

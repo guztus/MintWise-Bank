@@ -30,6 +30,6 @@ class CryptoRepository
                 return $this->cryptoService->getSingle($symbol);
             });
         }
-        return Cache::get('coinList');
+        return Cache::get("Crypto$symbol");
     }
 }

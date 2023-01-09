@@ -11,14 +11,12 @@ class Asset extends Model
     use HasFactory;
 
     protected $fillable =
-    [
-        'symbol',
-        'average_cost_before_decimal',
-        'average_cost_after_decimal',
-        'amount_before_decimal',
-        'amount_after_decimal',
-        'type'
-    ];
+        [
+            'symbol',
+            'average_cost',
+            'amount',
+            'type'
+        ];
 
     public function user(): BelongsTo
     {

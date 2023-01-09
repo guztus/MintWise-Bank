@@ -25,25 +25,25 @@
         }
     </style>
 
-{{--    <script>--}}
-{{--        function fiatChangeLive() {--}}
-{{--            let inputCoinAmount = document.getElementById('coin_amount').value;--}}
-{{--            let fiatAmount = inputCoinAmount * {{ $crypto->getPrice() }};--}}
+    {{--    <script>--}}
+    {{--        function fiatChangeLive() {--}}
+    {{--            let inputCoinAmount = document.getElementById('coin_amount').value;--}}
+    {{--            let fiatAmount = inputCoinAmount * {{ $crypto->getPrice() }};--}}
 
-{{--            fiatAmount = fiatAmount.toFixed(2);--}}
+    {{--            fiatAmount = fiatAmount.toFixed(2);--}}
 
-{{--            document.getElementById('fiat_amount').value = fiatAmount;--}}
-{{--        }--}}
+    {{--            document.getElementById('fiat_amount').value = fiatAmount;--}}
+    {{--        }--}}
 
-{{--        function assetChangeLive() {--}}
-{{--            let inputFiatAmount = document.getElementById('fiat_amount').value;--}}
-{{--            let coinAmount = inputFiatAmount / {{ $crypto->getPrice() }};--}}
+    {{--        function assetChangeLive() {--}}
+    {{--            let inputFiatAmount = document.getElementById('fiat_amount').value;--}}
+    {{--            let coinAmount = inputFiatAmount / {{ $crypto->getPrice() }};--}}
 
-{{--            coinAmount = coinAmount.toFixed(9);--}}
+    {{--            coinAmount = coinAmount.toFixed(9);--}}
 
-{{--            document.getElementById('coin_amount').value = coinAmount;--}}
-{{--        }--}}
-{{--    </script>--}}
+    {{--            document.getElementById('coin_amount').value = coinAmount;--}}
+    {{--        }--}}
+    {{--    </script>--}}
 
     <div class="container-fluid" style="margin-right: 0">
         <div class="center" style="width: 50%; height: 50%; text-align: center">
@@ -113,15 +113,16 @@
                         <div class="flex flex-row">
                             <form id="buy" action="{{ route('crypto.buy', $crypto->getSymbol()) }}" method="post">
                                 @csrf
+                                <input name="symbol" value="{{ $crypto->getSymbol() }}" hidden>
                                 <input id="asset_amount" name="assetAmount" type="number"
                                        placeholder="{{ $crypto->getSymbol() }}"
                                        step="0.000000001"
                                        required
-{{--                                       oninput="fiatChangeLive()"--}}
+                                    {{--                                       oninput="fiatChangeLive()"--}}
                                 >
                                 <input id="fiat_amount" type="number" placeholder="Money Amount" step="0.01"
                                        min="0.01"
-{{--                                       oninput="assetChangeLive()"--}}
+                                    {{--                                       oninput="assetChangeLive()"--}}
                                 >
                                 <select
                                     form="buy"
@@ -136,6 +137,7 @@
                             </form>
                             <form id="sell" action="{{ route('crypto.sell', $crypto->getSymbol()) }}" method="post">
                                 @csrf
+                                <input name="symbol" value="{{ $crypto->getSymbol() }}" hidden>
                                 <input name="assetAmount" type="number" placeholder="{{ $crypto->getSymbol() }}"
                                        step="0.000000001"
                                        required>

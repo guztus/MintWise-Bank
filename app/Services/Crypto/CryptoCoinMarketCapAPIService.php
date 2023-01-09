@@ -11,7 +11,7 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
 {
     private string $currency;
 
-    public function __construct(string $currency = 'USD')
+    public function __construct(string $currency = 'EUR')
     {
         $this->currency = $currency;
     }

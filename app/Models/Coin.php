@@ -37,6 +37,11 @@ class Coin
         $this->max_supply = $max_supply;
     }
 
+    public function __toString(): string
+    {
+        return $this->symbol;
+    }
+
     public function getLogo(): string
     {
         return $this->logo;
