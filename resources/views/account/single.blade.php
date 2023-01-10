@@ -220,10 +220,10 @@
                                 <td class="dark:text-white right py-4 px-6">{{ $transaction->currency }}</td>
                                 @if($transaction->beneficiary_account_number == $account->number)
                                     <td class="text-green-700 right py-4 px-6">
-                                        +{{ number_format($transaction->amount/100, 2) }}</td>
+                                        +{{ number_format($transaction->amount_two/100, 2) }}</td>
                                 @else
                                     <td class="text-red-700 right py-4 px-6">
-                                        -{{ number_format($transaction->amount/100, 2) }}</td>
+                                        -{{ number_format($transaction->amount_one/100, 2) }}</td>
                                 @endif
                             </tr>
                         @endforeach

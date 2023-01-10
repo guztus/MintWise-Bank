@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Interfaces\CryptoServiceInterface;
+use App\Http\Requests\CryptoBuyRequest;
 use App\Http\Requests\CryptoSaleRequest;
+use App\Http\Requests\CryptoSellRequest;
 use App\Repositories\CryptoRepository;
 use App\Services\CryptoTransactionService;
+use http\Env\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
@@ -37,74 +41,32 @@ class CryptoController extends Controller
     }
 
     public function buy(
-        CryptoSaleRequest $request
-    )
+        CryptoBuyRequest $request
+    ): RedirectResponse
     {
-        $request->validate([
-            'symbol' => [
-                'required',
-            ],
-        ]);
-
-        $latestPrice = $this->cryptoService->getSingle($request->symbol)->getPrice();
-        $this->validateAssetMinimumAmount($request, $latestPrice);
-
         (new CryptoTransactionService())->execute(
             $request->payerAccountNumber,
             $request->symbol,
             $request->assetAmount,
-            $latestPrice * -1
+            Cache::get('latestPrice') * -1
         );
+        Cache::forget('latestPrice');
 
         return redirect()->back();
     }
 
     public function sell(
-        CryptoSaleRequest $request
-    )
+        CryptoSellRequest $request
+    ): RedirectResponse
     {
-        $request->validate([
-            'symbol' =>
-                [
-                    'in:' . Auth::user()->assets()->pluck('symbol')->implode('symbol', ','),
-                ],
-            'assetAmount' =>
-                [
-                    'max:' . Auth::user()->assets->where('symbol', $request->symbol)->first()->amount,
-                ]
-        ]);
-
-        $latestPrice = $this->cryptoService->getSingle($request->symbol)->getPrice();
-        $this->validateAssetMinimumAmount($request, $latestPrice);
-
         (new CryptoTransactionService())->execute(
             $request->payerAccountNumber,
             $request->symbol,
             $request->assetAmount,
-            $latestPrice
+            Cache::get('latestPrice')
         );
+        Cache::forget('latestPrice');
 
         return redirect()->back();
-    }
-
-    private function validateAssetMinimumAmount(
-        CryptoSaleRequest $request,
-        float             $latestPrice
-    )
-    {
-        $minimumAmount = 0.01 / ($latestPrice * Cache::get('currencies')[auth()->user()->accounts->where('number', $request->payerAccountNumber)->first()->currency]);
-        if (strpos($minimumAmount, "-")) {
-            $minimumAmount = number_format($minimumAmount, (int)substr($minimumAmount, (strpos($minimumAmount, "-") + 1)));
-        }
-
-        $request->validate([
-            'assetAmount' =>
-                [
-                    'min:' . $minimumAmount,
-                ]
-        ], [
-                'assetAmount.min' => "Minimum amount is $minimumAmount $request->symbol",
-            ]
-        );
     }
 }

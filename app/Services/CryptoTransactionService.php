@@ -50,11 +50,13 @@ class CryptoTransactionService
 //        add to users transactions
         $this->addTransaction($account, $assetAmount, $symbol, 'Buy');
 
+//        calculate averageCost
         $asset = Auth::user()->assets()->where('symbol', $symbol)->first();
         if ($asset) {
+            $latestPrice = $latestPrice * -1;
             $averageCost = (int)number_format((($asset->average_cost * $asset->amount) + ($assetAmount * $latestPrice)) / ($asset->amount + $assetAmount) * 100, 2, '', '');
         } else {
-            $averageCost = $latestPrice * -1 * 100;
+            $averageCost = $latestPrice * -1;
         }
 
 //        add to assets (update or create)
@@ -97,7 +99,7 @@ class CryptoTransactionService
         float   $amount
     ): void
     {
-        $payerAccount->balance -= $amount;
+        $payerAccount->balance += $amount * 100;
         $payerAccount->save();
     }
 
