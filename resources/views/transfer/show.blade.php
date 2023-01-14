@@ -9,19 +9,6 @@
     </script>
 
     <style>
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .right {
-            text-align: right;
-        }
-
         /* Style inputs */
         input[type=text], select {
             width: 50%;
@@ -51,7 +38,7 @@
         }
     </style>
 
-    <div class="container-fluid-fluid" style="">
+    <div class="container-fluid-fluid my-8" style="">
         <div class="center" style="width: 50%; height: 50%; text-align: center">
             <div>
                 <h1 class="text-2xl font-bold">Transfer money</h1>
@@ -80,13 +67,6 @@
             <div>
                 <form method="POST" action="/transfer">
                     @csrf
-                    <label>
-                        <input type="text" name="name" placeholder="Recipients Name" required>
-                    </label>
-                    <label>
-                        <input type="text" name="beneficiaryAccountNumber" placeholder="Recipients Account Number"
-                               required>
-                    </label>
                     {{--                                        <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Choose your account</label>--}}
                     <select id="account_number"
                             name="payerAccountNumber"
@@ -100,11 +80,23 @@
                         @endforeach
                     </select>
                     <label>
-                        <input type="text" name="amount" placeholder="Amount" required>
+                        <input type="text"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               name="beneficiaryAccountNumber" placeholder="Recipients Account Number"
+                               required>
                     </label>
-                    <input type="text" name="description" placeholder="Description" required>
                     <label>
-                        <input type="text" name="code" placeholder="Code Nr. {{ $code }}" required>
+                        <input type="text"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               name="amount" placeholder="Amount" required>
+                    </label>
+                    <input type="text"
+                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                           name="description" placeholder="Description" required>
+                    <label>
+                        <input type="text"
+                               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               name="code" placeholder="Code Nr. {{ $code }}" required>
                     </label>
                     <input type="submit" value="Send">
                 </form>

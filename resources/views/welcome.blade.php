@@ -1,18 +1,4 @@
 <x-app-layout>
-    <style>
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .right {
-            text-align: right;
-        }
-    </style>
     <div
         class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
         @if (Route::has('login'))

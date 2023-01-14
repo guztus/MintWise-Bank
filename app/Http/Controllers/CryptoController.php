@@ -6,8 +6,10 @@ use App\Http\Interfaces\CryptoServiceInterface;
 use App\Http\Requests\CryptoBuyRequest;
 use App\Http\Requests\CryptoSaleRequest;
 use App\Http\Requests\CryptoSellRequest;
+use App\Models\Transaction;
 use App\Repositories\CryptoRepository;
 use App\Services\CryptoTransactionService;
+use App\Services\PortfolioService;
 use http\Env\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -37,6 +39,11 @@ class CryptoController extends Controller
         return view('crypto.single', [
             'accounts' => Auth::user()->accounts,
             'crypto' => $this->cryptoRepository->getSingle($symbol),
+            'assetOwned' => Auth::user()->assets->where('symbol', $symbol)->first() ?? null,
+            'transactions' =>
+                Transaction::where('currency_payer', $symbol)
+                    ->orWhere('currency_beneficiary', $symbol)
+                    ->get(),
         ]);
     }
 

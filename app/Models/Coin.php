@@ -7,7 +7,9 @@ class Coin
     private string $logo;
     private string $symbol;
     private float $price;
+    private float $percent_change_1h;
     private float $percent_change_24h;
+    private float $percent_change_7d;
     private float $volume_24h;
     private float $volume_change_24h;
     private float $circulating_supply;
@@ -18,12 +20,14 @@ class Coin
         string $logo,
         string $symbol,
         float  $price,
+        float  $percent_change_1h,
         float  $percent_change_24h,
+        float  $percent_change_7d,
         float  $volume_24h,
         float  $volume_change_24h,
         float  $circulating_supply,
         float  $total_supply,
-        ?float  $max_supply,
+        ?float $max_supply,
     )
     {
         $this->logo = $logo;
@@ -35,6 +39,8 @@ class Coin
         $this->circulating_supply = $circulating_supply;
         $this->total_supply = $total_supply;
         $this->max_supply = $max_supply;
+        $this->percent_change_1h = $percent_change_1h;
+        $this->percent_change_7d = $percent_change_7d;
     }
 
     public function __toString(): string
@@ -57,9 +63,19 @@ class Coin
         return $this->price;
     }
 
+    public function getPercentChange1h(): float
+    {
+        return $this->percent_change_1h;
+    }
+
     public function getPercentChange24h(): float
     {
         return $this->percent_change_24h;
+    }
+
+    public function getPercentChange7d(): float
+    {
+        return $this->percent_change_7d;
     }
 
     public function getVolume24h(): float

@@ -18,9 +18,9 @@ class Transaction extends Model
         'beneficiary_account_number',
         'description',
         'type',
-        'amount_one',
-        'currency_one',
-        'amount_two',
-        'currency_two'
+        'amount_payer',
+        'currency_payer',
+        'amount_beneficiary',
+        'currency_beneficiary'
     ];
 }

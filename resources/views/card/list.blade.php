@@ -1,19 +1,4 @@
 <x-app-layout>
-    <style>
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .right {
-            text-align: right;
-        }
-    </style>
-
     <div class="container-fluid" style="margin-right: 0">
         <div class="center" style="width: 50%; height: 50%; text-align: center">
             <div>
@@ -46,7 +31,7 @@
             </div>
 
             <div class="my-5">
-                <table class="center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="py-3 px-6">Type</th>

@@ -18,18 +18,18 @@ class TransferService
     {
         $amount *= 100;
         $payerAccount = auth()->user()->accounts->where('number', $payerAccountNumber)->first();
-        $beneficiaryAccount = Account::where('number', $beneficiaryAccountNumber)->first();
 
-        DB::transaction(function () use ($payerAccount, $beneficiaryAccount, $amount, $description) {
+        DB::transaction(function () use ($payerAccount, $beneficiaryAccountNumber, $amount, $description) {
             $this->updatePayerAccount($payerAccount, $amount);
-            $this->createTransaction($payerAccount, $beneficiaryAccount->number, $amount, $description);
+            $this->createTransaction($payerAccount, $beneficiaryAccountNumber, $amount / 100, $description);
 
+            $beneficiaryAccount = Account::where('number', $beneficiaryAccountNumber)->first();
             if (!empty($beneficiaryAccount)) {
                 $this->updateBeneficiaryAccount($payerAccount, $beneficiaryAccount, $amount);
             } else {
                 session()->flash('message', "Transfer successful! Sent "
                     . $amount / 100
-                    . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccount->number}."
+                    . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccountNumber}."
                 );
             }
         });

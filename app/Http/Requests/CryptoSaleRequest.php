@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Cache;
 
 class CryptoSaleRequest extends FormRequest
 {
-    protected float $minimumAmount;
+    protected string $minimumAmount;
 
     public function __construct(CryptoServiceInterface $cryptoService, CryptoRepository $cryptoRepository)
     {

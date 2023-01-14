@@ -33,7 +33,7 @@ class CryptoTransactionService
                 if ($orderSum > 0) {
                     $this->sell($account, $symbol, $assetAmount, $orderSum);
                 } else {
-                    $this->buy($account, $symbol, $assetAmount, $orderSum, $latestPrice);
+                    $this->buy($account, $symbol, $assetAmount, $orderSum * -1, $latestPrice);
                 }
             }
         );
@@ -48,13 +48,13 @@ class CryptoTransactionService
     ): void
     {
 //        add to users transactions
-        $this->addTransaction($account, $assetAmount, $symbol, 'Buy');
+        $this->addBuyTransaction($account, $assetAmount, $symbol, $orderSum);
 
 //        calculate averageCost
         $asset = Auth::user()->assets()->where('symbol', $symbol)->first();
         if ($asset) {
             $latestPrice = $latestPrice * -1;
-            $averageCost = (int)number_format((($asset->average_cost * $asset->amount) + ($assetAmount * $latestPrice)) / ($asset->amount + $assetAmount) * 100, 2, '', '');
+            $averageCost = (float)number_format((($asset->average_cost * $asset->amount) + ($assetAmount * $latestPrice)) / ($asset->amount + $assetAmount), 2, '.', '');
         } else {
             $averageCost = $latestPrice * -1;
         }
@@ -67,7 +67,7 @@ class CryptoTransactionService
         session()->flash('message',
             "Transaction successful!
             Bought $assetAmount $symbol for "
-            . $orderSum * -1
+            . number_format($orderSum, 2)
             . " $account->currency from {$account->number}"
         );
     }
@@ -80,7 +80,7 @@ class CryptoTransactionService
     ): void
     {
 //        add to users transactions
-        $this->addTransaction($account, $assetAmount, $symbol, 'Sell');
+        $this->addSellTransaction($account, $assetAmount, $symbol, $orderSum);
 
 //        add to assets (update or create)
         $this->updateAssets($symbol, $assetAmount * -1);
@@ -90,7 +90,9 @@ class CryptoTransactionService
         $orderSum = abs($orderSum);
         session()->flash('message',
             "Transaction successful!
-            Sold $assetAmount $symbol for $orderSum $account->currency from {$account->number}"
+            Sold $assetAmount $symbol for "
+            . number_format($orderSum, 2)
+            . " $account->currency from {$account->number}"
         );
     }
 
@@ -121,22 +123,41 @@ class CryptoTransactionService
             ]);
     }
 
-    private function addTransaction(
+    private function addBuyTransaction(
         Account $account,
         string  $assetAmount,
         string  $symbol,
-        string  $type
+        string  $orderSum
     ): void
     {
         Transaction::create([
             'account_number' => $account->number,
             'beneficiary_account_number' => 'Crypto',
-            'description' => "$type $assetAmount $symbol",
-            'type' => "Crypto $type",
-            'amount_one' => $assetAmount,
-            'currency_one' => $symbol,
-            'amount_two' => null,
-            'currency_two' => null,
+            'description' => "Buy $assetAmount $symbol",
+            'type' => "Crypto Buy",
+            'amount_payer' => $orderSum,
+            'currency_payer' => $account->currency,
+            'amount_beneficiary' => $assetAmount,
+            'currency_beneficiary' => $symbol,
+        ]);
+    }
+
+    private function addSellTransaction(
+        Account $account,
+        string  $assetAmount,
+        string  $symbol,
+        string  $orderSum
+    ): void
+    {
+        Transaction::create([
+            'account_number' => 'Crypto',
+            'beneficiary_account_number' => $account->number,
+            'description' => "Sell $assetAmount $symbol",
+            'type' => "Crypto Sell",
+            'amount_payer' => $assetAmount,
+            'currency_payer' => $symbol,
+            'amount_beneficiary' => $orderSum,
+            'currency_beneficiary' => $account->currency,
         ]);
     }
 

@@ -1,16 +1,8 @@
 <x-app-layout>
     <style>
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .right {
-            text-align: right;
+        .dangerHover:hover {
+            background: rgba(255, 0, 0, 0.54);
+            color: black;
         }
     </style>
 
@@ -21,11 +13,12 @@
                 <p class="dark:text-white">Account</p>
             </div>
             <div class="my-5">
-                <table class="center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <table class="table-rounded table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="py-3 px-6">Name</th>
                         <th scope="col" class="py-3 px-6">Number</th>
+                        <th scope="col" class="py-3 px-6">Currency</th>
                         <th scope="col" class="py-3 px-6 right">Balance</th>
                         <th></th>
                     </tr>
@@ -34,6 +27,7 @@
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="dark:text-white left py-4 px-6">{{ $account->label }}</td>
                         <td class="dark:text-white left py-4 px-6">{{ $account->number }}</td>
+                        <td class="dark:text-white left py-4 px-6">{{ $account->currency }}</td>
                         <td class="dark:text-white right py-4 px-6">{{ number_format($account->balance/100, 2) }}</td>
                         <td class="right" style="padding-right: 0.5em">
                             <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots"
@@ -47,26 +41,29 @@
                             </button>
                             <!-- Dropdown menu -->
                             <div id="dropdownDots"
-                                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                                 class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                                 style="width: max-content">
                                 <div
                                     class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                                     <!-- Modal toggle -->
-                                    <button data-modal-target="staticModal" data-modal-toggle="staticModal"
-                                            type="button"
-                                            onclick="correctId()">
-                                        Change Label {{ $account->id }}
+                                    <button
+                                        data-modal-target="renameAccountModal"
+                                        data-modal-toggle="renameAccountModal"
+                                        class="w-full text-left">
+                                        Change Label
                                     </button>
                                 </div>
                                 <div>
                                     <div
-                                        class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                        <form method="POST"
-                                              action="{{ route('account.destroy', $account->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <input type="submit"
-                                                   value="Close Account">
-                                        </form>
+                                        class="hover:text-white hover:bg-red-700 block px-4 py-2 hover:bg-gray-100">
+                                        <!-- Modal toggle -->
+                                        <button
+                                            data-modal-target="deleteAccountModal"
+                                            data-modal-toggle="deleteAccountModal"
+                                            class="w-full text-left">
+                                            Delete Account
+                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -97,7 +94,7 @@
 
                     <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
                         <div class="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                            <table class="center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
                                     class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -135,11 +132,11 @@
             </div>
 
             <!-- Main modal -->
-            <div id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+            <div id="renameAccountModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
                  class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
                 <div class="relative w-full h-full max-w-2xl md:h-auto">
                     <!-- Modal content -->
-                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <div class="py-1 relative bg-white rounded-lg shadow dark:bg-gray-700">
                         <!-- Modal header -->
                         <div
                             class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -148,7 +145,7 @@
                             </h3>
                             <button type="button"
                                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                                    data-modal-hide="staticModal">
+                                    data-modal-hide="renameAccountModal">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
@@ -158,25 +155,79 @@
                             </button>
                         </div>
                         <!-- Modal body -->
-                        <div class="center my-4">
+                        <div class="flex my-6" style="justify-content: center">
                             <form method="POST"
                                   id="label_change"
+                                  class="mx-2"
                                   action="{{ route('account.update', $account->id) }}">
                                 @csrf
                                 @method('PATCH')
-                                <input name="newLabel" value="{{ $account->label }}">
+                                <input
+                                    class="mx-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    name="newLabel" value="{{ $account->label }}">
                             </form>
+                            <button
+                                form="label_change" type="submit"
+                                class="mx-2 py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                data-modal-hide="deleteAccountModal">
+                                Rename
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Main modal -->
+            <div id="deleteAccountModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+                 class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+                <div class="relative w-full h-full max-w-2xl md:h-auto">
+                    <!-- Modal content -->
+                    <div class="py-1 relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <!-- Modal header -->
+                        <div
+                            class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                                Account Deletion Confirmation
+                            </h3>
+                            <button type="button"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="deleteAccountModal">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                          clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <!-- Modal body -->
+                        <div class="center my-6">
+                            {{--            Reassurance that user wants to delete--}}
+                            <h3>Are you sure you want to delete account Nr.({{ $account->number }}) ?</h3>
                         </div>
                         <!-- Modal footer -->
+                        <form
+                            id="deleteAccount"
+                            method="POST"
+                            action="{{ route('account.destroy', $account->id) }}">
+                            @csrf
+                            @method('DELETE')
+                        </form>
                         <div
-                            class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                            <div>
-                                <div
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                    <input form="label_change" type="submit"
-                                           value="Rename">
-                                </div>
-                            </div>
+                            class="flex items-center p-3 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600"
+                            style="justify-content: space-evenly">
+                            <button
+                                type="submit"
+                                form="deleteAccount"
+                                class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                                Yes, delete this account
+                            </button>
+                            <button
+                                class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                data-modal-hide="deleteAccountModal">
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -185,14 +236,13 @@
             <div>
                 <p class="dark:text-white">Transactions</p>
                 <div class="my-5">
-                    <table class="center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="py-3 px-6">#</th>
                             <th scope="col" class="py-3 px-6">Date</th>
                             <th scope="col" class="py-3 px-6">Beneficiary/Payer</th>
                             <th scope="col" class="py-3 px-6">Description</th>
-                            <th scope="col" class="py-3 px-6 right">Currency</th>
                             <th scope="col" class="py-3 px-6 right">Amount</th>
                         </tr>
                         </thead>
@@ -217,28 +267,27 @@
                                 <td class="dark:text-white left py-4 px-6">{{ date('d/m/y', strtotime($transaction->created_at)) }}</td>
                                 <td class="dark:text-white left py-4 px-6">{{ $transaction->beneficiary_account_number }}</td>
                                 <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
-                                <td class="dark:text-white right py-4 px-6">{{ $transaction->currency }}</td>
                                 @if($transaction->beneficiary_account_number == $account->number)
                                     <td class="text-green-700 right py-4 px-6">
-                                        +{{ number_format($transaction->amount_two/100, 2) }}</td>
+                                        +{{ number_format($transaction->amount_beneficiary, 2) }}</td>
                                 @else
                                     <td class="text-red-700 right py-4 px-6">
-                                        -{{ number_format($transaction->amount_one/100, 2) }}</td>
+                                        -{{ number_format($transaction->amount_payer, 2) }}</td>
                                 @endif
                             </tr>
                         @endforeach
                         </tbody>
                         <tfoot>
                         <tr style="font-weight: bold">
-                            <td colspan="5" class="dark:text-white left py-4 px-6">Total</td>
+                            <td colspan="4" class="dark:text-white left py-4 px-6">Total</td>
                             <td class="dark:text-white right py-4 px-6">{{ number_format($endingBalance/100, 2) }}</td>
                         </tr>
                         <tr class="text-red-700">
-                            <td colspan="5" class="text-red-700 left py-4 px-6">Credit Turnover</td>
+                            <td colspan="4" class="text-red-700 left py-4 px-6">Credit Turnover</td>
                             <td class="text-red-700 right py-4 px-6">{{ number_format($creditTurnover/100*(-1), 2) }}</td>
                         </tr>
                         <tr class="text-green-700">
-                            <td colspan="5" class="dark:text-white left py-4 px-6">Debit Turnover</td>
+                            <td colspan="4" class="dark:text-white left py-4 px-6">Debit Turnover</td>
                             <td class="text-green-700 right py-4 px-6">{{ number_format($debitTurnover/100, 2) }}</td>
                         </tr>
                         </tfoot>

@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        @vite('resources/css/app.css')
+
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
@@ -13,6 +15,24 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <link href="/css/app.css" rel="stylesheet">
+
+        <style>
+            .center {
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .left {
+                text-align: left;
+            }
+            .right {
+                text-align: right;
+            }
+            .table-rounded {
+                border-radius: 8px;
+                overflow: hidden;
+                margin-top: 1em
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -32,6 +52,6 @@
                 {{ $slot }}
             </main>
         </div>
-        <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
     </body>
 </html>

@@ -34,11 +34,11 @@
                             {{ ('Payments, accounts') }}
                         </x-nav-link>
                     </div>
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-nav-link :href="route('cards.show')" :active="request()->routeIs('cards.show')">
-                            {{ ('Cards') }}
-                        </x-nav-link>
-                    </div>
+{{--                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">--}}
+{{--                        <x-nav-link :href="route('cards.show')" :active="request()->routeIs('cards.show')">--}}
+{{--                            {{ ('Cards') }}--}}
+{{--                        </x-nav-link>--}}
+{{--                    </div>--}}
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('transfer.show')" :active="request()->routeIs('transfer.show')">
                             {{ ('Transfers') }}

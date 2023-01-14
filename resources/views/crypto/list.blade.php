@@ -1,52 +1,74 @@
 <x-app-layout>
     <style>
-        .center {
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .right {
-            text-align: right;
+        .percent-change {
+            formatPercentage()
         }
     </style>
 
-    <div class="container-fluid-fluid" style="margin-right: 0">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let percentChanges = document.getElementsByClassName("percent-change");
+
+            for (let i = 0; i < percentChanges.length; i++) {
+                let percentChange = percentChanges[i];
+                let percentValue = percentChange.getAttribute("data-percent-change");
+                percentChange.textContent = Math.abs(parseFloat(percentValue)).toLocaleString('en-US', {
+                    maximumFractionDigits: 2,
+                    useGrouping: true
+                }) + "%";
+                if (percentValue < 0) {
+                    percentChange.textContent = "↓ - " + percentChange.textContent;
+                    percentChange.style.color = "red";
+                } else {
+                    // place the arrow in front of the number
+                    percentChange.textContent = "↑ + " + percentChange.textContent;
+                    percentChange.style.color = "green";
+                }
+            }
+        });
+    </script>
+
+    <div class="container-fluid my-8" style="margin-right: 0">
         <div class="center" style="width: 50%; height: 50%; text-align: center">
-            <div>
-                <h1 class="text-2xl font-bold">Crypto</h1>
-            </div>
-            <div>
-                {{--                from cryptoList using foreach show  symbol, max_supply, circulation_supply, total_supply, --}}
-                <table class="table-auto">
-                    <thead>
-                    <tr>
-                        <th class="px-4 py-2">Symbol</th>
-                        <th class="px-4 py-2">Icon</th>
-                        <th class="px-4 py-2">Max Supply</th>
-                        <th class="px-4 py-2">Circulation Supply</th>
-                        <th class="px-4 py-2">Total Supply</th>
-                        <th class="px-4 py-2">Price</th>
+            <table
+                class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400 my-8 shadow-md">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th class="px-4 py-2">Logo</th>
+                    <th class="px-4 py-2">Symbol</th>
+                    <th class="px-4 py-2">Price</th>
+                    <th class="px-4 py-2">1h %</th>
+                    <th class="px-4 py-2">24h %</th>
+                    <th class="px-4 py-2">7d %</th>
+                    <th class="px-4 py-2">24h Volume</th>
+                    <th class="px-4 py-2">Volume %</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach ($cryptoList as $cryptocurrency)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-4 py-3"><img src="{{ $cryptocurrency->getLogo() }}" alt="icon"></td>
+                        <td class="px-4 py-3">
+                            <a href="/crypto/{{ $cryptocurrency->getSymbol() }}">{{ $cryptocurrency->getSymbol() }}</a>
+                        </td>
+                        <td class="px-4 py-3">{{ $cryptocurrency->getPrice() }}</td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getPercentChange1h()}}">
+                        </td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getPercentChange24h()}}">
+                        </td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getPercentChange7d()}}">
+                        </td>
+                        <td class="px-4 py-3">{{ $cryptocurrency->getVolume24h() }}</td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getVolumeChange24h()}}">
+                        </td>
                     </tr>
-                    </thead>
-                    <tbody>
-                    @foreach($cryptoList as $crypto)
-                        <tr>
-                            <td class="border px-4 py-2"><a
-                                    href="/crypto/{{ $crypto->getSymbol() }}">{{ $crypto->getSymbol() }}</a></td>
-                            <td class="border px-4 py-2"><img src="{{ $crypto->getLogo() }}" alt="icon"></td>
-                            <td class="border px-4 py-2">{{ $crypto->getMaxSupply() }}</td>
-                            <td class="border px-4 py-2">{{ $crypto->getCirculatingSupply() }}</td>
-                            <td class="border px-4 py-2">{{ $crypto->getTotalSupply() }}</td>
-                            <td class="border px-4 py-2">{{ $crypto->getPrice() }}</td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
+                @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </x-app-layout>
