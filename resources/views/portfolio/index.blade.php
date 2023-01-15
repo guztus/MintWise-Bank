@@ -87,13 +87,13 @@
                             </td>
                             <td class="px-4 py-2">{{ number_format($asset->current_price,2) }}</td>
                             <td class="px-4 py-2">{{ number_format($asset->average_cost, 2) }}</td>
-                            <td class="px-4 py-2">{{ number_format($asset->amount, 2) }}</td>
+                            <td class="px-4 py-2">{{ $asset->amount }}</td>
                             <td class="px-4 py-2">€ {{ number_format($asset->amount * $asset->current_price, 2) }}</td>
                             <td class="px-4 py-2 percent-change"
                                 data-percent-change="{{ (($asset->current_price - $asset->average_cost) / $asset->average_cost) * 100 }}">
                             </td>
-                            <td class="px-4 py-2 percent-change"
-                                data-percent-change="{{ ($asset->current_price - $asset->average_cost) * $asset->amount }}">
+                            <td class="px-4 py-2 cash-change"
+                                data-cash-change="{{ ($asset->current_price - $asset->average_cost) * $asset->amount }}">
                             </td>
                         </tr>
                     @endforeach

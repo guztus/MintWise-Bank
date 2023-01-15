@@ -28,8 +28,9 @@ class AccountController extends Controller
             'transactions' =>
                 Transaction::sortable()->where('account_number', $accountNumber)
                     ->orWhere('beneficiary_account_number', $accountNumber)
-                    ->filter(request(['search', 'order']))
-                    ->paginate(5)->withQueryString(),
+                    ->filter(request(['search']))
+                    ->paginate(5)
+                    ->withQueryString(),
             'cards' => Card::where('account_number', $accountNumber)->get(),
         ]);
     }

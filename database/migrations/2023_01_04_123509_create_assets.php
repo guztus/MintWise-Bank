@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->string('symbol');
-            $table->float('average_cost');
-            $table->float('amount');
+            $table->float('average_cost', 60, 30);
+            $table->float('amount', 60, 30);
             $table->string('type');
             $table->timestamps();
         });

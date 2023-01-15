@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BalanceTransferRequest;
-use App\Rules\CodecardCode;
 use App\Services\TransferService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
