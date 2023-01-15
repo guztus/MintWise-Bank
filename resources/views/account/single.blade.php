@@ -1,4 +1,5 @@
 <x-app-layout>
+    <script src="https://kit.fontawesome.com/39748767d3.js" crossorigin="anonymous"></script>
     <style>
         .dangerHover:hover {
             background: rgba(255, 0, 0, 0.54);
@@ -13,7 +14,8 @@
                 <p class="dark:text-white">Account</p>
             </div>
             <div class="my-5">
-                <table class="table-rounded table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <table
+                    class="table-rounded table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="py-3 px-6">Name</th>
@@ -94,7 +96,8 @@
 
                     <div id="accordion-flush-body-2" class="hidden" aria-labelledby="accordion-flush-heading-2">
                         <div class="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                            <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <table
+                                class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <thead
                                     class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
@@ -236,14 +239,29 @@
             <div>
                 <p class="dark:text-white">Transactions</p>
                 <div class="my-5">
+                    <div class="flex" style="flex-direction: row; justify-content: center">
+                        <form>
+                            <input type="text" name="search"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                   placeholder="Search in transactions"
+                                   value="{{ Request::input('search') }}">
+                        </form>
+                        <button
+                            class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                            Search
+                        </button>
+                        <a type="button"
+                           class="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                           href="{{ request()->url() }}">Reset filters</a>
+                    </div>
                     <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="py-3 px-6">#</th>
-                            <th scope="col" class="py-3 px-6">Date</th>
+                            <th scope="col" class="py-3 px-6">@sortablelink('created_at', 'Date')</th>
                             <th scope="col" class="py-3 px-6">Beneficiary/Payer</th>
                             <th scope="col" class="py-3 px-6">Description</th>
-                            <th scope="col" class="py-3 px-6 right">Amount</th>
+                            <th scope="col" class="py-3 px-6 right">@sortablelink('amount_beneficiary', 'Amount')</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -264,7 +282,7 @@
                             @endphp
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td class="dark:text-white left py-4 px-6">{{ $rowCount++ }}</td>
-                                <td class="dark:text-white left py-4 px-6">{{ date('d/m/y', strtotime($transaction->created_at)) }}</td>
+                                <td class="dark:text-white left py-4 px-6">{{ date('d/m/y H:i', strtotime($transaction->created_at)) }}</td>
                                 <td class="dark:text-white left py-4 px-6">{{ $transaction->beneficiary_account_number }}</td>
                                 <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
                                 @if($transaction->beneficiary_account_number == $account->number)
@@ -292,6 +310,7 @@
                         </tr>
                         </tfoot>
                     </table>
+                    {{ $transactions->links() }}
                 </div>
             </div>
         </div>

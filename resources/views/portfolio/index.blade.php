@@ -46,12 +46,13 @@
         <div class="center" style="width: 50%; height: 50%; text-align: center">
             <div>
                 <p style="font-size: 2em">Assets</p>
-                <p>Assets Held: {{ count($assets) }}</p>
-                <p>Total Asset Value: {{ "€ " . number_format(($assets->map(function ($asset) {
+                @if(!$assets->isEmpty())
+                    <p>Assets Held: {{ count($assets) }}</p>
+                    <p>Total Asset Value: {{ "€ " . number_format(($assets->map(function ($asset) {
                         return $asset->current_price * $asset->amount;
                     }))->sum(), 2) }}</p>
-                <p>Total % Profit/Loss: <span class="py-2 percent-change"
-                                              data-percent-change="{{ (((($assets->map(function ($asset) {
+                    <p>Total % Profit/Loss: <span class="py-2 percent-change"
+                                                  data-percent-change="{{ (((($assets->map(function ($asset) {
                         return ($asset->current_price * $asset->amount);
                     }))->sum() - ($assets->map(function ($asset) {
                         return ($asset->amount * $asset->average_cost);
@@ -59,13 +60,14 @@
                         return ($asset->amount * $asset->average_cost);
                     }))->sum()) * 100 }}"></span></p>
 
-                <p>Total € Profit/Loss: <span class="py-2 cash-change"
-                                              data-cash-change="{{ ($assets->map(function ($asset) {
+                    <p>Total € Profit/Loss: <span class="py-2 cash-change"
+                                                  data-cash-change="{{ ($assets->map(function ($asset) {
                         return ($asset->current_price - $asset->average_cost) * $asset->amount;
                     }))->sum() }}"></span></p>
             </div>
             <div>
-                <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400 my-8 shadow-md">
+                <table
+                    class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400 my-8 shadow-md">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th class="px-4 py-2">Symbol</th>
@@ -95,6 +97,7 @@
                             </td>
                         </tr>
                     @endforeach
+                    @endif
                     </tbody>
                 </table>
             </div>

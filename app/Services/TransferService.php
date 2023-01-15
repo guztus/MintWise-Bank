@@ -56,10 +56,10 @@ class TransferService
             'beneficiary_account_number' => $beneficiaryAccountNumber,
             'description' => $description,
             'type' => 'transfer',
-            'amount_one' => $amount,
-            'currency_one' => $payerAccount->currency,
-            'amount_two' => $amountWithRate ?? null,
-            'currency_two' => $beneficiaryAccount->currency ?? null,
+            'amount_payer' => $amount,
+            'currency_payer' => $payerAccount->currency,
+            'amount_beneficiary' => $amountWithRate ?? null,
+            'currency_beneficiary' => $beneficiaryAccount->currency ?? null,
         ]);
     }
 

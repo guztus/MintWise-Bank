@@ -22,32 +22,36 @@
 
             <div class="my-5">
                 <div>
-                    <table class="table-rounded table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow-md rounded">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="py-3 px-6">Name</th>
-                            <th scope="col" class="py-3 px-6">Account</th>
-                            <th scope="col" class="py-3 px-6 right">Credit Limit</th>
-                            <th scope="col" class="py-3 px-6 right">Balance</th>
-                            <th scope="col" class="py-3 px-6 right">Currency</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($accounts as $account)
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td class="dark:text-white left py-4 px-6">
-                                    <a href="/account/{{ $account->id }}" class="hover:text-gray-900 hover:">
-                                        {{ $account->label }}
-                                    </a>
-                                </td>
-                                <td class="dark:text-white left py-4 px-6">{{ $account->number }}</td>
-                                <td class="dark:text-white right py-4 px-6">{{ number_format($account->credit_limit/100, 2) }}</td>
-                                <td class="dark:text-white right py-4 px-6">{{ number_format($account->balance/100, 2) }}</td>
-                                <td class="dark:text-white right py-4 px-6">{{ $account->currency }}</td>
+                    @if(!$accounts->isEmpty())
+                        <table
+                            class="table-rounded table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400 shadow-md rounded">
+                            <thead
+                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="py-3 px-6">Name</th>
+                                <th scope="col" class="py-3 px-6">Account</th>
+                                <th scope="col" class="py-3 px-6 right">Credit Limit</th>
+                                <th scope="col" class="py-3 px-6 right">Balance</th>
+                                <th scope="col" class="py-3 px-6 right">Currency</th>
                             </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                            @foreach($accounts as $account)
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <td class="dark:text-white left py-4 px-6">
+                                        <a href="/accounts/{{ $account->id }}" class="hover:text-gray-900 hover:">
+                                            {{ $account->label }}
+                                        </a>
+                                    </td>
+                                    <td class="dark:text-white left py-4 px-6">{{ $account->number }}</td>
+                                    <td class="dark:text-white right py-4 px-6">{{ number_format($account->credit_limit/100, 2) }}</td>
+                                    <td class="dark:text-white right py-4 px-6">{{ number_format($account->balance/100, 2) }}</td>
+                                    <td class="dark:text-white right py-4 px-6">{{ $account->currency }}</td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    @endif
                 </div>
                 <div
                     class="my-6 p-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">

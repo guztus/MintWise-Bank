@@ -37,11 +37,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/accounts/create',
         [AccountController::class, 'create'])->name('account.create');
 
-    Route::get('/account/{id}',
+    Route::get('/accounts/{id}',
         [AccountController::class, 'showOne'])->name('account.show');
-    Route::patch('/account/{id}',
+    Route::patch('/accounts/{id}',
         [AccountController::class, 'update'])->name('account.update');
-    Route::delete('/account/{id}',
+    Route::delete('/accounts/{id}',
         [AccountController::class, 'destroy'])->name('account.destroy');
 
     Route::get('/cards',

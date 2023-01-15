@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Repositories\CryptoRepository;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class PortfolioService
 {
@@ -11,9 +13,9 @@ class PortfolioService
         $this->cryptoRepository = $cryptoRepository;
     }
 
-    public function execute()
+    public function execute(): Collection
     {
-        return auth()->user()->assets->map(function ($asset) {
+        return Auth::user()->assets->map(function ($asset) {
             $asset->current_price = $this->cryptoRepository->getSingle($asset->symbol)->getPrice();
             return $asset;
         });
