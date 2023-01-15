@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Database\Seeders\CodecardSeeder;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -53,19 +54,19 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        auth()->user()->codeCard()->create([
-            'code_1' => fake()->numberBetween(1000,9999),
-            'code_2' => fake()->numberBetween(1000,9999),
-            'code_3' => fake()->numberBetween(1000,9999),
-            'code_4' => fake()->numberBetween(1000,9999),
-            'code_5' => fake()->numberBetween(1000,9999),
-            'code_6' => fake()->numberBetween(1000,9999),
-            'code_7' => fake()->numberBetween(1000,9999),
-            'code_8' => fake()->numberBetween(1000,9999),
-            'code_9' => fake()->numberBetween(1000,9999),
-            'code_10' => fake()->numberBetween(1000,9999),
-            'code_11' => fake()->numberBetween(1000,9999),
-            'code_12' => fake()->numberBetween(1000,9999),
+        $user->codeCard()->create([
+            'code_1' => fake()->numberBetween(10000,99999),
+            'code_2' => fake()->numberBetween(10000,99999),
+            'code_3' => fake()->numberBetween(10000,99999),
+            'code_4' => fake()->numberBetween(10000,99999),
+            'code_5' => fake()->numberBetween(10000,99999),
+            'code_6' => fake()->numberBetween(10000,99999),
+            'code_7' => fake()->numberBetween(10000,99999),
+            'code_8' => fake()->numberBetween(10000,99999),
+            'code_9' => fake()->numberBetween(10000,99999),
+            'code_10' => fake()->numberBetween(10000,99999),
+            'code_11' => fake()->numberBetween(10000,99999),
+            'code_12' => fake()->numberBetween(10000,99999),
         ]);
 
 

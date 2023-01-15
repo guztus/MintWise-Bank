@@ -61,204 +61,183 @@
         {{--        }--}}
     </script>
 
-    <div class="container-fluid" style="margin-right: 0">
-        <div class="center" style="width: 50%; height: 50%; text-align: center">
-            <div class="my-8">
-                @if(session()->has('message'))
-                    <div
-                        class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
-                        role="alert">
-                        <span class="font-medium">{{ session()->get('message') }}</span>
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400"
-                         role="alert">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
-
-            <div>
-                <a class="center block max-w-lg mb-4 p-6 my-8 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
-                    <div class="flex items-center justify-center my-5">
-                        <img src="{{ $crypto->getLogo() }}" alt="icon">
-                    </div>
-                    <p class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $crypto->getSymbol() }}</p>
-                    <p class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                        € {{ number_format($crypto->getPrice(), 6) }}
-                        <span style="
+    <div class="center" style="width: 60%; height: 60%; text-align: center">
+        <x-message-or-error/>
+        <div>
+            <a class="center block max-w-lg mb-4 p-6 my-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex items-center justify-center my-5">
+                    <img src="{{ $crypto->getLogo() }}" alt="icon">
+                </div>
+                <p class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $crypto->getSymbol() }}</p>
+                <p class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    € {{ number_format($crypto->getPrice(), 6) }}
+                    <span style="
                             font-size: 0.7em;
                             vertical-align: super" class="py-2 percent-change"
-                              data-percent-change="{{ $crypto->getPercentChange24h() }}"></span>
-                    </p>
-                    <div>
-                        <table class="table-rounded table-auto">
-                            <thead>
-                            <tr>
-                                <th class="px-4 py-2">Volume (24h)</th>
-                                <td class="border px-4 py-2">{{ $crypto->getVolume24h() }}</td>
-                                <span class="px-4 py-2 percent-change"
-                                      data-percent-change="{{ $crypto->getVolumeChange24h() }}">
-                                </span>
-                            </tr>
-                            <tr>
-                                <th class="px-4 py-2">Circulating Supply</th>
-                                <td class="border px-4 py-2">{{ $crypto->getCirculatingSupply() }}</td>
-                            </tr>
-                            <tr>
-                                <th class="px-4 py-2">Total Supply</th>
-                                <td class="border px-4 py-2">{{ $crypto->getTotalSupply() }}</td>
-                            </tr>
-                            <tr>
-                                <th class="px-4 py-2">Max Supply</th>
-                                <td class="border px-4 py-2">{{ $crypto->getMaxSupply() }}</td>
-                            </tr>
-                            </thead>
-                        </table>
-                    </div>
-                    <div>
-                        {{--                display asset owned amount for this asset--}}
-                        @if ($assetOwned)
-                            <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
-                                You own {{ $assetOwned->amount }} {{ $crypto->getSymbol() }}
-                            </p>
-                            <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
-                                Average price: € {{ number_format($assetOwned->average_cost, 2) }}
-                            </p>
-                            <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
-                                Total worth: € {{ number_format($assetOwned->amount * $crypto->getPrice(), 2) }}
-                            </p>
-                        @endif
-                    </div>
-                </a>
-            </div>
-
-            <div>
-                {{--                form for buying or selling crypto --}}
-                <div class="container-fluid">
-                    <div class="flex flex-col w-1/2 center">
-                        <div class="flex flex-row">
-                            <form id="buy" action="{{ route('crypto.buy', $crypto->getSymbol()) }}" method="post">
-                                @csrf
-                                <input name="symbol" value="{{ $crypto->getSymbol() }}" hidden>
-                                <input id="asset_amount" name="assetAmount" type="number"
-                                       placeholder="{{ $crypto->getSymbol() }}"
-                                       step="0.000000001"
-                                       required
-                                    {{--                                       oninput="fiatChangeLive()"--}}
-                                >
-                                <input id="fiat_amount" type="number" placeholder="Money Amount" step="0.01"
-                                       min="0.01"
-                                    {{--                                       oninput="assetChangeLive()"--}}
-                                >
-                                <select
-                                    form="buy"
-                                    class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    name="payerAccountNumber">
-                                    @foreach($accounts as $account)
-                                        <option
-                                            value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}
-                                            ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
-                            <form id="sell" action="{{ route('crypto.sell', $crypto->getSymbol()) }}" method="post">
-                                @csrf
-                                <input name="symbol" value="{{ $crypto->getSymbol() }}" hidden>
-                                <input name="assetAmount" type="number" placeholder="{{ $crypto->getSymbol() }}"
-                                       step="0.000000001"
-                                       required>
-                                <input type="number" placeholder="Money Amount" step="0.01"
-                                       min="0.01">
-                                <select
-                                    form="sell"
-                                    class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    name="payerAccountNumber"
-                                >
-                                    @foreach($accounts as $account)
-                                        <option
-                                            value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}
-                                            ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        </div>
-                        <div class="flex flex-row center w-max" style="justify-content: space-evenly">
-                            <div style="padding-right: 4em">
-                                <button type="submit"
-                                        form="buy"
-                                        class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
-                                    Buy
-                                </button>
-                            </div>
-                            <div style="padding-left: 4em">
-                                <button type="submit"
-                                        form="sell"
-                                        class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
-                                    Sell
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <p class="dark:text-white">Transactions</p>
-                <div class="my-5">
-                    <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                          data-percent-change="{{ $crypto->getPercentChange24h() }}"></span>
+                </p>
+                <div>
+                    <table class="table-rounded table-auto">
+                        <thead>
                         <tr>
-                            <th scope="col" class="py-3 px-6">#</th>
-                            <th scope="col" class="py-3 px-6">Date</th>
-                            <th scope="col" class="py-3 px-6">Beneficiary/Payer</th>
-                            <th scope="col" class="py-3 px-6">Description</th>
-                            <th scope="col" class="py-3 px-6 right">Amount</th>
+                            <th class="px-4 py-2">Volume (24h)</th>
+                            <td class="border px-4 py-2">{{ $crypto->getVolume24h() }}</td>
+                            <span class="px-4 py-2 percent-change"
+                                  data-percent-change="{{ $crypto->getVolumeChange24h() }}">
+                                </span>
+                        </tr>
+                        <tr>
+                            <th class="px-4 py-2">Circulating Supply</th>
+                            <td class="border px-4 py-2">{{ $crypto->getCirculatingSupply() }}</td>
+                        </tr>
+                        <tr>
+                            <th class="px-4 py-2">Total Supply</th>
+                            <td class="border px-4 py-2">{{ $crypto->getTotalSupply() }}</td>
+                        </tr>
+                        <tr>
+                            <th class="px-4 py-2">Max Supply</th>
+                            <td class="border px-4 py-2">{{ $crypto->getMaxSupply() }}</td>
                         </tr>
                         </thead>
-                        <tbody>
-                        @php
-                            $rowCount = 1;
-                            $endingBalance = 0;
-                            $debitTurnover = 0;
-                            $creditTurnover = 0;
-                        @endphp
-                        @foreach($transactions as $transaction)
-                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                <td class="dark:text-white left py-4 px-6">{{ $rowCount++ }}</td>
-                                <td class="dark:text-white left py-4 px-6">{{ date('d/m/y', strtotime($transaction->created_at)) }}</td>
-                                <td class="dark:text-white left py-4 px-6">{{ $transaction->beneficiary_account_number }}</td>
-                                <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
-                                @if($transaction->beneficiary_account_number != 'Crypto')
-                                    <td class="text-green-700 right py-4 px-6">
-                                        +{{ number_format($transaction->amount_beneficiary, 2) }}</td>
-                                @else
-                                    <td class="text-red-700 right py-4 px-6">
-                                        -{{ number_format($transaction->amount_payer, 2) }}</td>
-                                @endif
-                            </tr>
-                        @endforeach
-                        </tbody>
-                        {{--                        <tfoot>--}}
-                        {{--                        <tr style="font-weight: bold">--}}
-                        {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Total</td>--}}
-                        {{--                            <td class="dark:text-white right py-4 px-6">{{ number_format($endingBalance/100, 2) }}</td>--}}
-                        {{--                        </tr>--}}
-                        {{--                        <tr class="text-red-700">--}}
-                        {{--                            <td colspan="4" class="text-red-700 left py-4 px-6">Credit Turnover</td>--}}
-                        {{--                            <td class="text-red-700 right py-4 px-6">{{ number_format($creditTurnover/100*(-1), 2) }}</td>--}}
-                        {{--                        </tr>--}}
-                        {{--                        <tr class="text-green-700">--}}
-                        {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Debit Turnover</td>--}}
-                        {{--                            <td class="text-green-700 right py-4 px-6">{{ number_format($debitTurnover/100, 2) }}</td>--}}
-                        {{--                        </tr>--}}
-                        {{--                        </tfoot>--}}
                     </table>
                 </div>
+                <div>
+                    {{--                display asset owned amount for this asset--}}
+                    @if ($assetOwned)
+                        <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
+                            You own {{ $assetOwned->amount }} {{ $crypto->getSymbol() }}
+                        </p>
+                        <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
+                            Average price: € {{ number_format($assetOwned->average_cost, 2) }}
+                        </p>
+                        <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
+                            Total worth: € {{ number_format($assetOwned->amount * $crypto->getPrice(), 2) }}
+                        </p>
+                    @endif
+                </div>
+            </a>
+        </div>
+
+        <div>
+            {{--                form for buying or selling crypto --}}
+            <div class="container-fluid">
+                <div class="flex flex-col w-1/2 center">
+                    <div class="flex flex-row">
+                        <form id="buy" action="{{ route('crypto.buy', $crypto->getSymbol()) }}" method="post">
+                            @csrf
+                            <input name="symbol" value="{{ $crypto->getSymbol() }}" hidden>
+                            <input id="asset_amount" name="assetAmount" type="number"
+                                   placeholder="{{ $crypto->getSymbol() }}"
+                                   step="0.000000001"
+                                   required
+                                {{--                                       oninput="fiatChangeLive()"--}}
+                            >
+                            <input id="fiat_amount" type="number" placeholder="Money Amount" step="0.01"
+                                   min="0.01"
+                                {{--                                       oninput="assetChangeLive()"--}}
+                            >
+                            <select
+                                form="buy"
+                                class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                name="payerAccountNumber">
+                                @foreach($accounts as $account)
+                                    <option
+                                        value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}
+                                        ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                @endforeach
+                            </select>
+                        </form>
+                        <form id="sell" action="{{ route('crypto.sell', $crypto->getSymbol()) }}" method="post">
+                            @csrf
+                            <input name="symbol" value="{{ $crypto->getSymbol() }}" hidden>
+                            <input name="assetAmount" type="number" placeholder="{{ $crypto->getSymbol() }}"
+                                   step="0.000000001"
+                                   required>
+                            <input type="number" placeholder="Money Amount" step="0.01"
+                                   min="0.01">
+                            <select
+                                form="sell"
+                                class="center w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                name="payerAccountNumber"
+                            >
+                                @foreach($accounts as $account)
+                                    <option
+                                        value="{{ $account->number }}">{{ $account->label }} ({{ $account->number }}
+                                        ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                                @endforeach
+                            </select>
+                        </form>
+                    </div>
+                    <div class="flex flex-row center w-max" style="justify-content: space-evenly">
+                        <div style="padding-right: 4em">
+                            <button type="submit"
+                                    form="buy"
+                                    class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+                                Buy
+                            </button>
+                        </div>
+                        <div style="padding-left: 4em">
+                            <button type="submit"
+                                    form="sell"
+                                    class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                Sell
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <p class="dark:text-white">Transactions</p>
+            <div class="my-5">
+                <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="py-3 px-6">#</th>
+                        <th scope="col" class="py-3 px-6">Date</th>
+                        <th scope="col" class="py-3 px-6">Beneficiary/Payer</th>
+                        <th scope="col" class="py-3 px-6">Description</th>
+                        <th scope="col" class="py-3 px-6 right">Amount</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @php
+                        $rowCount = 1;
+                        $endingBalance = 0;
+                        $debitTurnover = 0;
+                        $creditTurnover = 0;
+                    @endphp
+                    @foreach($transactions as $transaction)
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                            <td class="dark:text-white left py-4 px-6">{{ $rowCount++ }}</td>
+                            <td class="dark:text-white left py-4 px-6">{{ date('d/m/y', strtotime($transaction->created_at)) }}</td>
+                            <td class="dark:text-white left py-4 px-6">{{ $transaction->beneficiary_account_number }}</td>
+                            <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
+                            @if($transaction->beneficiary_account_number != 'Crypto')
+                                <td class="text-green-700 right py-4 px-6">
+                                    +{{ number_format($transaction->amount_beneficiary, 2) }}</td>
+                            @else
+                                <td class="text-red-700 right py-4 px-6">
+                                    -{{ number_format($transaction->amount_payer, 2) }}</td>
+                            @endif
+                        </tr>
+                    @endforeach
+                    </tbody>
+                    {{--                        <tfoot>--}}
+                    {{--                        <tr style="font-weight: bold">--}}
+                    {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Total</td>--}}
+                    {{--                            <td class="dark:text-white right py-4 px-6">{{ number_format($endingBalance/100, 2) }}</td>--}}
+                    {{--                        </tr>--}}
+                    {{--                        <tr class="text-red-700">--}}
+                    {{--                            <td colspan="4" class="text-red-700 left py-4 px-6">Credit Turnover</td>--}}
+                    {{--                            <td class="text-red-700 right py-4 px-6">{{ number_format($creditTurnover/100*(-1), 2) }}</td>--}}
+                    {{--                        </tr>--}}
+                    {{--                        <tr class="text-green-700">--}}
+                    {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Debit Turnover</td>--}}
+                    {{--                            <td class="text-green-700 right py-4 px-6">{{ number_format($debitTurnover/100, 2) }}</td>--}}
+                    {{--                        </tr>--}}
+                    {{--                        </tfoot>--}}
+                </table>
             </div>
         </div>
     </div>

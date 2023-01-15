@@ -10,13 +10,12 @@ class Asset extends Model
 {
     use HasFactory;
 
-    protected $fillable =
-        [
-            'symbol',
-            'average_cost',
-            'amount',
-            'type'
-        ];
+    protected $fillable = [
+        'symbol',
+        'average_cost',
+        'amount',
+        'type'
+    ];
 
     public function user(): BelongsTo
     {

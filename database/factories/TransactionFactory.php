@@ -16,18 +16,16 @@ class TransactionFactory extends Factory
      */
     public function definition()
     {
+        $amount = $this->faker->numberBetween(1, 100000000);
         return [
-//            Needs to be updated
-//            'user_id' => 1,
-//            'account_id' => 31,
-//            'account_number' => 398790902469, // should be name
-//            'beneficiary_user_id' => rand(1, 1351315), // should be account
-//            'beneficiary_account_number' => rand(100000000000, 999999999999), // should be account
-//            'description' => fake()->word(),
-//            'type' => 'transfer',
-//            'amount' => rand(-100000000, 100000000),
-//            'created_at' => now(),
-//            'updated_at' => now(),
+            'account_number' => $this->faker->randomElement(['LV26HABAE9QAB89FEG395', 'LV26HABAE9QAB89FEG396', 'LV26HABAE9QAB89FEG397', 'LV26HABAE9QAB89FEG398', 'LV26HABAE9QAB89FEG399']),
+            'beneficiary_account_number' =>  $this->faker->randomElement(['LV26HABAE9QAB89FEG395', 'LV26HABAE9QAB89FEG396', 'LV26HABAE9QAB89FEG397', 'LV26HABAE9QAB89FEG398', 'LV26HABAE9QAB89FEG399']),
+            'description' => $this->faker->sentence(),
+            'type' => 'transfer',
+            'amount_payer' => $amount,
+            'currency_payer' => 'EUR',
+            'amount_beneficiary' => $amount,
+            'currency_beneficiary' => 'EUR',
         ];
     }
 }

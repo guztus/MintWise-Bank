@@ -38,32 +38,12 @@
         }
     </style>
 
-    <div class="container-fluid-fluid my-8" style="">
-        <div class="center" style="width: 50%; height: 50%; text-align: center">
+    <div class="container-fluid-fluid my-6" style="">
+        <div class="center" style="width: 60%; height: 60%; text-align: center">
             <div>
                 <h1 class="text-2xl font-bold">Transfer money</h1>
             </div>
-            <div>
-                @if(session()->has('message'))
-                    <div
-                        class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800"
-                        role="alert">
-                        <span class="font-medium">{{ session()->get('message') }}</span>
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400"
-                         role="alert">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
-
-
+            <x-message-or-error/>
             <div>
                 <form method="POST" action="/transfer">
                     @csrf

@@ -22,14 +22,13 @@ class AccountController extends Controller
     public function showOne(): View
     {
         $accountNumber = Auth::user()->accounts->where('id', request('id'))->first()->number;
-
         return view('account.single', [
             'account' => Auth::user()->accounts->where('number', $accountNumber)->first(),
             'transactions' =>
                 Transaction::sortable()->where('account_number', $accountNumber)
                     ->orWhere('beneficiary_account_number', $accountNumber)
-                    ->filter(request(['search']))
-                    ->paginate(5)
+                    ->filter(request()->only('search', 'from', 'to'))
+                    ->paginate()
                     ->withQueryString(),
             'cards' => Card::where('account_number', $accountNumber)->get(),
         ]);
@@ -43,7 +42,7 @@ class AccountController extends Controller
             'currency' => request('currency')
         ]);
 
-        return redirect()->back()->with('message', 'Account successfully created!');
+        return redirect()->back()->with('message_success', 'Account successfully created!');
     }
 
     public function update()
@@ -52,15 +51,18 @@ class AccountController extends Controller
         $account->label = Str::ucfirst(request('newLabel'));
         $account->save();
 
-        return redirect()->back()->with('message', 'Account successfully updated!');
+        return redirect()->back()->with('message_success', 'Account successfully updated!');
     }
 
     public function destroy()
     {
         $account = Auth::user()->accounts->where('id', request('id'))->first();
+        if ($account->balance != 0) {
+            return redirect()->back()->with('message_danger', 'Account balance must be 0 to delete it!');
+        }
         $account->delete();
 
-        return redirect()->to(route('accounts.index'))->with('message', 'Account successfully deleted!');
+        return redirect()->to(route('accounts.index'))->with('message_success', 'Account successfully deleted!');
     }
 
     protected function getTransactions()

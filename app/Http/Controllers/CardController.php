@@ -29,6 +29,6 @@ class CardController extends Controller
             'design' => 1,
         ]);
 
-        return redirect()->back()->with('message', 'Card order created!');
+        return redirect()->back()->with('message_success', 'Card order created!');
     }
 }
