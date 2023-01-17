@@ -64,7 +64,7 @@
     <div class="center" style="width: 60%; height: 60%; text-align: center">
         <x-message-or-error/>
         <div>
-            <a class="center block max-w-lg mb-4 p-6 my-6 bg-white border border-gray-200 rounded-lg shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700">
+            <a class="center block max-w-lg mb-4 p-6 my-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex items-center justify-center my-5">
                     <img src="{{ $crypto->getLogo() }}" alt="icon">
                 </div>

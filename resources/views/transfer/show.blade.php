@@ -1,11 +1,4 @@
 <x-app-layout>
-    <script>
-        window.onload = function randomNumber() {
-            let randomNumber = Math.ceil(Math.random() * 12);
-            document.getElementById('codeId').value = randomNumber
-            document.getElementById('codeId').placeholder = randomNumber
-        }
-    </script>
     <style>
         input, select {
             width: 500px !important;

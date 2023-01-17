@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    @vite('resources/css/app.css')
+{{--    @vite('resources/css/app.css')--}}
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -14,7 +14,6 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="/css/app.css" rel="stylesheet">
 </head>
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-gray-100">
@@ -38,7 +37,7 @@
         </main>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/datepicker.min.js"></script>
+{{--<script src="../path/to/flowbite/dist/flowbite.min.js"></script>--}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
 </body>
 </html>

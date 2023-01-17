@@ -26,16 +26,22 @@
     @apply cursor-pointer py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-purple-900 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
 }
 
+.btn-danger {
+    @apply cursor-pointer py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-red-600 rounded-lg border border-gray-200 hover:bg-red-500 hover:text-purple-900 focus:z-10 focus:ring-4 focus:ring-red-500 dark:focus:ring-red-600 dark:bg-red-600 dark:text-gray-400 dark:border-red-500 dark:hover:text-white dark:hover:bg-red-600;
+}
+
 .input {
-    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-900 focus:border-purple-900 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500;
+    /* w-80 */
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-900 focus:border-purple-900 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500;
 }
 
 .card-standard {
-    @apply mt-6 pt-4 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700
+    /* pt-4 */
+    @apply p-4 sm:p-8 mt-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700
 }
 
 .heading {
-    @apply text-gray-900 text-2xl font-bold dark:text-gray-400 my-4;
+    @apply text-gray-900 text-xl font-bold dark:text-gray-400 my-4;
 }
 
 .heading-medium {
