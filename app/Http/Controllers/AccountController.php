@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Card;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -25,7 +26,7 @@ class AccountController extends Controller
         return view('account.single', [
             'account' => Auth::user()->accounts->where('number', $accountNumber)->first(),
             'transactions' =>
-                Transaction::sortable()->where('account_number', $accountNumber)
+                Transaction::sortable(['created_at', 'desc'])->where('account_number', $accountNumber)
                     ->orWhere('beneficiary_account_number', $accountNumber)
                     ->filter(request()->only('search', 'from', 'to'))
                     ->paginate()
@@ -34,8 +35,11 @@ class AccountController extends Controller
         ]);
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $request->validate([
+            'label' => 'required|string|max:255',
+        ]);
         Auth::user()->accounts()->create([
             'number' => fake()->iban('LV', 'HABA'),
             'label' => Str::ucfirst(request('label')),

@@ -24,20 +24,16 @@ class Transaction extends Model
 
     public $sortable = [
         'created_at',
-//        'account_number',
-        'beneficiary_account_number',
-//        'amount_payer',
-        'amount_beneficiary',
     ];
 
     public function scopeFilter($query, array $filters)
     {
         if (!empty($filters)) {
             $query
-                ->whereBetween('created_at', [request('from') ?? ('2018-01-01'), request('to') ?? ('2031-01-01')])
+                ->whereBetween('created_at', [request('from') ?? null, request('to') ?? null])
                 ->where('description', 'like', '%' . request('search') . '%')
-                ->orWhere('account_number', 'like', '%' . request('search') . '%')
-                ->orWhere('beneficiary_account_number', 'like', '%' . request('search') . '%');
+                ->where('account_number', 'like', '%' . request('search') . '%')
+                ->where('beneficiary_account_number', 'like', '%' . request('search') . '%');
         }
     }
 }

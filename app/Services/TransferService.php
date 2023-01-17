@@ -27,7 +27,7 @@ class TransferService
             if (!empty($beneficiaryAccount)) {
                 $this->updateBeneficiaryAccount($payerAccount, $beneficiaryAccount, $amount);
             } else {
-                session()->flash('message', "Transfer successful! Sent "
+                session()->flash('message_success', "Transfer successful! Sent "
                     . $amount / 100
                     . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccountNumber}."
                 );
@@ -87,13 +87,13 @@ class TransferService
 
         if ($payerCurrency !== $beneficiaryCurrency) {
             $amountWithRate = $amount * $beneficiaryRate / $payerRate;
-            session()->flash('message', "Transfer successful!
+            session()->flash('message_success', "Transfer successful!
                 Sent " . $amount / 100 . " {$payerCurrency} from {$payerAccount->number} to {$beneficiaryAccount->number}.
                 \n Currency exchanged from {$payerCurrency} to {$beneficiaryCurrency}. Sent: "
                 . number_format($amountWithRate / 100, 2)
                 . " {$beneficiaryCurrency}");
         } else {
-            session()->flash('message', "Transfer successful!
+            session()->flash('message_success', "Transfer successful!
                 Sent " . $amount / 100 . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccount->number}.");
         }
 

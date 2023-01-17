@@ -187,58 +187,61 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="card-standard">
             <p class="dark:text-white">Transactions</p>
-            <div class="my-5">
-                <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                        <th scope="col" class="py-3 px-6">#</th>
-                        <th scope="col" class="py-3 px-6">Date</th>
-                        <th scope="col" class="py-3 px-6">Beneficiary/Payer</th>
-                        <th scope="col" class="py-3 px-6">Description</th>
-                        <th scope="col" class="py-3 px-6 right">Amount</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @php
-                        $rowCount = 1;
-                        $endingBalance = 0;
-                        $debitTurnover = 0;
-                        $creditTurnover = 0;
-                    @endphp
-                    @foreach($transactions as $transaction)
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                            <td class="dark:text-white left py-4 px-6">{{ $rowCount++ }}</td>
-                            <td class="dark:text-white left py-4 px-6">{{ date('d/m/y', strtotime($transaction->created_at)) }}</td>
-                            <td class="dark:text-white left py-4 px-6">{{ $transaction->beneficiary_account_number }}</td>
-                            <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
-                            @if($transaction->beneficiary_account_number != 'Crypto')
-                                <td class="text-green-700 right py-4 px-6">
-                                    +{{ number_format($transaction->amount_beneficiary, 2) }}</td>
-                            @else
-                                <td class="text-red-700 right py-4 px-6">
-                                    -{{ number_format($transaction->amount_payer, 2) }}</td>
-                            @endif
+            {{--            show transactions if not empty--}}
+            @if ($transactions->count() > 0)
+                <div class="my-5">
+                    <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">#</th>
+                            <th scope="col" class="py-3 px-6">Date</th>
+                            <th scope="col" class="py-3 px-6">Beneficiary/Payer</th>
+                            <th scope="col" class="py-3 px-6">Description</th>
+                            <th scope="col" class="py-3 px-6 right">Amount</th>
                         </tr>
-                    @endforeach
-                    </tbody>
-                    {{--                        <tfoot>--}}
-                    {{--                        <tr style="font-weight: bold">--}}
-                    {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Total</td>--}}
-                    {{--                            <td class="dark:text-white right py-4 px-6">{{ number_format($endingBalance/100, 2) }}</td>--}}
-                    {{--                        </tr>--}}
-                    {{--                        <tr class="text-red-700">--}}
-                    {{--                            <td colspan="4" class="text-red-700 left py-4 px-6">Credit Turnover</td>--}}
-                    {{--                            <td class="text-red-700 right py-4 px-6">{{ number_format($creditTurnover/100*(-1), 2) }}</td>--}}
-                    {{--                        </tr>--}}
-                    {{--                        <tr class="text-green-700">--}}
-                    {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Debit Turnover</td>--}}
-                    {{--                            <td class="text-green-700 right py-4 px-6">{{ number_format($debitTurnover/100, 2) }}</td>--}}
-                    {{--                        </tr>--}}
-                    {{--                        </tfoot>--}}
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                        @php
+                            $rowCount = 1;
+                            $endingBalance = 0;
+                            $debitTurnover = 0;
+                            $creditTurnover = 0;
+                        @endphp
+                        @foreach($transactions as $transaction)
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td class="dark:text-white left py-4 px-6">{{ $rowCount++ }}</td>
+                                <td class="dark:text-white left py-4 px-6">{{ date('d/m/y', strtotime($transaction->created_at)) }}</td>
+                                <td class="dark:text-white left py-4 px-6">{{ $transaction->beneficiary_account_number }}</td>
+                                <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
+                                @if($transaction->beneficiary_account_number != 'Crypto')
+                                    <td class="text-green-700 right py-4 px-6">
+                                        +{{ number_format($transaction->amount_beneficiary, 2) }}</td>
+                                @else
+                                    <td class="text-red-700 right py-4 px-6">
+                                        -{{ number_format($transaction->amount_payer, 2) }}</td>
+                                @endif
+                            </tr>
+                        @endforeach
+                        </tbody>
+                        {{--                        <tfoot>--}}
+                        {{--                        <tr style="font-weight: bold">--}}
+                        {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Total</td>--}}
+                        {{--                            <td class="dark:text-white right py-4 px-6">{{ number_format($endingBalance/100, 2) }}</td>--}}
+                        {{--                        </tr>--}}
+                        {{--                        <tr class="text-red-700">--}}
+                        {{--                            <td colspan="4" class="text-red-700 left py-4 px-6">Credit Turnover</td>--}}
+                        {{--                            <td class="text-red-700 right py-4 px-6">{{ number_format($creditTurnover/100*(-1), 2) }}</td>--}}
+                        {{--                        </tr>--}}
+                        {{--                        <tr class="text-green-700">--}}
+                        {{--                            <td colspan="4" class="dark:text-white left py-4 px-6">Debit Turnover</td>--}}
+                        {{--                            <td class="text-green-700 right py-4 px-6">{{ number_format($debitTurnover/100, 2) }}</td>--}}
+                        {{--                        </tr>--}}
+                        {{--                        </tfoot>--}}
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>

@@ -8,7 +8,6 @@ use Illuminate\Support\ServiceProvider;
 
 class CryptoProvider extends ServiceProvider
 {
-
     public function register()
     {
         $this->app->bind(CryptoServiceInterface::class, CryptoCoinMarketCapAPIService::class);

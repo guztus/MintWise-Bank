@@ -73,4 +73,9 @@ class CryptoController extends Controller
 
         return redirect()->back();
     }
+
+    public function search(): RedirectResponse
+    {
+        return redirect()->route('crypto.show', ['symbol' => request('symbol')]);
+    }
 }

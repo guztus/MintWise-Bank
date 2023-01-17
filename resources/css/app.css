@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.center {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.table-rounded {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 1em
+}
+
+.btn {
+    @apply cursor-pointer py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-purple-900 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700;
+}
+
+.input {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-900 focus:border-purple-900 block w-80 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-purple-500 dark:focus:border-purple-500;
+}
+
+.card-standard {
+    @apply mt-6 pt-4 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700
+}
+
+.heading {
+    @apply text-gray-900 text-2xl font-bold dark:text-gray-400 my-4;
+}
+
+.heading-medium {
+    @apply text-gray-900 text-base font-bold dark:text-gray-400 my-2 mb-6;
+}
+
+.table-rounded-preset {
+@layer @apply table-rounded w-full text-sm text-left text-gray-500 dark: text-gray-400 my-6;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}

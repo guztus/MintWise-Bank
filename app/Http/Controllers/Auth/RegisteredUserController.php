@@ -9,6 +9,7 @@ use Database\Seeders\CodecardSeeder;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
@@ -42,6 +43,8 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        DB::transaction(function () use ($request){
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -49,10 +52,6 @@ class RegisteredUserController extends Controller
             'phone_number' => $request->phone_number,
             'password' => Hash::make($request->password),
         ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
 
         $user->codeCard()->create([
             'code_1' => fake()->numberBetween(10000,99999),
@@ -69,6 +68,13 @@ class RegisteredUserController extends Controller
             'code_12' => fake()->numberBetween(10000,99999),
         ]);
 
+        });
+
+        $user = User::where('email', $request->email)->first();
+
+        event(new Registered($user));
+
+        Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
     }

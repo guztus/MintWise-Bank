@@ -15,32 +15,11 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="/css/app.css" rel="stylesheet">
-
-    <style>
-        .center {
-            text-align: center;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .left {
-            text-align: left;
-        }
-
-        .right {
-            text-align: right;
-        }
-
-        .table-rounded {
-            border-radius: 8px;
-            overflow: hidden;
-            margin-top: 1em
-        }
-    </style>
 </head>
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-gray-100">
-    @include('layouts.navigation')
+
+    @include('layouts.new-navigation')
 
     <div class="container-fluid mt-6 pb-6">
 
@@ -54,7 +33,7 @@
         @endif
 
         <!-- Page Content -->
-        <main>
+        <main class="mb-6">
             {{ $slot }}
         </main>
     </div>

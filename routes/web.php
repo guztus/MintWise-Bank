@@ -58,6 +58,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/crypto',
         [CryptoController::class, 'index'])->name('crypto.index');
+    Route::get('/crypto/search/',
+        [CryptoController::class, 'search'])->name('crypto.search');
     Route::get('/crypto/{symbol}',
         [CryptoController::class, 'show'])->name('crypto.show');
     Route::post('/crypto/{symbol}/buy',

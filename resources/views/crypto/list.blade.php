@@ -29,48 +29,63 @@
     </script>
 
     <div class="center" style="width: 60%; height: 60%; text-align: center">
-        <table
-            class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400 my-6 shadow-md">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th class="px-4 py-2">#</th>
-                <th class="px-2 py-2">Logo</th>
-                <th class="px-4 py-2">Symbol</th>
-                <th class="px-4 py-2">Price</th>
-                <th class="px-4 py-2">1h %</th>
-                <th class="px-4 py-2">24h %</th>
-                <th class="px-4 py-2">7d %</th>
-                <th class="px-4 py-2">24h Volume</th>
-                <th class="px-4 py-2">Volume %</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach ($cryptoList as $cryptocurrency)
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td class="px-4 py-3">{{ $loop->index + 1 }}</td>
-                    <td class="px-2 py-3"><img src="{{ $cryptocurrency->getLogo() }}" alt="icon"
-                                               style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
-                    </td>
-                    <td class="px-4 py-3">
-                        <a href="/crypto/{{ $cryptocurrency->getSymbol() }}">{{ $cryptocurrency->getSymbol() }}</a>
-                    </td>
-                    <td class="px-4 py-3">{{ $cryptocurrency->getPrice() }}</td>
-                    <td class="px-4 py-3 percent-change"
-                        data-percent-change="{{$cryptocurrency->getPercentChange1h()}}">
-                    </td>
-                    <td class="px-4 py-3 percent-change"
-                        data-percent-change="{{$cryptocurrency->getPercentChange24h()}}">
-                    </td>
-                    <td class="px-4 py-3 percent-change"
-                        data-percent-change="{{$cryptocurrency->getPercentChange7d()}}">
-                    </td>
-                    <td class="px-4 py-3">{{ $cryptocurrency->getVolume24h() }}</td>
-                    <td class="px-4 py-3 percent-change"
-                        data-percent-change="{{$cryptocurrency->getVolumeChange24h()}}">
-                    </td>
+        <div class="card-standard">
+            <div class="heading">Cryptocurrency Market</div>
+            <div class="mb-6">
+                <form method="get" action="/crypto/search/">
+                    <div class="flex px-32" style="justify-content: center; gap: 0.5em">
+                        <input
+                            class="input"
+                            type="text"
+                            name="symbol"
+                            placeholder="Symbol">
+                        <input type="submit" class="btn" value="Search">
+                    </div>
+                </form>
+            </div>
+            <table
+                class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th class="px-4 py-2">#</th>
+                    <th class="px-2 py-2">Logo</th>
+                    <th class="px-4 py-2">Symbol</th>
+                    <th class="px-4 py-2">Price</th>
+                    <th class="px-4 py-2">1h %</th>
+                    <th class="px-4 py-2">24h %</th>
+                    <th class="px-4 py-2">7d %</th>
+                    <th class="px-4 py-2">24h Volume</th>
+                    <th class="px-4 py-2">Volume %</th>
                 </tr>
-            @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                @foreach ($cryptoList as $cryptocurrency)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <td class="px-4 py-3">{{ $loop->index + 1 }}</td>
+                        <td class="px-2 py-3"><img src="{{ $cryptocurrency->getLogo() }}" alt="icon"
+                                                   style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+                        </td>
+                        <td class="px-4 py-3">
+                            <a href="/crypto/{{ $cryptocurrency->getSymbol() }}">{{ $cryptocurrency->getSymbol() }}</a>
+                        </td>
+                        <td class="px-4 py-3">{{ $cryptocurrency->getPrice() }}</td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getPercentChange1h()}}">
+                        </td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getPercentChange24h()}}">
+                        </td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getPercentChange7d()}}">
+                        </td>
+                        <td class="px-4 py-3">{{ $cryptocurrency->getVolume24h() }}</td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$cryptocurrency->getVolumeChange24h()}}">
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </x-app-layout>
