@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Card;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -16,7 +17,7 @@ class CardController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): RedirectResponse
     {
         Card::create([
             'account_id' => $request->account_id,

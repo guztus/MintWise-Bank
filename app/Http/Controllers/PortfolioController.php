@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\CryptoRepository;
 use App\Services\PortfolioService;
+use Illuminate\Contracts\View\View;
 
 class PortfolioController extends Controller
 {
@@ -12,7 +13,7 @@ class PortfolioController extends Controller
         $this->cryptoRepository = $cryptoRepository;
     }
 
-    public function index()
+    public function index(): View
     {
         return view('portfolio.index', [
             'assets' => (new PortfolioService($this->cryptoRepository))->execute(),

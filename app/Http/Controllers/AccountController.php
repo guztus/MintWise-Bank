@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Card;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -35,7 +36,7 @@ class AccountController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): RedirectResponse
     {
         $request->validate([
             'label' => 'required|string|max:255',
@@ -49,7 +50,7 @@ class AccountController extends Controller
         return redirect()->back()->with('message_success', 'Account successfully created!');
     }
 
-    public function update()
+    public function update(): RedirectResponse
     {
         $account = Auth::user()->accounts->where('id', request('id'))->first();
         $account->label = Str::ucfirst(request('newLabel'));
@@ -58,7 +59,7 @@ class AccountController extends Controller
         return redirect()->back()->with('message_success', 'Account successfully updated!');
     }
 
-    public function destroy()
+    public function destroy(): RedirectResponse
     {
         $account = Auth::user()->accounts->where('id', request('id'))->first();
         if ($account->balance != 0) {
@@ -67,10 +68,5 @@ class AccountController extends Controller
         $account->delete();
 
         return redirect()->to(route('accounts.index'))->with('message_success', 'Account successfully deleted!');
-    }
-
-    protected function getTransactions()
-    {
-        return Transaction::latest()->filter()->get();
     }
 }
