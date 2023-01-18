@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CryptoTransaction;
 use App\Http\Interfaces\CryptoServiceInterface;
 use App\Http\Requests\CryptoBuyRequest;
 use App\Http\Requests\CryptoSellRequest;
 use App\Models\Transaction;
 use App\Repositories\CryptoRepository;
-use App\Services\Crypto\CryptoTransactionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -48,7 +48,7 @@ class CryptoController extends Controller
         CryptoBuyRequest $request
     ): RedirectResponse
     {
-        (new CryptoTransactionService())->execute(
+        (new CryptoTransaction())->execute(
             $request->payerAccountNumber,
             $request->symbol,
             $request->assetAmount,
@@ -63,7 +63,7 @@ class CryptoController extends Controller
         CryptoSellRequest $request
     ): RedirectResponse
     {
-        (new CryptoTransactionService())->execute(
+        (new CryptoTransaction())->execute(
             $request->payerAccountNumber,
             $request->symbol,
             $request->assetAmount,

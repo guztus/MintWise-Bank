@@ -50,7 +50,7 @@
                         <label>Security Code
                             <input type="password"
                                    class="input"
-                                   name="code" placeholder="Code Nr. {{ $code }}" required>
+                                   name="code" placeholder="Code Nr. {{ $codeNumber }}" required>
                         </label>
                         <input type="submit" class="btn mt-4" value="Send">
                     </div>

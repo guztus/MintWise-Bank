@@ -40,31 +40,13 @@
             let account = document.getElementById("account").value;
             let url = "/crypto/" + account;
             window.location.href
-
         }
-        {{--        function fiatChangeLive() {--}}
-        {{--            let inputCoinAmount = document.getElementById('coin_amount').value;--}}
-        {{--            let fiatAmount = inputCoinAmount * {{ $crypto->getPrice() }};--}}
-
-        {{--            fiatAmount = fiatAmount.toFixed(2);--}}
-
-        {{--            document.getElementById('fiat_amount').value = fiatAmount;--}}
-        {{--        }--}}
-
-        {{--        function assetChangeLive() {--}}
-        {{--            let inputFiatAmount = document.getElementById('fiat_amount').value;--}}
-        {{--            let coinAmount = inputFiatAmount / {{ $crypto->getPrice() }};--}}
-
-        {{--            coinAmount = coinAmount.toFixed(9);--}}
-
-        {{--            document.getElementById('coin_amount').value = coinAmount;--}}
-        {{--        }--}}
     </script>
 
     <div class="center" style="width: 60%; height: 60%; text-align: center">
         <x-message-or-error/>
         <div>
-            <a class="center block max-w-lg mb-4 p-6 my-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+            <div class="center card-standard w-1/2">
                 <div class="flex text-xs text-gray-500" style="justify-content: flex-end">Refreshed: {{ \Carbon\Carbon::parse(strtotime($crypto->getTimestamp()))->addHours(2)->format('M d-H:i:s') }}</div>
                 <div class="flex items-center justify-center my-5">
                     <img src="{{ $crypto->getLogo() }}" alt="icon">
@@ -74,7 +56,7 @@
                     € {{ number_format($crypto->getPrice(), 6) }}
                     <span style="
                             font-size: 0.7em;
-                            vertical-align: super" class="py-2 percent-change"
+                            vertical-align: super" class="py-2 percent-change text-xs"
                           data-percent-change="{{ $crypto->getPercentChange24h() }}"></span>
                 </div>
                 <div>
@@ -82,10 +64,9 @@
                         <thead>
                         <tr>
                             <th class="px-4 py-2">Volume (24h)</th>
-                            <td class="border px-4 py-2">{{ $crypto->getVolume24h() }}</td>
-                            <span class="px-4 py-2 percent-change"
-                                  data-percent-change="{{ $crypto->getVolumeChange24h() }}">
-                                </span>
+                            <td class="border px-4 py-2">{{ $crypto->getVolume24h() }}
+                                <span class="px-4 py-2 percent-change text-xs" data-percent-change="{{ $crypto->getVolumeChange24h() }}"></span>
+                            </td>
                         </tr>
                         <tr>
                             <th class="px-4 py-2">Circulating Supply</th>
@@ -116,13 +97,17 @@
                         </div>
                     @endif
                 </div>
-            </a>
+            </div>
         </div>
+
 
         <div>
             {{--                form for buying or selling crypto --}}
             <div class="container-fluid">
-                <div class="flex flex-col w-1/2 center">
+                <div class="card-standard flex flex-col w-1/2 center">
+                    @if($accounts->isEmpty())
+                        <div class="heading-medium"><a href="{{ route('accounts.index') }}" class="text-purple-900 underline">Open an account</a> to start trading!</div>
+                    @else
                     <div class="flex flex-row">
                         <form id="buy" action="{{ route('crypto.buy', $crypto->getSymbol()) }}" method="post">
                             @csrf
@@ -185,6 +170,7 @@
                             </button>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -210,7 +196,7 @@
                             $endingBalance = 0;
                             $debitTurnover = 0;
                             $creditTurnover = 0;
-                        @endphp
+//                        @endphp
                         @foreach($transactions as $transaction)
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                 <td class="dark:text-white left py-4 px-6">{{ $rowCount++ }}</td>
@@ -242,6 +228,7 @@
                         {{--                        </tr>--}}
                         {{--                        </tfoot>--}}
                     </table>
+
                 </div>
             @endif
         </div>

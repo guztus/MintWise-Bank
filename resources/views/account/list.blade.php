@@ -13,7 +13,6 @@
                             <tr>
                                 <th scope="col" class="py-3 px-6 left">Name</th>
                                 <th scope="col" class="py-3 px-6 left">Account Nr.</th>
-                                <th scope="col" class="py-3 px-6 right">Credit Limit</th>
                                 <th scope="col" class="py-3 px-6 right">Balance</th>
                                 <th scope="col" class="py-3 px-6 center">Currency</th>
                             </tr>
@@ -27,7 +26,6 @@
                                         </a>
                                     </td>
                                     <td class="dark:text-white left py-4 px-6">{{ $account->number }}</td>
-                                    <td class="dark:text-white right py-4 px-6">{{ number_format($account->credit_limit/100, 2) }}</td>
                                     <td class="dark:text-white right py-4 px-6">{{ number_format($account->balance/100, 2) }}</td>
                                     <td class="dark:text-white center py-4 px-6">{{ $account->currency }}</td>
                                 </tr>

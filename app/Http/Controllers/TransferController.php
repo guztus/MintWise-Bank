@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Transfer;
 use App\Http\Requests\BalanceTransferRequest;
-use App\Services\TransferService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -13,19 +13,17 @@ class TransferController extends Controller
 {
     public function show(): View
     {
-        Cache::forget('code');
+        session()->flash('codeNumber', fake()->numberBetween(1, 12));
         return view('transfer.show', [
             'currencies' => Cache::get('currencies'),
             'accounts' => Auth::user()->accounts,
-            'code' => Cache::remember('code', 9999, function () {
-                return fake()->numberBetween(1, 12);
-            }),
+            'codeNumber' => session()->get('codeNumber'),
         ]);
     }
 
     public function create(BalanceTransferRequest $request): RedirectResponse
     {
-        (new TransferService())->execute(
+        (new Transfer())->execute(
             $request->payerAccountNumber,
             $request->beneficiaryAccountNumber,
             $request->amount,

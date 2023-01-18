@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Crypto;
+namespace App\Actions;
 
 use App\Models\Account;
 use App\Models\Transaction;
@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-class CryptoTransactionService
+class CryptoTransaction
 {
     public function execute(
         string $accountNumber,
@@ -47,9 +47,6 @@ class CryptoTransactionService
         float   $latestPrice
     ): void
     {
-//        add to users transactions
-        $this->addBuyTransaction($account, $assetAmount, $symbol, $orderSum);
-
 //        calculate averageCost
         $asset = Auth::user()->assets()->where('symbol', $symbol)->first();
         if ($asset) {
@@ -61,10 +58,12 @@ class CryptoTransactionService
 
 //        add to assets (update or create)
         $this->updateAssets($symbol, $assetAmount, $averageCost);
-
 //        flash message
         $assetAmount = $this->formatAmount($assetAmount);
-        session()->flash('message',
+//        add to users transactions
+        $this->addBuyTransaction($account, $assetAmount, $symbol, $orderSum);
+
+        session()->flash('message_success',
             "Transaction successful!
             Bought $assetAmount $symbol for "
             . number_format($orderSum, 2)
@@ -79,16 +78,15 @@ class CryptoTransactionService
         float   $orderSum,
     ): void
     {
+//        add to assets (update or create)
+        $this->updateAssets($symbol, $assetAmount * -1);
+//        flash message
+        $assetAmount = $this->formatAmount($assetAmount);
 //        add to users transactions
         $this->addSellTransaction($account, $assetAmount, $symbol, $orderSum);
 
-//        add to assets (update or create)
-        $this->updateAssets($symbol, $assetAmount * -1);
-
-//        flash message
-        $assetAmount = $this->formatAmount($assetAmount);
         $orderSum = abs($orderSum);
-        session()->flash('message',
+        session()->flash('message_success',
             "Transaction successful!
             Sold $assetAmount $symbol for "
             . number_format($orderSum, 2)

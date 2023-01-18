@@ -84,9 +84,6 @@
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ ('Profile') }}
                         </x-dropdown-link>
-                        <x-dropdown-link :href="route('dashboard.index')">
-                            {{ ('Dashboard') }}
-                        </x-dropdown-link>
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

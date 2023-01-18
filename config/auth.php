@@ -108,4 +108,8 @@ return [
 
     'password_timeout' => 10800,
 
+    'code_card' => [
+        'code_amount' => 12,
+    ],
+
 ];

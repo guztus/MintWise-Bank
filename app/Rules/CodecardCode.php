@@ -8,11 +8,12 @@ use Illuminate\Support\Facades\Cache;
 
 class CodecardCode implements InvokableRule
 {
-    public function __invoke($attribute, $value, $fail): void
+    public function __invoke($attribute, $enteredCode, $fail): void
     {
-        $codeId = 'code_' . Cache::get('code');
+        session()->reflash();
+        $codes = explode(';', Auth::user()->codeCard->codes);
 
-        if ($value != Auth::user()->codeCard->$codeId) {
+        if ($codes[session()->get('codeNumber') - 1] != $enteredCode) {
             $fail('The codecard code is incorrect');
         }
     }

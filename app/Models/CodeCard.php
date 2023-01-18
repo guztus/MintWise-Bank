@@ -8,25 +8,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class CodeCard extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        'code_1',
-        'code_2',
-        'code_3',
-        'code_4',
-        'code_5',
-        'code_6',
-        'code_7',
-        'code_8',
-        'code_9',
-        'code_10',
-        'code_11',
-        'code_12'
+        'codes',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public static function generate(): string {
+        $codes = '';
+        for ($i=0;$i<config('auth.code_card.code_amount');$i++) {
+            $codes.=fake()->numberBetween(10000, 99999);
+            if ($i < config('auth.code_card.code_amount') - 1) {
+                $codes.=';';
+            }
+        }
+        return $codes;
     }
 }

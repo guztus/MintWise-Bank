@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services;
+namespace App\Actions;
 
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
-class TransferService
+class Transfer
 {
     public function execute(
         string $payerAccountNumber,
@@ -85,8 +85,8 @@ class TransferService
         $payerRate = $currencies[$payerCurrency];
         $beneficiaryRate = $currencies[$beneficiaryCurrency];
 
+        $amountWithRate = $amount * $beneficiaryRate / $payerRate;
         if ($payerCurrency !== $beneficiaryCurrency) {
-            $amountWithRate = $amount * $beneficiaryRate / $payerRate;
             session()->flash('message_success', "Transfer successful!
                 Sent " . $amount / 100 . " {$payerCurrency} from {$payerAccount->number} to {$beneficiaryAccount->number}.
                 \n Currency exchanged from {$payerCurrency} to {$beneficiaryCurrency}. Sent: "

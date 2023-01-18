@@ -20,69 +20,21 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="card-standard">
                 <div class="max-w-xl">
-                    <a class="heading">Your security codes:</a>
+                    <a class="heading">Security Codes</a>
                     <div class="flex mt-4"
-                         style="flex-wrap: wrap; gap: 1em; justify-content: center; align-items: center">
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">1.</span>
-                            <span x-show="open">{{ $codeCard->code_1 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">2.</span>
-                            <span x-show="open">{{ $codeCard->code_2 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">3.</span>
-                            <span x-show="open">{{ $codeCard->code_3 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">4.</span>
-                            <span x-show="open">{{ $codeCard->code_4 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">5.</span>
-                            <span x-show="open">{{ $codeCard->code_5 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">6.</span>
-                            <span x-show="open">{{ $codeCard->code_6 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">7.</span>
-                            <span x-show="open">{{ $codeCard->code_7 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">8.</span>
-                            <span x-show="open">{{ $codeCard->code_8 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">9.</span>
-                            <span x-show="open">{{ $codeCard->code_9 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">10.</span>
-                            <span x-show="open">{{ $codeCard->code_10 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">11.</span>
-                            <span x-show="open">{{ $codeCard->code_11 }}</span>
-                        </div>
-                        <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
-                             x-on:mouseleave="open = false">
-                            <span x-show="!open">12.</span>
-                            <span x-show="open">{{ $codeCard->code_12 }}</span>
-                        </div>
+                         style="flex-wrap: wrap; gap: 1em 1.6em; justify-content: center; align-items: center">
+                        @foreach($codes as $code)
+                            <div class="code" x-data="{ open: false }" x-on:mouseenter="open = true"
+                                 x-on:mouseleave="open = false">
+                                <span x-show="!open">{{ $loop->index+1 }}.</span>
+                                <span x-show="open">{{ $code }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-8 mb-4">
+                        <a class="btn my-3" style="margin-top: 8em !important;" href="{{ route('profile.resetCodes') }}">
+                            Generate new codes
+                        </a>
                     </div>
                 </div>
             </div>
