@@ -6,6 +6,7 @@ use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class Transfer
 {
@@ -27,7 +28,7 @@ class Transfer
             if (!empty($beneficiaryAccount)) {
                 $this->updateBeneficiaryAccount($payerAccount, $beneficiaryAccount, $amount);
             } else {
-                session()->flash('message_success', "Transfer successful! Sent "
+                Session::flash('message_success', "Transfer successful! Sent "
                     . $amount / 100
                     . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccountNumber}."
                 );
@@ -87,13 +88,13 @@ class Transfer
 
         $amountWithRate = $amount * $beneficiaryRate / $payerRate;
         if ($payerCurrency !== $beneficiaryCurrency) {
-            session()->flash('message_success', "Transfer successful!
+            Session::flash('message_success', "Transfer successful!
                 Sent " . $amount / 100 . " {$payerCurrency} from {$payerAccount->number} to {$beneficiaryAccount->number}.
                 \n Currency exchanged from {$payerCurrency} to {$beneficiaryCurrency}. Sent: "
                 . number_format($amountWithRate / 100, 2)
                 . " {$beneficiaryCurrency}");
         } else {
-            session()->flash('message_success', "Transfer successful!
+            Session::flash('message_success', "Transfer successful!
                 Sent " . $amount / 100 . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccount->number}.");
         }
 

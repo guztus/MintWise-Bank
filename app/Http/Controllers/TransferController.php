@@ -8,12 +8,13 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 
 class TransferController extends Controller
 {
     public function show(): View
     {
-        session()->flash('codeNumber', fake()->numberBetween(1, 12));
+        Session::flash('codeNumber', fake()->numberBetween(1, 12));
         return view('transfer.show', [
             'currencies' => Cache::get('currencies'),
             'accounts' => Auth::user()->accounts,

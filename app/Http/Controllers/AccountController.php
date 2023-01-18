@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Card;
 use App\Models\Transaction;
+use App\Rules\ExistsForUser;
+use App\Rules\Testere;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -23,7 +25,8 @@ class AccountController extends Controller
 
     public function showOne(): View
     {
-        $accountNumber = Auth::user()->accounts->where('id', request('id'))->first()->number;
+//        handle if id is not valid - not for the user
+        $accountNumber = Auth::user()->accounts->find(request('id'))->number;
         return view('account.single', [
             'account' => Auth::user()->accounts->where('number', $accountNumber)->first(),
             'transactions' =>
@@ -53,7 +56,7 @@ class AccountController extends Controller
 
     public function update(): RedirectResponse
     {
-        $account = Auth::user()->accounts->where('id', request('id'))->first();
+        $account = Auth::user()->accounts->find(request('id'));
         $account->label = Str::ucfirst(request('newLabel'));
         $account->save();
 
@@ -62,7 +65,7 @@ class AccountController extends Controller
 
     public function destroy(): RedirectResponse
     {
-        $account = Auth::user()->accounts->where('id', request('id'))->first();
+        $account = Auth::user()->accounts->find(request('id'));
         if ($account->balance != 0) {
             return redirect()->back()->with('message_danger', 'Account balance must be 0 to delete it!');
         }

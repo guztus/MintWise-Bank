@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class CryptoTransaction
 {
@@ -63,7 +64,7 @@ class CryptoTransaction
 //        add to users transactions
         $this->addBuyTransaction($account, $assetAmount, $symbol, $orderSum);
 
-        session()->flash('message_success',
+        Session::flash('message_success',
             "Transaction successful!
             Bought $assetAmount $symbol for "
             . number_format($orderSum, 2)
@@ -86,7 +87,7 @@ class CryptoTransaction
         $this->addSellTransaction($account, $assetAmount, $symbol, $orderSum);
 
         $orderSum = abs($orderSum);
-        session()->flash('message_success',
+        Session::flash('message_success',
             "Transaction successful!
             Sold $assetAmount $symbol for "
             . number_format($orderSum, 2)
