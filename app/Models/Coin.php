@@ -4,6 +4,7 @@ namespace App\Models;
 
 class Coin
 {
+    private string $timestamp;
     private string $logo;
     private string $symbol;
     private float $price;
@@ -17,6 +18,7 @@ class Coin
     private ?float $max_supply;
 
     public function __construct(
+        string $timestamp,
         string $logo,
         string $symbol,
         float  $price,
@@ -30,6 +32,7 @@ class Coin
         ?float $max_supply,
     )
     {
+        $this->timestamp = $timestamp;
         $this->logo = $logo;
         $this->symbol = $symbol;
         $this->price = $price;
@@ -46,6 +49,11 @@ class Coin
     public function __toString(): string
     {
         return $this->symbol;
+    }
+
+    public function getTimestamp(): string
+    {
+        return $this->timestamp;
     }
 
     public function getLogo(): string

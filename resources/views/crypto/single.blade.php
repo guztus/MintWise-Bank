@@ -65,17 +65,18 @@
         <x-message-or-error/>
         <div>
             <a class="center block max-w-lg mb-4 p-6 my-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+                <div class="flex text-xs text-gray-500" style="justify-content: flex-end">Refreshed: {{ \Carbon\Carbon::parse(strtotime($crypto->getTimestamp()))->addHours(2)->format('M d-H:i:s') }}</div>
                 <div class="flex items-center justify-center my-5">
                     <img src="{{ $crypto->getLogo() }}" alt="icon">
                 </div>
-                <p class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $crypto->getSymbol() }}</p>
-                <p class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                <div class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $crypto->getSymbol() }}</div>
+                <div class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                     € {{ number_format($crypto->getPrice(), 6) }}
                     <span style="
                             font-size: 0.7em;
                             vertical-align: super" class="py-2 percent-change"
                           data-percent-change="{{ $crypto->getPercentChange24h() }}"></span>
-                </p>
+                </div>
                 <div>
                     <table class="table-rounded table-auto">
                         <thead>
@@ -104,15 +105,15 @@
                 <div>
                     {{--                display asset owned amount for this asset--}}
                     @if ($assetOwned)
-                        <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
+                        <div class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
                             You own {{ $assetOwned->amount }} {{ $crypto->getSymbol() }}
-                        </p>
-                        <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
+                        </div>
+                        <div class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
                             Average price: € {{ number_format($assetOwned->average_cost, 2) }}
-                        </p>
-                        <p class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
+                        </div>
+                        <div class="mb-2 font-bold tracking-tight text-gray-900 dark:text-white">
                             Total worth: € {{ number_format($assetOwned->amount * $crypto->getPrice(), 2) }}
-                        </p>
+                        </div>
                     @endif
                 </div>
             </a>
@@ -188,9 +189,10 @@
             </div>
         </div>
         <div class="card-standard">
-            <p class="dark:text-white">Transactions</p>
-            {{--            show transactions if not empty--}}
-            @if ($transactions->count() > 0)
+            <div class="heading">Transactions</div>
+            @if ($transactions->isEmpty())
+                <div class="heading-medium">Your {{ $crypto->getSymbol() }} transactions will show up here!</div>
+            @else
                 <div class="my-5">
                     <table class="table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

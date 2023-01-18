@@ -48,6 +48,10 @@
     @apply text-gray-900 text-base font-bold dark:text-gray-400 my-2 mb-6;
 }
 
+div {
+    @apply text-gray-900 dark:text-gray-400;
+}
+
 .table-rounded-preset {
 @layer @apply table-rounded w-full text-sm text-left text-gray-500 dark: text-gray-400 my-6;
     text-align: center;

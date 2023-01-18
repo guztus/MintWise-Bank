@@ -18,15 +18,17 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
 
     public function getSingle(string $symbol): ?Coin
     {
-        $fetchedCoin = $this->singleCoin($symbol)->data->$symbol;
-        if ($fetchedCoin) {
-            $fetchedCoin = $fetchedCoin[0];
+        $fetchedCoin = $this->singleCoin($symbol);
+        if (!empty($fetchedCoin->data->$symbol)) {
+            $timestamp = $fetchedCoin->status->timestamp;
+            $fetchedCoin = $fetchedCoin->data->$symbol[0];
         } else {
             return null;
         }
 
         $currency = $this->currency;
         return new Coin(
+            $timestamp,
             $this->getLogo($symbol) ?? '',
             $fetchedCoin->symbol,
             $fetchedCoin->quote->$currency->price,
@@ -46,10 +48,14 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
         $coinList = new CoinCollection();
 
         $currency = $this->currency;
-        $coins = $this->realCoins()->data;
-        foreach ($coins as $coin) {
+
+        $liveCoins = $this->liveCoins();
+        $coinList->addTimestamp($liveCoins->status->timestamp);
+
+        foreach ($liveCoins->data as $coin) {
             $coinList->addCoin(
                 new Coin(
+                    $liveCoins->status->timestamp,
                     $coin->logo = str_replace('64x64', '32x32', $this->getLogo($coin->symbol)) ?? '',
                     $coin->symbol,
                     $coin->quote->$currency->price,
@@ -86,20 +92,20 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
             'X-CMC_PRO_API_KEY' => 'b54bcf4d-1bca-4e8e-9a24-22ff2c3d462c',
         ])->get('https://sandbox-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
             'start' => '1',
-            'limit' => '10',
+            'limit' => config('services.coinmarketcap.limit'),
             'convert' => $this->currency,
         ]);
         return $request->object();
     }
 
-    private function realCoins(): object
+    private function liveCoins(): object
     {
         $request = Http::withHeaders([
             'Accepts' => 'application/json',
-            'X-CMC_PRO_API_KEY' => env('CRYPTO_COINMARKETCAP_API_KEY'),
+            'X-CMC_PRO_API_KEY' => config('services.coinmarketcap.key'),
         ])->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest', [
             'start' => '1',
-            'limit' => '2',
+            'limit' => config('services.coinmarketcap.limit'),
             'convert' => $this->currency,
         ]);
         return $request->object();
@@ -109,7 +115,7 @@ class CryptoCoinMarketCapAPIService implements CryptoServiceInterface
     {
         $metadata = Http::withHeaders([
             'Accepts' => 'application/json',
-            'X-CMC_PRO_API_KEY' => env('CRYPTO_COINMARKETCAP_API_KEY'),
+            'X-CMC_PRO_API_KEY' => config('services.coinmarketcap.key'),
         ])->get("https://pro-api.coinmarketcap.com/v2/cryptocurrency/info", [
             'symbol' => $symbol
         ]);

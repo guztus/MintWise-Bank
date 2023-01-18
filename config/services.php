@@ -33,5 +33,6 @@ return [
 
     'coinmarketcap' => [
         'key' => env('CRYPTO_COINMARKETCAP_API_KEY'),
+        'limit' => '3',
     ],
 ];

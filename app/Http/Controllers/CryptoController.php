@@ -7,7 +7,7 @@ use App\Http\Requests\CryptoBuyRequest;
 use App\Http\Requests\CryptoSellRequest;
 use App\Models\Transaction;
 use App\Repositories\CryptoRepository;
-use App\Services\CryptoTransactionService;
+use App\Services\Crypto\CryptoTransactionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -24,7 +24,7 @@ class CryptoController extends Controller
     public function index(): View
     {
         return view('crypto.list', [
-            'cryptoList' => $this->cryptoRepository->getList()->getCoins(),
+            'cryptoList' => $this->cryptoRepository->getList(),
         ]);
     }
 

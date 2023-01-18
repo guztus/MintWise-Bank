@@ -215,4 +215,8 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'currency' => [
+        'default' => 'EUR',
+    ],
+
 ];

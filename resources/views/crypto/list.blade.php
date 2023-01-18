@@ -59,33 +59,34 @@
                 </tr>
                 </thead>
                 <tbody>
-                @foreach ($cryptoList as $cryptocurrency)
+                @foreach ($cryptoList->getCoins() as $crypto)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                         <td class="px-4 py-3">{{ $loop->index + 1 }}</td>
-                        <td class="px-2 py-3"><img src="{{ $cryptocurrency->getLogo() }}" alt="icon"
+                        <td class="px-2 py-3"><img src="{{ $crypto->getLogo() }}" alt="icon"
                                                    style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
                         </td>
                         <td class="px-4 py-3">
-                            <a href="/crypto/{{ $cryptocurrency->getSymbol() }}">{{ $cryptocurrency->getSymbol() }}</a>
+                            <a href="/crypto/{{ $crypto->getSymbol() }}">{{ $crypto->getSymbol() }}</a>
                         </td>
-                        <td class="px-4 py-3">{{ $cryptocurrency->getPrice() }}</td>
+                        <td class="px-4 py-3">{{ $crypto->getPrice() }}</td>
                         <td class="px-4 py-3 percent-change"
-                            data-percent-change="{{$cryptocurrency->getPercentChange1h()}}">
-                        </td>
-                        <td class="px-4 py-3 percent-change"
-                            data-percent-change="{{$cryptocurrency->getPercentChange24h()}}">
+                            data-percent-change="{{$crypto->getPercentChange1h()}}">
                         </td>
                         <td class="px-4 py-3 percent-change"
-                            data-percent-change="{{$cryptocurrency->getPercentChange7d()}}">
+                            data-percent-change="{{$crypto->getPercentChange24h()}}">
                         </td>
-                        <td class="px-4 py-3">{{ $cryptocurrency->getVolume24h() }}</td>
                         <td class="px-4 py-3 percent-change"
-                            data-percent-change="{{$cryptocurrency->getVolumeChange24h()}}">
+                            data-percent-change="{{$crypto->getPercentChange7d()}}">
+                        </td>
+                        <td class="px-4 py-3">{{ $crypto->getVolume24h() }}</td>
+                        <td class="px-4 py-3 percent-change"
+                            data-percent-change="{{$crypto->getVolumeChange24h()}}">
                         </td>
                     </tr>
                 @endforeach
                 </tbody>
             </table>
+            <div class="flex text-xs pt-2 text-gray-500" style="justify-content: flex-end">Refreshed: {{ \Carbon\Carbon::parse(strtotime($cryptoList->getTimestamp()))->addHours(2)->format('M d-H:i:s') }}</div>
         </div>
     </div>
 </x-app-layout>
