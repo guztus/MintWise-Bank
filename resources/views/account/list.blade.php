@@ -1,11 +1,11 @@
 <x-app-layout>
     <div class="center" style="width: 60%; height: 60%; text-align: center">
         <x-message-or-error/>
+        @if(!$accounts->isEmpty())
         <div class="card-standard">
             <div class="heading">Accounts</div>
             <div class="flex" style="flex-direction: column; gap: 2em">
                 <div>
-                    @if(!$accounts->isEmpty())
                         <table
                             class="table-rounded table-rounded center w-full text-sm text-left text-gray-500 dark:text-gray-400 rounded">
                             <thead
@@ -34,12 +34,18 @@
                             @endforeach
                             </tbody>
                         </table>
-                    @endif
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
+
+        <div class="flex" style="justify-content: center;  align-items: center">
         <div
-            class="card-standard pb-6">
+            class="card-standard pb-6 w-1/2">
+            @if($accounts->isEmpty())
+                <div class="heading">Accounts</div>
+                <div class="heading">You do not have any open accounts!</div>
+            @endif
             <div class="heading-medium">Open a new account</div>
             <form method="post" action="{{ route('account.create') }}">
                 @csrf
@@ -58,10 +64,11 @@
                         </select>
                     </div>
                     <div>
-                        <input type="submit" class="btn" value="Open a new Account">
+                        <input type="submit" class="btn" value="Submit">
                     </div>
                 </div>
             </form>
         </div>
+    </div>
     </div>
 </x-app-layout>

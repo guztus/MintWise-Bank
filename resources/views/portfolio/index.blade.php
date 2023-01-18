@@ -42,10 +42,18 @@
     </script>
 
     <div class="center" style="width: 60%; height: 60%; text-align: center">
+        @if($assets->isEmpty())
+        <div class="flex" style="justify-content: center;  align-items: center">
+            <div
+                class="card-standard pb-6 w-1/2">
+                <div class="heading">There are no assets to list!</div>
+                <div class="heading-medium">You can browse the crypto market and when you make a purchase, your assets will be visible here! <a href="{{ route('crypto.index') }}" class="text-purple-900 underline">Go to the Cryptocurrency Market</a></div>
+            </div>
+        </div>
+        @else
         <div class="card-standard">
             <div class="mb-6">
                 <div class="heading">Assets</div>
-                @if(!$assets->isEmpty())
                     <p>Assets Held: {{ count($assets) }}</p>
                     <p>Total Asset Value: {{ "€ " . number_format(($assets->map(function ($asset) {
                         return $asset->current_price * $asset->amount;

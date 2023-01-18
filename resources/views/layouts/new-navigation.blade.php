@@ -59,9 +59,9 @@
         </ul>
         @if(!Auth::user())
             <a class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200"
-               href="#">Sign In</a>
+               href="{{ route('login') }}">Log In</a>
             <a class="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200"
-               href="#">Sign up</a>
+               href="{{ route('register') }}">Sign up</a>
         @else
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
@@ -157,9 +157,9 @@
                 <div class="pt-6">
                     @if(!Auth::user())
                         <a class="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"
-                           href="#">Sign in</a>
+                           href="{{ route('asset.index') }}">Log In</a>
                         <a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl"
-                           href="#">Sign Up</a>
+                           href="{{ route('register') }}">Register</a>
                     @endif
                 </div>
             </div>

@@ -13,8 +13,8 @@
         @csrf
         @method('put')
         <div>
-            <x-input-label for="current_password" :value="__('Current Phone Number')" />
-            <x-text-input id="current_password" name="phone_number" type="text" class="mt-1 block w-full" value="{{ Auth::user()->address }}" autocomplete="current-password" />
+            <x-input-label for="phone_number" :value="__('Current Phone Number')" />
+            <x-text-input id="phone_number" name="phone_number" type="text" class="mt-1 block w-full" value="{{ Auth::user()->address }}" autocomplete="current-password" />
             <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
         </div>
 
