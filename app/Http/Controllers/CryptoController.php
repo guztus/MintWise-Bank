@@ -38,9 +38,13 @@ class CryptoController extends Controller
             'crypto' => $this->cryptoRepository->getSingle($symbol),
             'assetOwned' => Auth::user()->assets->where('symbol', $symbol)->first() ?? null,
             'transactions' =>
-                Transaction::where('currency_payer', $symbol)
+                Transaction::sortable(['created_at', 'desc'])->where('currency_payer', $symbol)
                     ->orWhere('currency_beneficiary', $symbol)
-                    ->get(),
+                    ->filter(request()->only('search', 'from', 'to'))
+                    ->paginate()
+                    ->withQueryString(),
+            'credit' => Transaction::where('currency_beneficiary', $symbol)->sum('amount_payer'),
+            'debit' => Transaction::where('currency_payer', $symbol)->sum('amount_beneficiary'),
         ]);
     }
 

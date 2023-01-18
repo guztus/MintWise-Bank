@@ -32,7 +32,8 @@ class AccountController extends Controller
                     ->filter(request()->only('search', 'from', 'to'))
                     ->paginate()
                     ->withQueryString(),
-            'cards' => Card::where('account_number', $accountNumber)->get(),
+            'credit' => Transaction::where('account_number', $accountNumber)->sum('amount_payer'),
+            'debit' => Transaction::where('beneficiary_account_number', $accountNumber)->sum('amount_beneficiary'),
         ]);
     }
 
