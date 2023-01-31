@@ -14,7 +14,6 @@
                     percentChange.textContent = "↓ - " + percentChange.textContent;
                     percentChange.style.color = "red";
                 } else {
-                    // place the arrow in front of the number
                     percentChange.textContent = "↑ + " + percentChange.textContent;
                     percentChange.style.color = "green";
                 }
@@ -33,7 +32,6 @@
                     cashChange.textContent = "↓ - " + cashChange.textContent;
                     cashChange.style.color = "red";
                 } else {
-                    // place the arrow in front of the number
                     cashChange.textContent = "↑ + " + cashChange.textContent;
                     cashChange.style.color = "green";
                 }
@@ -92,9 +90,9 @@
                             <td class="px-4 py-2">
                                 <a href="/crypto/{{ $asset->symbol }}">{{ $asset->symbol }}</a>
                             </td>
-                            <td class="px-4 py-2">{{ number_format($asset->current_price,2) }}</td>
+                            <td class="px-4 py-2">{{ number_format($asset->current_price, 2) }}</td>
                             <td class="px-4 py-2">{{ number_format($asset->average_cost, 2) }}</td>
-                            <td class="px-4 py-2">{{ $asset->amount }}</td>
+                            <td class="px-4 py-2" id="assetAmount">{{ $asset->amount }}</td>
                             <td class="px-4 py-2">€ {{ number_format($asset->amount * $asset->current_price, 2) }}</td>
                             <td class="px-4 py-2 percent-change"
                                 data-percent-change="{{ (($asset->current_price - $asset->average_cost) / $asset->average_cost) * 100 }}">

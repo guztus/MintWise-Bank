@@ -13,6 +13,7 @@
                 </svg>
             </button>
         </div>
+        @if(Auth::user())
         <ul class="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
             <li>
                 <x-nav-link :href="route('accounts.index')" :active="request()->routeIs('accounts.index')">
@@ -57,6 +58,8 @@
                 </x-nav-link>
             </li>
         </ul>
+        @endif
+
         @if(!Auth::user())
             <a class="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200"
                href="{{ route('login') }}">Log In</a>

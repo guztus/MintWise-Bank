@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('number');
             $table->string('label');
-            $table->bigInteger('balance')->default(0);
+            $table->decimal('balance', 30, 0)->default(0);
             $table->string('currency');
             $table->integer('credit_limit')->default(0);
             $table->timestamps();

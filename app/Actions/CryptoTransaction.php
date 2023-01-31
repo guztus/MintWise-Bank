@@ -107,9 +107,10 @@ class CryptoTransaction
     private function updateAssets(
         string $symbol,
         string $assetAmount,
-        float  $averageCost = 0
+        ?float  $averageCost = null
     ): void
     {
+        if ($averageCost) {
         Auth::user()->assets()->updateOrCreate(
             [
                 'symbol' => $symbol,
@@ -120,6 +121,17 @@ class CryptoTransaction
                 'amount' => DB::raw("amount + $assetAmount"),
                 'type' => 'standard'
             ]);
+        } else {
+            Auth::user()->assets()->updateOrCreate(
+                [
+                    'symbol' => $symbol,
+                ],
+                [
+                    'symbol' => $symbol,
+                    'amount' => DB::raw("amount + $assetAmount"),
+                    'type' => 'standard'
+                ]);
+        }
     }
 
     private function addBuyTransaction(

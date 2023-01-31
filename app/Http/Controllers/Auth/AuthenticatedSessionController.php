@@ -11,23 +11,17 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     *
-     * @return \Illuminate\View\View
-     */
     public function create()
     {
-        Cache::forget('code');
+        Session::flash('codeNumber', fake()->numberBetween(1, 12));
         return view('auth.login', [
-            'code' => Cache::remember('code', 9999, function () {
-                return fake()->numberBetween(1, 12);
-            })
+            'code' => session()->get('codeNumber'),
         ]);
     }
 

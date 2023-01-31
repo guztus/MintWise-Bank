@@ -45,11 +45,11 @@
                            placeholder="{{ $crypto->getSymbol() }}"
                            step="0.000000001"
                            required
-                           oninput="copyBuyForm(); fiatChangeLive()">
+                           oninput="fiatChangeLive(); copyBuyForm()">
                     <x-input-label for="fiat_amount">FIAT Amount</x-input-label>
                     <input class="input w-1/2" id="fiat_amount" type="number" placeholder="Money Amount" step="0.01"
                            min="0.01"
-                           oninput="copyBuyForm(); amountChangeLive()">
+                           oninput="amountChangeLive(); copyBuyForm()">
                     <x-input-label for="account">Account</x-input-label>
                     <select
                         id="account"

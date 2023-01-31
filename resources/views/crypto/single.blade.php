@@ -44,6 +44,6 @@
             </div>
         </div>
         @include('crypto.partials.buy-sell-form')
-        @include('layouts.transactions', ['identifier' => $crypto->getSymbol()])
+        @include('layouts.transactions', ['identifier' => !'Crypto'])
     </div>
 </x-app-layout>
