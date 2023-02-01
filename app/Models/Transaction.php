@@ -28,12 +28,27 @@ class Transaction extends Model
 
     public function scopeFilter($query, array $filters)
     {
+        $search = request('search');
+
         if (!empty($filters)) {
-            $query
-                ->whereBetween('created_at', [request('from') ?? null, request('to') ?? null])
-                ->where('description', 'like', '%' . request('search') . '%')
-                ->where('account_number', 'like', '%' . request('search') . '%')
-                ->where('beneficiary_account_number', 'like', '%' . request('search') . '%');
+            if (isset($filters['from']) && isset($filters['to'])) {
+                $query
+                    ->whereBetween('created_at', [$filters['from'], $filters['to']])
+                    ->where(function ($query) use ($search) {
+                        $query
+                            ->where('description', 'like', '%' . $search . '%')
+                            ->orWhere('account_number', 'like', '%' . $search . '%')
+                            ->orWhere('beneficiary_account_number', 'like', '%' . $search . '%');
+                    });
+            } else {
+                $query
+                    ->where(function ($query) use ($search) {
+                        $query
+                            ->where('description', 'like', '%' . $search . '%')
+                            ->orWhere('account_number', 'like', '%' . $search . '%')
+                            ->orWhere('beneficiary_account_number', 'like', '%' . $search . '%');
+                    });
+            }
         }
     }
 }

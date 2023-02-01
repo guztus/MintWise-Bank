@@ -60,24 +60,34 @@
             <thead
                 class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th scope="col" class="py-3 px-6">@sortablelink('created_at', 'Date')</th>
-                <th scope="col" class="py-3 px-6">Beneficiary/Payer</th>
-                <th scope="col" class="py-3 px-6">Description</th>
-                <th scope="col" class="py-3 px-6 right">Amount</th>
+                <th scope="col" class="py-3 px-4">@sortablelink('created_at', 'Date')</th>
+                <th scope="col" class="py-3 px-4">Beneficiary/Payer</th>
+                <th scope="col" class="py-3 px-4">Description</th>
+                <th scope="col" class="py-3 px-4 right">Amount</th>
             </tr>
             </thead>
             <tbody>
             @foreach($transactions as $transaction)
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <td class="dark:text-white left py-4 px-6">{{ date('d/m/y H:i', strtotime($transaction->created_at)) }}</td>
-                    <td class="dark:text-white left py-4 px-6">{{ $transaction->beneficiary_account_number }}</td>
-                    <td class="dark:text-white left py-4 px-6">{{ $transaction->description }}</td>
-                    @if($transaction->beneficiary_account_number == $identifier)
-                        <td class="text-green-700 right py-4 px-6">
-                            + {{ number_format($transaction->amount_beneficiary, 2) }}</td>
+                    <td class="dark:text-white left py-4 px-2">{{ date('d/m/y H:i', strtotime($transaction->created_at)) }}</td>
+                    <td class="dark:text-white left py-4 px-2">{{ $transaction->beneficiary_account_number }}</td>
+                    <td class="dark:text-white left py-4 px-2">{{ $transaction->description }}</td>
+                    @if($identifier == "Crypto")
+                        @if($transaction->beneficiary_account_number == $identifier)
+                            <td class="text-red-700 right py-4 px-2">
+                                - {{ number_format($transaction->amount_payer, 2) }}</td>
+                        @else
+                            <td class="text-green-700 right py-4 px-2">
+                                + {{ number_format($transaction->amount_beneficiary, 2) }}</td>
+                        @endif
                     @else
-                        <td class="text-red-700 right py-4 px-6">
-                            - {{ number_format($transaction->amount_payer, 2) }}</td>
+                        @if($transaction->beneficiary_account_number == $identifier)
+                            <td class="text-green-700 right py-4 px-2">
+                                + {{ number_format($transaction->amount_beneficiary, 2) }}</td>
+                        @else
+                            <td class="text-red-700 right py-4 px-2">
+                                - {{ number_format($transaction->amount_payer, 2) }}</td>
+                        @endif
                     @endif
                 </tr>
             @endforeach
