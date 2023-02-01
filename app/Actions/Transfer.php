@@ -97,8 +97,7 @@ class Transfer
             Session::flash('message_success', "Transfer successful!
                 Sent " . $amount / 100 . " {$payerAccount->currency} from {$payerAccount->number} to {$beneficiaryAccount->number}.");
         }
-
-        $beneficiaryAccount->balance += (float)number_format($amountWithRate, 2);
+        $beneficiaryAccount->balance += (int)$amountWithRate;
         $beneficiaryAccount->save();
     }
 }

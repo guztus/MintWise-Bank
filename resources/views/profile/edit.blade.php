@@ -16,8 +16,11 @@
         }
     </style>
 
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <x-message-or-error/>
+
             <div class="card-standard">
                 <div class="max-w-xl">
                     <a class="heading">Security Codes</a>

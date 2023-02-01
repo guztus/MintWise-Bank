@@ -33,18 +33,25 @@ class CryptoController extends Controller
         string $symbol
     ): View
     {
+        $accountNumbers = [];
         foreach (Auth::user()->accounts->toArray() as $account) {
             $accountNumbers [] = $account['number'];
         }
-//        var_dump($accountNumbers);die;
+
         $transactions = Transaction::sortable(['created_at', 'desc'])
-            ->whereIn('beneficiary_account_number', $accountNumbers)
-            ->orWhereIn('account_number', $accountNumbers)
             ->where(function ($query) use ($symbol) {
                 $query
                     ->where('currency_payer', $symbol)
                     ->orWhere('currency_beneficiary', $symbol);
+            })
+            ->where(function ($query) use ($accountNumbers) {
+                $query
+                    ->whereIn('beneficiary_account_number', $accountNumbers)
+                    ->orWhereIn('account_number', $accountNumbers);
             });
+
+//        echo "<pre>";
+//        var_dump($transactions->get());die;
 
         $symbol = strtoupper($symbol);
         return view('crypto.single', [

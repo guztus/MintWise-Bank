@@ -11,9 +11,11 @@ class CodecardCode implements InvokableRule
 {
     public function __invoke($attribute, $enteredCode, $fail): void
     {
-        Session::reflash();
+        $requiredCode = Session::get('codeNumber');
+        Session::forget('codeNumber');
         $codes = explode(';', Auth::user()->codeCard->codes);
-        $correctCode = $codes[Session::get('codeNumber') - 1];
+
+        $correctCode = $codes[$requiredCode - 1];
 
         if ($correctCode != $enteredCode || $correctCode == -1) {
             $fail('The codecard code is incorrect');

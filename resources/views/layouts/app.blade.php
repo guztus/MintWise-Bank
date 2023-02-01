@@ -19,9 +19,12 @@
 <body class="font-sans antialiased">
 <div class="min-h-screen bg-gray-100">
 
-    @include('layouts.new-navigation')
+    @if(Auth::check())
+{{--        @include('layouts.guest-navigation')--}}
+        @include('layouts.new-navigation')
+    @endif
 
-    <div class="container-fluid mt-6 pb-6">
+    <div class="container-fluid pb-6">
 
         <!-- Page Heading -->
         @if (isset($header))
@@ -38,7 +41,6 @@
         </main>
     </div>
 </div>
-{{--<script src="../path/to/flowbite/dist/flowbite.min.js"></script>--}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
 </body>
 </html>

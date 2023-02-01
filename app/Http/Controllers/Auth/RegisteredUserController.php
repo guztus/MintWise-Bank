@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -52,6 +53,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(RouteServiceProvider::HOME);
+        Session::flash('message_information',
+            "Welcome to our MintWise, {$user->name}! \n Here, in the Profile section, you can view your security codes
+            that will be used to authorize you. \n\n Please, hover on the codes, write them down and save them in a safe place!"
+        );
+        return redirect('/profile');
     }
 }

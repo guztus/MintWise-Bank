@@ -14,11 +14,11 @@ class TransferController extends Controller
 {
     public function show(): View
     {
-        Session::flash('codeNumber', fake()->numberBetween(1, 12));
+        Session::put('codeNumber', fake()->numberBetween(1, 12));
         return view('transfer.show', [
             'currencies' => Cache::get('currencies'),
             'accounts' => Auth::user()->accounts,
-            'codeNumber' => session()->get('codeNumber'),
+            'codeNumber' => Session::get('codeNumber'),
         ]);
     }
 
