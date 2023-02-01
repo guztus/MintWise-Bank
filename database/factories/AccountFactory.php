@@ -10,17 +10,13 @@ use Illuminate\Support\Str;
  */
 class AccountFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition()
     {
         return [
             'user_id' => 1,
-            'number' => rand(100000000000, 999999999999),
-            'name' => fake()->word(),
+            'number' => fake()->iban('LV', 'HABA'),
+            'label' => fake()->word(),
+            'currency' => 'EUR',
             'balance' => rand(0, 100000000),
             'created_at' => now(),
             'updated_at' => now(),
