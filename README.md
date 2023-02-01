@@ -1,66 +1,66 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MintWise - Internet Bank (+ Crypto trading) 
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Table of contents
 
-## About Laravel
+* [General info](#general-info)
+* [Demonstration GIFs](#demonstration-gifs)
+* [Used Technologies](#used-technologies)
+* [Setup](#setup)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## General info
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This project is a internet bank where one can:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* Open bank accounts
+* Make money transfers
+* Buy & sell cryptocurrencies
+* View asset portfolio
 
-## Learning Laravel
+Information about coins can be retrieved using dummy data or real data from an <ins>**API**</ins> (set up for using the
+CoinMarketCap API)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Demonstration GIFs
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+<div style="text-align: center">
+    <h3>Overall overview</h3>
+    <p align="center">
+        <img src="/overview-.gif"  width="95%" alt="animated-demo" /><br>
+    </p>
+    <h3>Making a transaction (to an account that has a different currency)</h3>
+    <p align="center">
+        <img src="/transaction-eur-gbp.gif" width="95%" alt="animated-demo" /><br>
+    </p>
+    <h3>Search in transactions</h3>
+    <p align="center">
+        <img src="/search-transactions.gif" width="95%" alt="animated-demo" /><br>
+    </p>
+    <h3>Purchasing Crypto</h3>
+    <p align="center">
+        <img src="/crypto-purchase.gif" width="95%" alt="animated-demo" /><br>
+    </p>
+</div>
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Used Technologies
 
-## Laravel Sponsors
+* PHP `8.0`
+* MySQL `8.0`
+* Composer `2.4`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Style:
+* TailwindCSS
 
-### Premium Partners
+## Setup
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+To install this project on your local machine, follow these steps:
 
-## Contributing
+1. Clone this repository - `git clone https://github.com/guztus/MintWise_Bank`
+2. Install all dependencies - `composer install`
+3. Rename the ".env.example" file to ".env" <br>
+4. Create a database and add the credentials to the ".env" file
+5. Make a dummy account `php artisan db:seed --class=BaseAccountSeeder` 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+(Login details - email: user@user.lv, password: password, codes: 1;2;3;4;5;6;7;8;9;10;11;12)
 
-## Code of Conduct
+* In order for the Crypto section to wrok, you will need to enter your own CoinMarketCap API key in the ".env" file.<br>
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+To run the project, locate "/public" and there, you can use a command such as `php artisan serve` (to run the backend) and `npm run dev` (to run the frontend).
