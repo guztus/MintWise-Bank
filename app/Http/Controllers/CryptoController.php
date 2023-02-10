@@ -50,9 +50,6 @@ class CryptoController extends Controller
                     ->orWhereIn('account_number', $accountNumbers);
             });
 
-//        echo "<pre>";
-//        var_dump($transactions->get());die;
-
         $symbol = strtoupper($symbol);
         return view('crypto.single', [
             'accounts' => Auth::user()->accounts,
