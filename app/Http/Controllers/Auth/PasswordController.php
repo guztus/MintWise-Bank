@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Password;
 
 class PasswordController extends Controller
@@ -22,9 +23,16 @@ class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
+        if (!$validated) {
+            Session::flash('message_danger', 'Password changed successfully!');
+            return back();
+        }
+
         $request->user()->update([
             'password' => Hash::make($validated['password']),
         ]);
+
+        Session::flash('message_success', 'Password changed successfully!');
 
         return back()->with('status', 'password-updated');
     }

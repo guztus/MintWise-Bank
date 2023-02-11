@@ -18,16 +18,32 @@
         @method('patch')
         <div>
             <x-input-label for="name" :value="__('Name')"/>
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)"
-                          required autofocus autocomplete="name"/>
-            <x-input-error class="mt-2" :messages="$errors->get('name')"/>
+            <x-text-input
+                id="name"
+                name="name"
+                type="text"
+                class="mt-1 block w-full"
+                :value="old('name', $user->name)"
+                required
+                autocomplete="name"/>
+            <x-input-error
+                class="mt-2"
+                :messages="$errors->get('name')"/>
         </div>
 
         <div>
             <x-input-label for="email" :value="__('Email')"/>
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full"
-                          :value="old('email', $user->email)" required autocomplete="email"/>
-            <x-input-error class="mt-2" :messages="$errors->get('email')"/>
+            <x-text-input
+                id="email"
+                name="email"
+                type="email"
+                class="mt-1 block w-full"
+                :value="old('email', $user->email)"
+                required
+                autocomplete="email"/>
+            <x-input-error
+                class="mt-2"
+                :messages="$errors->get('email')"/>
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
@@ -46,6 +62,59 @@
                     @endif
                 </div>
             @endif
+        </div>
+
+        <div>
+            <x-input-label
+                for="address"
+                :value="__('Address')"/>
+            <x-text-input
+                id="address"
+                address="address"
+                type="text"
+                name="address"
+                class="mt-1 block w-full"
+                :value="old('address', $user->address)"
+                required
+                autocomplete="address-line1"/>
+            <x-input-error
+                class="mt-2"
+                :messages="$errors->get('address')"/>
+        </div>
+
+        <div>
+            <x-input-label
+                for="phone_number"
+                :value="__('Phone Number')"/>
+            <x-text-input
+                id="phone_number"
+                phone_number="phone_number"
+                type="text"
+                name="phone-number"
+                class="mt-1 block w-full"
+                :value="old('phone_number', $user->phone_number)"
+                required
+                autocomplete="tel"/>
+            <x-input-error
+                class="mt-2"
+                :messages="$errors->get('phone_number')"/>
+        </div>
+
+        <div class="border-t-2 pt-2">
+            <x-input-label for="password" :value="__('Password to confirm')"/>
+
+            <x-text-input
+                id="password"
+                class="block mt-1 w-full"
+                type="password"
+                name="password"
+                placeholder="Password"
+                required
+                autocomplete="current-password"/>
+
+            <x-input-error
+                :messages="$errors->get('password')"
+                class="mt-2"/>
         </div>
 
         <div class="flex items-center gap-4">
