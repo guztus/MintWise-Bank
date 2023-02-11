@@ -44,8 +44,7 @@
 
         @if($wallet->balance <= 0)
             <div class="flex" style="justify-content: center;  align-items: center">
-                <div
-                    class="card-standard pb-6 w-1/2">
+                <div class="card-standard pb-6 w-1/2">
                     <p class="heading">Your Asset wallet FIAT balance is {{ number_format($wallet->balance, 2) }}!</p>
                     <p class="my-6">Add money to your wallet from your bank accounts</p>
                     @if(count($accounts) < 1)
@@ -75,7 +74,6 @@
         </div>
         @else
         <div class="card-standard">
-
             <div class="mb-6">
                 <div class="heading">Asset wallet</div>
                     <p>FIAT balance: € {{ number_format($wallet->balance / 100, 2) }}</p>
@@ -133,11 +131,11 @@
                 </table>
             </div>
         </div>
-            <div class="flex" style="flex-direction: column; justify-content: center;  align-items: center">
-                <div
-                    class="card-standard pb-6 w-1/2">
+            <div class="flex card-standard pb-6" style="flex-direction: column; justify-content: center;  align-items: center">
                     @include('wallet.partials.deposit-withdraw-form')
-                </div>
+            </div>
+            <div class="mb-6">
+                @include('layouts.transactions', ['identifier' => 'Crypto'])
             </div>
         @endif
     </div>
