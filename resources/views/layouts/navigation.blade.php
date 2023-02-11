@@ -49,7 +49,7 @@
                         </x-nav-link>
                     </div>
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-nav-link :href="route('asset.index')" :active="request()->routeIs('asset.index')">
+                        <x-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.index')">
                             {{ ('Portfolio') }}
                         </x-nav-link>
                     </div>

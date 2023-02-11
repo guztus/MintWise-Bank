@@ -30,12 +30,8 @@ class CryptoSaleRequest extends FormRequest
             return $this->cryptoService->getSingle($this->symbol)->getPrice();
         });
 
-        $this->minimumAmount =
-            0.01
-            / (Cache::get('latestPrice')
-                * Cache::get('currencies')
-                [auth()->user()->accounts->where('number', $this->payerAccountNumber)->first()->currency]
-            );
+        $this->minimumAmount = 0.01 / (Cache::get('latestPrice'));
+
         if (strpos($this->minimumAmount, "-")) {
             $this->minimumAmount =
                 number_format($this->minimumAmount, (int)substr($this->minimumAmount, (strpos($this->minimumAmount, "-") + 1)));
@@ -45,12 +41,6 @@ class CryptoSaleRequest extends FormRequest
             'symbol' =>
                 [
                     'required',
-                ],
-            'payerAccountNumber' =>
-                [
-                    'required',
-                    'exists:accounts,number',
-                    'in:' . Auth::user()->accounts->pluck('number')->implode(','),
                 ],
             'assetAmount' =>
                 [

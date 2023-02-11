@@ -53,10 +53,22 @@
                 </svg>
             </li>
             <li>
-                <x-nav-link :href="route('asset.index')" :active="request()->routeIs('asset.index')">
+                <x-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.index')">
                     Portfolio
                 </x-nav-link>
             </li>
+{{--            <li class="text-gray-300">--}}
+{{--                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" class="w-4 h-4 current-fill"--}}
+{{--                     viewBox="0 0 24 24">--}}
+{{--                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"--}}
+{{--                          d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>--}}
+{{--                </svg>--}}
+{{--            </li>--}}
+{{--            <li>--}}
+{{--                <x-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.index')">--}}
+{{--                    Wallets--}}
+{{--                </x-nav-link>--}}
+{{--            </li>--}}
         </ul>
         @endif
 
@@ -147,7 +159,7 @@
                     <li>
                         <x-nav-link
                             class="block p-4 text-sm font-semibold text-gray-400 hover:bg-blue-50 hover:text-blue-600 rounded"
-                            :href="route('asset.index')" :active="request()->routeIs('asset.index')">
+                            :href="route('wallet.index')" :active="request()->routeIs('wallet.index')">
                             Portfolio
                         </x-nav-link>
                     </li>
@@ -157,7 +169,7 @@
                 <div class="pt-6">
                     @if(!Auth::user())
                         <a class="block px-4 py-3 mb-3 leading-loose text-xs text-center font-semibold leading-none bg-gray-50 hover:bg-gray-100 rounded-xl"
-                           href="{{ route('asset.index') }}">Log In</a>
+                           href="{{ route('wallet.index') }}">Log In</a>
                         <a class="block px-4 py-3 mb-2 leading-loose text-xs text-center text-white font-semibold bg-blue-600 hover:bg-blue-700  rounded-xl"
                            href="{{ route('register') }}">Register</a>
                     @endif

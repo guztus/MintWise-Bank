@@ -11,6 +11,7 @@ class Asset extends Model
     use HasFactory;
 
     protected $fillable = [
+        'wallet_id',
         'symbol',
         'average_cost',
         'amount',
@@ -19,6 +20,6 @@ class Asset extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Wallet::class);
     }
 }

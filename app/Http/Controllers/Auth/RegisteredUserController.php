@@ -45,6 +45,12 @@ class RegisteredUserController extends Controller
             $user->codeCard()->create([
                 'codes' => CodeCard::generate(),
             ]);
+
+            $user->wallet()->create([
+                'label' => 'Main',
+                'number' => uniqid() . uniqid(),
+                'balance' => 0,
+            ]);
         });
 
         $user = User::where('email', $request->email)->first();

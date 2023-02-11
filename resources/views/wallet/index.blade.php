@@ -40,18 +40,45 @@
     </script>
 
     <div class="center" style="width: 60%; height: 60%; text-align: center">
-        @if($assets->isEmpty())
-        <div class="flex" style="justify-content: center;  align-items: center">
+        <x-message-or-error/>
+
+        @if($wallet->balance <= 0)
+            <div class="flex" style="justify-content: center;  align-items: center">
+                <div
+                    class="card-standard pb-6 w-1/2">
+                    <p class="heading">Your Asset wallet FIAT balance is {{ number_format($wallet->balance, 2) }}!</p>
+                    <p class="my-6">Add money to your wallet from your bank accounts</p>
+                    @if(count($accounts) < 1)
+                        <p>You do not have any accounts! <a href="/accounts" class="text-purple-900 font-bold transition duration-150 ease-in-out">Open a new account</a></p>
+                    @else
+                        @include('wallet.partials.deposit-withdraw-form')
+                    @endif
+                </div>
+            </div>
+        @elseif($assets->isEmpty())
+        <div class="flex" style="flex-direction: column; justify-content: center;  align-items: center">
+            <div
+                class="card-standard pb-6 w-1/2">
+                <p class="heading">Your Asset wallet FIAT balance is € {{ number_format($wallet->balance / 100, 2) }}!</p>
+            </div>
             <div
                 class="card-standard pb-6 w-1/2">
                 <div class="heading">There are no assets to list!</div>
                 <div class="heading-medium">You can browse the crypto market and when you make a purchase, your assets will be visible here! <a href="{{ route('crypto.index') }}" class="text-purple-900 underline">Go to the Cryptocurrency Market</a></div>
             </div>
         </div>
+        <div class="flex" style="flex-direction: column; justify-content: center;  align-items: center">
+            <div
+                class="card-standard pb-6 w-1/2">
+                @include('wallet.partials.deposit-withdraw-form')
+            </div>
+        </div>
         @else
         <div class="card-standard">
+
             <div class="mb-6">
-                <div class="heading">Assets</div>
+                <div class="heading">Asset wallet</div>
+                    <p>FIAT balance: € {{ number_format($wallet->balance / 100, 2) }}</p>
                     <p>Assets Held: {{ count($assets) }}</p>
                     <p>Total Asset Value: {{ "€ " . number_format(($assets->map(function ($asset) {
                         return $asset->current_price * $asset->amount;
@@ -92,7 +119,7 @@
                             </td>
                             <td class="px-4 py-2">{{ number_format($asset->current_price, 2) }}</td>
                             <td class="px-4 py-2">{{ number_format($asset->average_cost, 2) }}</td>
-                            <td class="px-4 py-2" id="assetAmount">{{ number_format($asset->amount, 8) }}</td>
+                            <td class="px-4 py-2" id="assetAmount">{{ (float)$asset->amount }}</td>
                             <td class="px-4 py-2">€ {{ number_format($asset->amount * $asset->current_price, 2) }}</td>
                             <td class="px-4 py-2 percent-change"
                                 data-percent-change="{{ (($asset->current_price - $asset->average_cost) / $asset->average_cost) * 100 }}">
@@ -102,10 +129,16 @@
                             </td>
                         </tr>
                     @endforeach
-                    @endif
                     </tbody>
                 </table>
             </div>
         </div>
+            <div class="flex" style="flex-direction: column; justify-content: center;  align-items: center">
+                <div
+                    class="card-standard pb-6 w-1/2">
+                    @include('wallet.partials.deposit-withdraw-form')
+                </div>
+            </div>
+        @endif
     </div>
 </x-app-layout>

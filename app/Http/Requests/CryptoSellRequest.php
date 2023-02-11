@@ -18,8 +18,8 @@ class CryptoSellRequest extends CryptoSaleRequest
             return $this->cryptoService->getSingle($this->symbol)->getPrice();
         });
 
-        $amount = Auth::user()->assets->where('symbol', $this->symbol)->first()
-            ? Auth::user()->assets->where('symbol', $this->symbol)->first()->amount
+        $amount = Auth::user()->wallet->assets->where('symbol', $this->symbol)->first()
+            ? Auth::user()->wallet->assets->where('symbol', $this->symbol)->first()->amount
             : null;
         $maxAmount = (string)$amount;
 
@@ -27,7 +27,7 @@ class CryptoSellRequest extends CryptoSaleRequest
         $rules ['symbol'] = array_merge(
             $rules['symbol'],
             [
-                'in:' . Auth::user()->assets()->pluck('symbol')->implode(',', 'symbol'),
+                'in:' . Auth::user()->wallet->assets->pluck('symbol')->implode(',', 'symbol'),
             ]
         );
         $rules ['assetAmount'] = array_merge(

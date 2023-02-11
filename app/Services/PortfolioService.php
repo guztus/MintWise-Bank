@@ -15,7 +15,7 @@ class PortfolioService
 
     public function execute(): Collection
     {
-        return Auth::user()->assets->map(function ($asset) {
+        return Auth::user()->wallet->assets->map(function ($asset) {
             $asset->current_price = $this->cryptoRepository->getSingle($asset->symbol)->getPrice();
             return $asset;
         });

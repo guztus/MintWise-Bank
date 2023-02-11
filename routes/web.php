@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
-use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\DashboardController;
@@ -69,7 +69,14 @@ Route::middleware('auth')->group(function () {
         [CryptoController::class, 'sell'])->name('crypto.sell');
 
     Route::get('/portfolio',
-        [PortfolioController::class, 'index'])->name('asset.index');
+        [WalletController::class, 'index'])->name('wallet.index');
+
+//    Route::get('/wallet',
+//        [WalletController::class, 'index'])->name('wallet.index');
+    Route::post('/wallet-deposit',
+        [WalletController::class, 'deposit'])->name('wallet.deposit');
+    Route::post('/wallet-withdraw',
+        [WalletController::class, 'withdraw'])->name('wallet.withdraw');
 });
 
 require __DIR__ . '/auth.php';

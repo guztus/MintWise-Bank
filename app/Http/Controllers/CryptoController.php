@@ -33,10 +33,7 @@ class CryptoController extends Controller
         string $symbol
     ): View
     {
-        $accountNumbers = [];
-        foreach (Auth::user()->accounts->toArray() as $account) {
-            $accountNumbers [] = $account['number'];
-        }
+        $accountNumber = Auth::user()->wallet->number;
 
         $transactions = Transaction::sortable(['created_at', 'desc'])
             ->where(function ($query) use ($symbol) {
@@ -44,17 +41,17 @@ class CryptoController extends Controller
                     ->where('currency_payer', $symbol)
                     ->orWhere('currency_beneficiary', $symbol);
             })
-            ->where(function ($query) use ($accountNumbers) {
+            ->where(function ($query) use ($accountNumber) {
                 $query
-                    ->whereIn('beneficiary_account_number', $accountNumbers)
-                    ->orWhereIn('account_number', $accountNumbers);
+                    ->where('beneficiary_account_number', $accountNumber)
+                    ->orWhere('account_number', $accountNumber);
             });
 
         $symbol = strtoupper($symbol);
         return view('crypto.single', [
-            'accounts' => Auth::user()->accounts,
+            'wallet' => Auth::user()->wallet,
             'crypto' => $this->cryptoRepository->getSingle($symbol),
-            'assetOwned' => Auth::user()->assets->where('symbol', $symbol)->first() ?? null,
+            'assetOwned' => Auth::user()->wallet->assets->where('symbol', $symbol)->first() ?? null,
             'transactions' => $transactions
                 ->filter(request()->only('search', 'from', 'to'))
                 ->paginate()
@@ -69,7 +66,6 @@ class CryptoController extends Controller
     ): RedirectResponse
     {
         (new CryptoTransaction())->execute(
-            $request->payerAccountNumber,
             $request->symbol,
             $request->assetAmount,
             Cache::get('latestPrice') * -1
@@ -84,7 +80,6 @@ class CryptoController extends Controller
     ): RedirectResponse
     {
         (new CryptoTransaction())->execute(
-            $request->payerAccountNumber,
             $request->symbol,
             $request->assetAmount,
             Cache::get('latestPrice')

@@ -24,9 +24,9 @@ class User extends Authenticatable
         return $this->hasMany(Account::class);
     }
 
-    public function cards(): HasMany
+    public function wallet(): HasOne
     {
-        return $this->hasMany(Card::class);
+        return $this->hasOne(Wallet::class);
     }
 
     public function assets(): HasMany
