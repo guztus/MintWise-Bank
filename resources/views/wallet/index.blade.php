@@ -104,9 +104,9 @@
                         <th class="px-4 py-2">Current Price</th>
                         <th class="px-4 py-2">Average Cost</th>
                         <th class="px-4 py-2">Amount</th>
-                        <th class="px-4 py-2">€ Amount</th>
+                        <th class="px-4 py-2">{{ config('global.currency_symbol') }} Amount</th>
                         <th class="px-4 py-2">% Profit/Loss</th>
-                        <th class="px-4 py-2">€ Profit/Loss</th>
+                        <th class="px-4 py-2">{{ config('global.currency_symbol') }} Profit/Loss</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -118,7 +118,10 @@
                             <td class="px-4 py-2">{{ number_format($asset->current_price, 2) }}</td>
                             <td class="px-4 py-2">{{ number_format($asset->average_cost, 2) }}</td>
                             <td class="px-4 py-2" id="assetAmount">{{ (float)$asset->amount }}</td>
-                            <td class="px-4 py-2">€ {{ number_format($asset->amount * $asset->current_price, 2) }}</td>
+                            <td class="px-4 py-2">
+                                {{ config('global.currency_symbol') }}
+                                {{ number_format($asset->amount * $asset->current_price, 2) }}
+                            </td>
                             <td class="px-4 py-2 percent-change"
                                 data-percent-change="{{ (($asset->current_price - $asset->average_cost) / $asset->average_cost) * 100 }}">
                             </td>

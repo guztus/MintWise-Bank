@@ -1,4 +1,6 @@
 <x-app-layout>
+    <x-floating-button-calculator/>
+
     <div class="center" style="width: 60%; height: 60%; text-align: center">
         <x-message-or-error/>
         @if(!$accounts->isEmpty())

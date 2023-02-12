@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\Account;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -18,7 +19,7 @@ class Transfer
     ): void
     {
         $amount *= 100;
-        $payerAccount = auth()->user()->accounts->where('number', $payerAccountNumber)->first();
+        $payerAccount = Auth::user()->accounts->where('number', $payerAccountNumber)->first();
 
         DB::transaction(function () use ($payerAccount, $beneficiaryAccountNumber, $amount, $description) {
             $this->updatePayerAccount($payerAccount, $amount);

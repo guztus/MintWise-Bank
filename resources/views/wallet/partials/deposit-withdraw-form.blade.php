@@ -15,31 +15,36 @@
     }
 </script>
 
-<p class="heading my-3">Deposit or withdraw FIAT (EUR)</p>
+<p class="heading my-3">Deposit or withdraw FIAT ({{ config('global.currency_code') }})</p>
 
 
 <form method="POST" id="deposit" action="/wallet-deposit">
     @csrf
     <div class="flex flex-col gap-2 items-center text-center">
         <label>Amount
-            <input type="text"
-                   class="input center"
-                   name="amount"
-                   placeholder="xx.xx"
-                   value="{{ old('amount') }}"
-                   required
-                   oninput="copyBuyForm()">
+            <div class="relative mt-1">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <span class="text-gray-500 sm:text-sm">{{ config('global.currency_symbol') }}</span>
+                </div>
+                <input type="text"
+                       class="input center"
+                       name="amount"
+                       placeholder="xx.xx"
+                       value="{{ old('amount') }}"
+                       required
+                       oninput="copyBuyForm()">
+            </div>
         </label>
         <label>Account
-        <select id="account_number"
-                name="account_id"
-                class="input">
-            @foreach($accounts as $account)
-                <option
-                    value="{{ $account->id }}">{{ $account->label }} ({{ $account->number }}
-                    ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
-            @endforeach
-        </select>
+            <select id="account_number"
+                    name="account_id"
+                    class="input">
+                @foreach($accounts as $account)
+                    <option
+                        value="{{ $account->id }}">{{ $account->label }} ({{ $account->number }}
+                        ) {{ number_format($account->balance/100, 2) }} {{ $account->currency }}</option>
+                @endforeach
+            </select>
         </label>
     </div>
 </form>
@@ -48,10 +53,10 @@
     @csrf
     <div class="flex flex-col gap-2 items-center text-center">
         <select
-                style="display:none"
-                id="account_number"
-                name="account_id"
-                class="input">
+            style="display:none"
+            id="account_number"
+            name="account_id"
+            class="input">
             @foreach($accounts as $account)
                 <option
                     value="{{ $account->id }}">{{ $account->label }} ({{ $account->number }}
@@ -59,12 +64,12 @@
             @endforeach
         </select>
         <input
-               class="input"
-               name="amount"
-               placeholder="xx.xx"
-               value="{{ old('amount') }}"
-               required
-               type="hidden">
+            class="input"
+            name="amount"
+            placeholder="xx.xx"
+            value="{{ old('amount') }}"
+            required
+            type="hidden">
     </div>
 </form>
 

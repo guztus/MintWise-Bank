@@ -36,7 +36,7 @@
         @endif
 
         <!-- Page Content -->
-        <main class="mb-6">
+        <main class="mb-6 relative">
             {{ $slot }}
         </main>
     </div>
