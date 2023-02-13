@@ -17,6 +17,9 @@ module.exports = {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'MintWise-purple': '#1b1349',
+            },
         },
     },
 

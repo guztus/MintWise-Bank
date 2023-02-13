@@ -56,7 +56,7 @@
 </script>
 
 <div class="fixed bottom-0 right-0 mb-6 mr-8 z-50">
-    <button class="bg-purple-900 transition duration-150 ease-in-out p-2 rounded-full hover:bg-purple-600" id="open-div" onclick="openModal()">
+    <button class="bg-purple-900 p-2 rounded-full hover:bg-purple-600" id="open-div" onclick="openModal()">
         <i class="fas fa-plus">
             <svg fill="#FFFFFF" height="35px" width="35px" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 273.835 273.835" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 273.835 273.835">
                 <g>

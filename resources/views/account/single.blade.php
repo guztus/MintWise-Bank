@@ -2,7 +2,9 @@
     <script src="https://kit.fontawesome.com/39748767d3.js" crossorigin="anonymous"></script>
 
     <div class="center" style="width: 60%; height: 60%; text-align: center">
+        <x-floating-button-calculator/>
         <x-message-or-error/>
+
         <div class="card-standard">
             <div>
                 <h1 class="text-2xl font-bold">Overview</h1>

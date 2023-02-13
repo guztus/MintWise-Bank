@@ -1,13 +1,8 @@
 <x-app-layout>
-    <style>
-        input, select {
-            width: 500px !important;
-            text-align: center;
-        }
-    </style>
-
     <div class="center" style="width: 60%; height: 60%">
+        <x-floating-button-calculator/>
         <x-message-or-error/>
+
         <div class="flex" style="justify-content: center;  align-items: center">
             <div class="card-standard pb-6 w-1/2" style="margin-top: 0 !important">
                 <div class="heading">Transfer money</div>
@@ -18,5 +13,6 @@
                 @endif
             </div>
         </div>
+
     </div>
 </x-app-layout>

@@ -40,6 +40,7 @@
     </script>
 
     <div class="center" style="width: 60%; height: 60%; text-align: center">
+        <x-floating-button-calculator/>
         <x-message-or-error/>
 
         @if($wallet->balance <= 0)

@@ -1,3 +1,10 @@
+<style>
+    input, select {
+        width: 500px;
+        text-align: center;
+    }
+</style>
+
 <form method="POST" action="/transfer">
     @csrf
     <div class="flex"

@@ -7,6 +7,7 @@ use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransferController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,10 +21,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
+Route::get('/', function () {
+    if (Auth::check()) {
         return redirect('/accounts');
-    })->name('home');
+    } else {
+        return view('welcome');
+    }
+})->name('home');
+
+Route::middleware('auth')->group(function () {
+//    Route::get('/', function () {
+//        return redirect('/accounts');
+//    })->name('accounts');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
