@@ -9,6 +9,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class WalletController extends Controller
 {
@@ -37,14 +38,13 @@ class WalletController extends Controller
                 ->filter(request()->only('search', 'from', 'to'))
                 ->paginate()
                 ->withQueryString(),
-            'credit' => $transactions->where('beneficiary_account_number', $accountNumber)->sum('amount_payer'),
-            'debit' => $transactions->where('account_number', $accountNumber)->sum('amount_beneficiary'),
+            'credit' => $transactions->where('account_number', $accountNumber)->sum('amount_payer'),
+            'debit' => $transactions->where('beneficiary_account_number', $accountNumber)->sum('amount_beneficiary'),
         ]);
     }
 
     public function deposit(): RedirectResponse
     {
-//        validate
         $account = Auth::user()->accounts->find(request('account_id'));
         $amount = request('amount') * 100;
 
@@ -52,6 +52,8 @@ class WalletController extends Controller
         $payerRate = $currencies[$account->currency];
         $walletRate = $currencies[config('global.currency_code')];
         $amountWithRate = $amount * $walletRate / $payerRate;
+
+        $wallet = Auth::user()->wallet;
 
         if (!$account) {
             return redirect()->back()->with('message_danger', 'Transaction error');
@@ -60,18 +62,47 @@ class WalletController extends Controller
             return redirect()->back()->with('message_danger', 'Transaction error. Not enough money in account ' . $account->number);
         }
 
-        Auth::user()->wallet->deposit($amountWithRate);
+        DB::transaction(
+            function () use ($account, $wallet, $amount, $amountWithRate) {
 
-        $account->balance -= $amount;
-        $account->save();
+                $wallet->deposit($amount);
 
-        return redirect()->back()->with('message_success', "Transaction successful. Deposited " . number_format($amountWithRate / 100, 2) . " into wallet from {$account->number}");
+                $account->balance -= $amountWithRate;
+                $account->save();
+
+                Transaction::create([
+                    'account_number' => $account->number,
+                    'beneficiary_account_number' => $wallet->number,
+                    'description' =>
+                        "Deposited "
+                        . number_format($amount / 100, 2)
+                        .  " " . config('global.currency_code')
+                        . " (" . number_format($amountWithRate / 100, 2) . " {$account->currency})"
+                        . " into wallet from {$account->number} ",
+                    'type' => "Wallet deposit",
+                    'amount_payer' => $amountWithRate / 100,
+                    'currency_payer' => config('global.currency_code'),
+                    'amount_beneficiary' => $amount / 100,
+                    'currency_beneficiary' => $account->currency,
+                ]);
+
+                return redirect()->back()->with('message_success',
+                    "Transaction successful. Deposited "
+                    . number_format($amount / 100, 2)
+                    .  " " . config('global.currency_code')
+                    . " (" . number_format($amountWithRate / 100, 2) . " {$account->currency})"
+                    . " into wallet from {$account->number} "
+                );
+            }
+        );
+
+        return redirect()->back()->with('message_danger', 'Transaction error');
     }
 
     public function withdraw(): RedirectResponse
     {
-//        validate
         $account = Auth::user()->accounts->find(request('account_id'));
+        $wallet = Auth::user()->wallet;
         $amount = request('amount') * 100;
 
         $currencies = Cache::get('currencies');
@@ -82,15 +113,43 @@ class WalletController extends Controller
         if (!$account) {
             return redirect()->back()->with('message_danger', 'Transaction error');
         }
-        if ($amountWithRate > Auth::user()->wallet->balance) {
+        if ($amount > $wallet->balance) {
             return redirect()->back()->with('message_danger', "Not enough money in wallet!");
         }
 
-        Auth::user()->wallet->withdraw($amountWithRate);
+        DB::transaction(
+            function () use ($account, $wallet, $amount, $amountWithRate) {
 
-        $account->balance += $amount;
-        $account->save();
+            $wallet->withdraw($amount);
 
-        return redirect()->back()->with('message_success', 'Transaction successful. Withdrew ' .  number_format($amountWithRate / 100, 2) . " from wallet into {$account->number}");
+            $account->balance += $amountWithRate;
+            $account->save();
+
+            Transaction::create([
+                'account_number' => $wallet->number,
+                'beneficiary_account_number' => $account->number,
+                'description' =>
+                    "Withdrew "
+                    . number_format($amount / 100, 2)
+                    .  " " . config('global.currency_code')
+                    . " (" . number_format($amountWithRate / 100, 2) . " {$account->currency})"
+                    . " from wallet into {$account->number}",
+                'type' => "Wallet withdraw",
+                'amount_payer' => $amount / 100,
+                'currency_payer' => $account->currency,
+                'amount_beneficiary' => $amountWithRate / 100,
+                'currency_beneficiary' => config('global.currency_code'),
+            ]);
+
+            return redirect()->back()->with('message_success',
+                'Transaction successful. Withdrew '
+                . number_format($amount / 100, 2)
+                .  " " . config('global.currency_code')
+                . " (" . number_format($amountWithRate / 100, 2) . " {$account->currency})"
+                . " from wallet into {$account->number}");
+            }
+        );
+
+        return redirect()->back()->with('message_danger', 'Transaction error');
     }
 }

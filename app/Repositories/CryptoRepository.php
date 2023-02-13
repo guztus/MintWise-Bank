@@ -16,7 +16,7 @@ class CryptoRepository
     public function getList(): CoinCollection
     {
         if (!Cache::get('coinList')) {
-            Cache::remember('coinList', 6000, function () {
+            Cache::remember('coinList', 60, function () {
                 return $this->cryptoService->getList();
             });
         }
@@ -26,7 +26,7 @@ class CryptoRepository
     public function getSingle(string $symbol)
     {
         if (!Cache::get("Crypto$symbol")) {
-            Cache::remember("Crypto$symbol", 6000, function () use ($symbol) {
+            Cache::remember("Crypto$symbol", 60, function () use ($symbol) {
                 return $this->cryptoService->getSingle($symbol);
             });
         }

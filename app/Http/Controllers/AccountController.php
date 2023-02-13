@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -16,7 +17,8 @@ class AccountController extends Controller
     {
         return view('account.list', [
             'currencies' => Cache::get('currencies'),
-            'accounts' => Auth::user()->accounts,
+            'accounts' => Account::where('user_id', Auth::user()->id)
+                ->paginate(),
         ]);
     }
 

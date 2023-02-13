@@ -45,7 +45,8 @@
 
 .card-standard {
     /* pt-4 */
-    @apply p-4 sm:p-8 mt-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700
+    /*@apply p-4 sm:p-8 mt-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700*/
+    @apply mt-6 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700
 }
 
 .heading {

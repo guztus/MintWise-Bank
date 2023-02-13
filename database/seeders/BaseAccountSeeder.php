@@ -23,6 +23,12 @@ class BaseAccountSeeder extends Seeder
             'codes' => '1;2;3;4;5;6;7;8;9;10;11;12',
         ]);
 
+        $wallet = $user->wallet()->create([
+            'label' => 'Main',
+            'number' => uniqid() . uniqid(),
+            'balance' => 0,
+        ]);
+
         Account::factory()->create([
             'label' => 'UK Account',
             'user_id' => $user->id,
@@ -52,7 +58,7 @@ class BaseAccountSeeder extends Seeder
             'beneficiary_account_number' => "LV55HABA456W4U661JAB1",
         ]);
 
-        $user->assets()->createMany([
+        $wallet->assets()->createMany([
             [
                 'symbol' => 'BTC',
                 'average_cost' => 365.54843,

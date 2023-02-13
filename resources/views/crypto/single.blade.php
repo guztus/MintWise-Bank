@@ -6,10 +6,12 @@
             padding: 12px 20px;
             margin: 8px 0;
             display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
         }
+
+         .bottom-gray-border {
+             border-bottom: solid 1px;
+             border-color: lightgray
+         }
     </style>
 
     <script>
@@ -27,7 +29,6 @@
                     percentChange.textContent = "↓ - " + percentChange.textContent;
                     percentChange.style.color = "red";
                 } else {
-                    // place the arrow in front of the number
                     percentChange.textContent = "↑ + " + percentChange.textContent;
                     percentChange.style.color = "green";
                 }
@@ -38,7 +39,7 @@
     <div class="center" style="width: 60%; height: 60%; text-align: center">
         <x-message-or-error/>
         <div>
-            <div class="center card-standard w-1/2">
+            <div class="center card-standard w-2/5 px-4 pt-4">
                 @include('crypto.partials.crypto-information')
                 @include('crypto.partials.asset-information')
             </div>

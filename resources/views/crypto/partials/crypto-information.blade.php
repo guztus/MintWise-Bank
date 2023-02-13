@@ -11,28 +11,27 @@
           data-percent-change="{{ $crypto->getPercentChange24h() }}"></span>
 </div>
 
-<div>
-    <table class="table-rounded table-auto right">
-        <thead>
-        <tr>
-            <th class="px-4 py-2">Volume (24h)</th>
-            <td class="border px-4 py-2">
-                <span class="px-4 py-2 percent-change text-xs" data-percent-change="{{ $crypto->getVolumeChange24h() }}"></span>
-                {{ $crypto->getVolume24h() }}
-            </td>
-        </tr>
-        <tr>
-            <th class="px-4 py-2">Circulating Supply</th>
-            <td class="border px-4 py-2">{{ $crypto->getCirculatingSupply() }}</td>
-        </tr>
-        <tr>
-            <th class="px-4 py-2">Total Supply</th>
-            <td class="border px-4 py-2">{{ $crypto->getTotalSupply() }}</td>
-        </tr>
-        <tr>
-            <th class="px-4 py-2">Max Supply</th>
-            <td class="border px-4 py-2">{{ $crypto->getMaxSupply() }}</td>
-        </tr>
-        </thead>
-    </table>
+<div class="flex flex-col mt-8">
+    <div class="flex">
+        <p class="flex-1 px-4 py-2 bottom-gray-border left">Volume (24h)</p>
+        <p class="flex-0 px-4 py-2 bottom-gray-border right">
+            <span class="percent-change text-xs" data-percent-change="{{ $crypto->getVolumeChange24h() }}"></span>
+        </p>
+        <p class="flex-1 px-4 py-2 bottom-gray-border right">{{ $crypto->getVolume24h() }}</p>
+    </div>
+
+    <div class="flex">
+        <p class="flex-1 px-4 py-2 bottom-gray-border left">Circulating Supply</p>
+        <p class="flex-1 px-4 py-2 bottom-gray-border right">{{ $crypto->getCirculatingSupply() }}</p>
+    </div>
+
+    <div class="flex" >
+        <p class="flex-1 px-4 py-2 bottom-gray-border left">Total Supply</p>
+        <p class="flex-1 px-4 py-2 bottom-gray-border right">{{ $crypto->getTotalSupply() }}</p>
+    </div>
+
+    <div class="flex">
+        <p class="flex-1 px-4 py-2 bottom-gray-border left">Max Supply</p>
+        <p class="flex-1 px-4 py-2 bottom-gray-border right">{{ $crypto->getMaxSupply() }}</p>
+    </div>
 </div>

@@ -43,22 +43,23 @@
         <x-floating-button-calculator/>
         <x-message-or-error/>
 
-        @if($wallet->balance <= 0)
-            <div class="flex" style="justify-content: center;  align-items: center">
-                <div class="card-standard pb-6 w-1/2">
-                    <p class="heading">Your Asset wallet FIAT balance is {{ number_format($wallet->balance, 2) }}!</p>
-                    <p class="my-6">Add money to your wallet from your bank accounts</p>
-                    @if(count($accounts) < 1)
-                        <p>You do not have any accounts! <a href="/accounts" class="text-purple-900 font-bold transition duration-150 ease-in-out">Open a new account</a></p>
-                    @else
-                        @include('wallet.partials.deposit-withdraw-form')
-                    @endif
-                </div>
-            </div>
-        @elseif($assets->isEmpty())
+{{--        @if($wallet->balance <= 0)--}}
+{{--            <div class="flex" style="justify-content: center;  align-items: center">--}}
+{{--                <div class="card-standard pb-6 w-1/2">--}}
+{{--                    <p class="heading">Your Asset wallet FIAT balance is {{ number_format($wallet->balance, 2) }}!</p>--}}
+{{--                    <p class="my-6">Add money to your wallet from your bank accounts</p>--}}
+{{--                    @if(count($accounts) < 1)--}}
+{{--                        <p>You do not have any accounts! <a href="/accounts" class="text-purple-900 font-bold transition duration-150 ease-in-out">Open a new account</a></p>--}}
+{{--                    @else--}}
+{{--                        @include('wallet.partials.deposit-withdraw-form')--}}
+{{--                    @endif--}}
+{{--                </div>--}}
+{{--            </div>--}}
+        @if($assets->isEmpty())
         <div class="flex" style="flex-direction: column; justify-content: center;  align-items: center">
             <div
                 class="card-standard pb-6 w-1/2">
+                <p class="my-1">Wallet Nr. <span class="text-sm">{{ $wallet->number }}</span></p>
                 <p class="heading">Your Asset wallet FIAT balance is € {{ number_format($wallet->balance / 100, 2) }}!</p>
             </div>
             <div
@@ -77,12 +78,13 @@
         <div class="card-standard">
             <div class="mb-6">
                 <div class="heading">Asset wallet</div>
-                    <p>FIAT balance: € {{ number_format($wallet->balance / 100, 2) }}</p>
-                    <p>Assets Held: {{ count($assets) }}</p>
-                    <p>Total Asset Value: {{ "€ " . number_format(($assets->map(function ($asset) {
+                    <p class="mt-1">Wallet Nr. <span class="text-sm">{{ $wallet->number }}</span></p>
+                    <p class="mt-1">FIAT balance: € {{ number_format($wallet->balance / 100, 2) }}</p>
+                    <p class="mt-1">Assets Held: {{ count($assets) }}</p>
+                    <p class="mt-1">Total Asset Value: {{ "€ " . number_format(($assets->map(function ($asset) {
                         return $asset->current_price * $asset->amount;
                     }))->sum(), 2) }}</p>
-                    <p>Total % Profit/Loss: <span class="py-2 percent-change"
+                    <p class="mt-1">Total % Profit/Loss: <span class="py-2 percent-change"
                                                   data-percent-change="{{ (((($assets->map(function ($asset) {
                         return ($asset->current_price * $asset->amount);
                     }))->sum() - ($assets->map(function ($asset) {
@@ -91,7 +93,7 @@
                         return ($asset->amount * $asset->average_cost);
                     }))->sum()) * 100 }}"></span></p>
 
-                    <p>Total € Profit/Loss: <span class="py-2 cash-change"
+                    <p class="mt-1">Total € Profit/Loss: <span class="py-2 cash-change"
                                                   data-cash-change="{{ ($assets->map(function ($asset) {
                         return ($asset->current_price - $asset->average_cost) * $asset->amount;
                     }))->sum() }}"></span></p>
@@ -139,7 +141,7 @@
                     @include('wallet.partials.deposit-withdraw-form')
             </div>
             <div class="mb-6">
-                @include('layouts.transactions', ['identifier' => 'Crypto'])
+                @include('layouts.transactions', ['identifier' => $wallet->number])
             </div>
         @endif
     </div>

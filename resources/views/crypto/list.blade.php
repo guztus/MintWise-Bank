@@ -86,7 +86,7 @@
                 @endforeach
                 </tbody>
             </table>
-            <div class="flex text-xs pt-2 text-gray-500" style="justify-content: flex-end">Refreshed: {{ \Carbon\Carbon::parse(strtotime($cryptoList->getTimestamp()))->addHours(2)->format('M d-H:i:s') }}</div>
+            <div class="flex text-xs pt-2 pb-2 text-gray-500 px-2" style="justify-content: flex-end">Refreshed: {{ \Carbon\Carbon::parse(strtotime($cryptoList->getTimestamp()))->addHours(2)->format('M d-H:i:s') }}</div>
         </div>
     </div>
 </x-app-layout>

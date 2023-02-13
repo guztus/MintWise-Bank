@@ -24,19 +24,19 @@ CoinMarketCap API)
 <div style="text-align: center">
     <h3>Overall overview</h3>
     <p align="center">
-        <img src="/overview-.gif"  width="95%" alt="animated-demo" /><br>
+        <img src="/login.gif"  width="95%" alt="animated-demo" /><br>
     </p>
     <h3>Making a transaction (to an account that has a different currency)</h3>
     <p align="center">
-        <img src="/transaction-eur-gbp.gif" width="95%" alt="animated-demo" /><br>
-    </p>
-    <h3>Search in transactions</h3>
-    <p align="center">
-        <img src="/search-transactions.gif" width="95%" alt="animated-demo" /><br>
+        <img src="/transfer.gif" width="95%" alt="animated-demo" /><br>
     </p>
     <h3>Purchasing Crypto</h3>
     <p align="center">
-        <img src="/crypto-purchase.gif" width="95%" alt="animated-demo" /><br>
+        <img src="/wallet.gif" width="95%" alt="animated-demo" /><br>
+    </p>
+    <h3>Currency calculator</h3>
+    <p align="center">
+        <img src="/fab.gif" width="95%" alt="animated-demo" /><br>
     </p>
 </div>
 
